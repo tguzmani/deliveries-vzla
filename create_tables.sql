@@ -110,7 +110,7 @@ CREATE TABLE direccion (
 );
 
 CREATE TABLE unidad (
-    id INTEGER NOT NULL AUTO_INCREMENT,
+    id INTEGER NOT NULL AUTO_INCREMENT, 
     placa VARCHAR(50) NOT NULL UNIQUE,
     tipo VARCHAR(50) NOT NULL, 
     estatus VARCHAR(50) NOT NULL, 
@@ -125,7 +125,7 @@ CREATE TABLE unidad (
         REFERENCES oficina (id_aplicacion),
 
     CONSTRAINT ch_tipo CHECK (tipo IN ('carro', 'camioneta', 'moto')),
-    CONSTRAINT ch_tipo CHECK (tipo IN ('activo', 'en reparación'))
+    CONSTRAINT ch_estatus CHECK (tipo IN ('activo', 'en reparación'))
 );
 
 CREATE TABLE envio (

@@ -1,4 +1,5 @@
--- Create table SQL
+-- Esquema SQL
+
 CREATE TABLE cliente (
     cedula INTEGER NOT NULL AUTO_INCREMENT,
     primer_nombre VARCHAR(50) NOT NULL,

@@ -117,9 +117,67 @@ CREATE TABLE unidad (
     id_zona_oficina INTEGER NOT NULL,
 
     CONSTRAINT pk_unidad PRIMARY KEY (id),
-    CONSTRAINT fk_unidad_aplicacion_oficina FOREIGN KEY id_aplicacion_oficina
-        REFERENCES oficina (id_zona);
-    CONSTRAINT fk_unidad_aplicacion_zona FOREIGN KEY id_zona_oficina
-        REFERENCES oficina (id_aplicacion);
 
+    CONSTRAINT fk_unidad_aplicacion_oficina FOREIGN KEY id_aplicacion_oficina
+        REFERENCES oficina (id_zona),
+    CONSTRAINT fk_unidad_aplicacion_zona FOREIGN KEY id_zona_oficina
+        REFERENCES oficina (id_aplicacion),
+
+    CONSTRAINT ch_tipo CHECK (tipo IN ('carro', 'camioneta', 'moto')),
+    CONSTRAINT ch_tipo CHECK (tipo IN ('activo', 'en reparación'))
 );
+
+CREATE TABLE envio (
+    tracking INTEGER NOT NULL AUTO_INCREMENT,
+    fechas fechas NOT NULL,
+    id_unidad NOT NULL,
+    id_cliente_direccion NOT NULL, 
+    id_zona_direccion NOT NULL, 
+    id_direccion NOT NULL, 
+    valoracion NOT NULL,
+
+    CONSTRAINT pk_envio PRIMARY KEY (tracking),
+
+    CONSTRAINT fk_envio_cliente_direccion FOREIGN KEY id_cliente_direccion
+        REFERENCES direccion (ced_cliente),
+    CONSTRAINT fk_envio_zona_direccion FOREIGN KEY id_zona_direccion
+        REFERENCES direccion (id_zona),
+);
+
+CREATE TABLE pto_referencia (
+    id tracking INTEGER NOT NULL AUTO_INCREMENT,
+    descripcion VARCHAR(50) NOT NULL UNIQUE,
+
+    CONSTRAINT pk_pto_referencia PRIMARY KEY (id)
+);
+
+CREATE TABLE pedido (
+    id INTEGER NOT NULL AUTO_INCREMENT,
+    fechas fechas NOT NULL,
+    total INTEGER NOT NULL,
+    ced_cliente NOT NULL, 
+    id_aplicacion NOT NULL,
+    id_aliada NOT NULL, 
+    id_pto_referencia NOT NULL, 
+    tracking_envio NOT NULL, 
+
+    CONSTRAINT pk_pedido PRIMARY KEY (id),
+
+    CONSTRAINT fk_pedido_cliente FOREIGN KEY ced_cliente REFERENCES cliente (cedula),
+    CONSTRAINT fk_pedido_aplicacion FOREIGN KEY id_aplicacion REFERENCES aplicacion (id),
+    CONSTRAINT fk_pedido_aliada FOREIGN KEY id_aliada REFERENCES aliada (id),
+    CONSTRAINT fk_pedido_pto_referencia FOREIGN KEY id_pto_referencia REFERENCES pto_referencia (id),
+    CONSTRAINT fk_pedido_envio FOREIGN KEY tracking_envio REFERENCES envio (tracking),
+);
+
+CREATE TABLE producto (
+    id INTEGER NOT NULL AUTO_INCREMENT,
+    id_pedido NOT NULL, 
+    cod_producto NOT NULL,
+    especifiacion precio_cantidad NOT NULL,
+    id_sector NOT NULL,
+
+    CONSTRAINT pk_producto PRIMARY KEY (id),
+    CONSTRAINT fk_producto_pedido FOREIGN KEY id_pedido REFERENCES pedido (id),
+    CONSTRAINT fk_producto_sector FOREIGN KEY id_sector REFERENCES sector (id) 
+)

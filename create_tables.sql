@@ -180,4 +180,4 @@ CREATE TABLE producto (
     CONSTRAINT pk_producto PRIMARY KEY (id),
     CONSTRAINT fk_producto_pedido FOREIGN KEY id_pedido REFERENCES pedido (id),
     CONSTRAINT fk_producto_sector FOREIGN KEY id_sector REFERENCES sector (id) 
-)
+);

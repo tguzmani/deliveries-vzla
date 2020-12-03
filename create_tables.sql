@@ -15,7 +15,7 @@ CREATE TABLE cliente (
 
 CREATE TABLE aplicacion (
     id INTEGER GENERATED ALWAYS AS IDENTITY,
-    datos dato_empresa NOT NULL,
+    datos dato_empresa,
 
     CONSTRAINT pk_aplicacion PRIMARY KEY (id)
 );
@@ -24,7 +24,7 @@ CREATE TABLE registro (
     id_aplicacion INTEGER NOT NULL,
     ced_cliente INTEGER NOT NULL,
     id INTEGER GENERATED ALWAYS AS IDENTITY,
-    fechas fechas NOT NULL,
+    fechas fechas,
 
     CONSTRAINT pk_registro PRIMARY KEY (id_aplicacion, ced_cliente, id),
     CONSTRAINT fk_registro_cliente FOREIGN KEY (ced_cliente) REFERENCES cliente (cedula),
@@ -34,8 +34,8 @@ CREATE TABLE registro (
 CREATE TABLE servicio (
     id INTEGER GENERATED ALWAYS AS IDENTITY,
     id_aplicacion INTEGER NOT NULL,
-    especificacion precio_cantidad NOT NULL,
-    periodo fechas NOT NULL,
+    especificacion precio_cantidad,
+    periodo fechas,
 
     CONSTRAINT pk_servicio PRIMARY KEY (id_aplicacion, id),
     CONSTRAINT fk_servicio_aplicacion FOREIGN KEY (id_aplicacion) REFERENCES aplicacion (id)
@@ -51,7 +51,7 @@ CREATE TABLE sector (
 
 CREATE TABLE aliada (
     id INTEGER GENERATED ALWAYS AS IDENTITY,
-    datos dato_empresa NOT NULL,
+    datos dato_empresa,
     id_sector NOT NULL,
 
     CONSTRAINT pk_aliada PRIMARY KEY (id),
@@ -62,7 +62,7 @@ CREATE TABLE contrato (
     n_contrato INTEGER GENERATED ALWAYS AS IDENTITY,
     id_aplicacion INTEGER NOT NULL,
     id_aliada INTEGER NOT NULL,
-    fechas fechas NOT NULL,
+    fechas fechas,
     id_servicio INTEGER NOT NULL,
 
     CONSTRAINT pk_contrato PRIMARY KEY (n_contrato, id_aliada, id_aplicacion),
@@ -135,7 +135,7 @@ CREATE TABLE unidad (
 
 CREATE TABLE envio (
     tracking INTEGER GENERATED ALWAYS AS IDENTITY,
-    fechas fechas NOT NULL,
+    fechas fechas,
     id_unidad  INTEGER NOT NULL,
     id_cliente_direccion INTEGER NOT NULL,
     id_zona_direccion INTEGER NOT NULL,
@@ -161,7 +161,7 @@ CREATE TABLE pto_referencia (
 
 CREATE TABLE pedido (
     id INTEGER GENERATED ALWAYS AS IDENTITY,
-    fechas fechas NOT NULL,
+    fechas fechas,
     total NUMBER(8,2) NOT NULL,
     ced_cliente INTEGER NOT NULL,
     id_aplicacion INTEGER NOT NULL,
@@ -182,7 +182,7 @@ CREATE TABLE producto (
     id INTEGER GENERATED ALWAYS AS IDENTITY,
     id_pedido INTEGER NOT NULL,
     cod_producto INTEGER NOT NULL,
-    especifiacion precio_cantidad NOT NULL,
+    especifiacion precio_cantidad,
     id_sector INTEGER NOT NULL,
 
     CONSTRAINT pk_producto PRIMARY KEY (id, id_pedido),

@@ -177,7 +177,7 @@ CREATE TABLE producto (
     id INTEGER GENERATED ALWAYS AS IDENTITY,
     tracking_pedido INTEGER NOT NULL,
     cod_producto INTEGER NOT NULL,
-    especifiacion precio_cantidad,
+    especificacion precio_cantidad,
     id_sector INTEGER NOT NULL,
 
     CONSTRAINT pk_producto PRIMARY KEY (id, tracking_pedido),

@@ -1,12 +1,12 @@
 -- TDAs
 
---TDA: DATOS EMPRESA
+--TDA: datos_empresa
 
 CREATE OR REPLACE TYPE datos_empresa AS OBJECT(
     logo     BLOB,
     nombre    VARCHAR2(20),
     rif     VARCHAR2(20),
-    
+
     STATIC FUNCTION validar_rif(rif VARCHAR2) RETURN VARCHAR2,
     STATIC FUNCTION validar_nombre(nombre VARCHAR2) RETURN VARCHAR2
 );
@@ -31,4 +31,32 @@ BEGIN
           RAISE_APPLICATION_ERROR(-20001, 'ERROR: el nombre no puede estar vacío.');
     END IF;
 END;
+END;
+
+--TDA: fechas
+
+CREATE OR REPLACE TYPE fechas AS OBJECT(
+    fecha_inicio DATE,
+    fecha_fin DATE,
+
+    STATIC FUNCTION validar_fecha(fecha DATE) RETURN DATE,
+    STATIC FUNCTION validar_vigencia(fecha_fin VARCHAR2) RETURN DATE
+);
+
+CREATE OR REPLACE TYPE BODY fechas IS
+
+END;
+
+--TDA: precio_cantidad
+
+CREATE OR REPLACE TYPE precio_cantidad AS OBJECT(
+    cantidad INTEGER,
+    precio NUMBER(8,2),
+
+    STATIC FUNCTION validar_cantidad(cantidad INTEGER) RETURN INTEGER,
+    STATIC FUNCTION validar_precio(precio NUMBER) RETURN NUMBER
+);
+
+CREATE OR REPLACE TYPE BODY precio_cantidad IS
+
 END;

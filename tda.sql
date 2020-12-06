@@ -40,10 +40,40 @@ CREATE OR REPLACE TYPE fechas AS OBJECT(
     fecha_fin DATE,
 
     STATIC FUNCTION validar_fecha(fecha DATE) RETURN DATE,
-    STATIC FUNCTION validar_vigencia(fecha_fin VARCHAR2) RETURN DATE
+    STATIC FUNCTION validar_fecha_fin(fecha_inicio DATE, fecha_fin DATE) RETURN DATE,
+    STATIC FUNCTION validar_vigencia(fecha_fin DATE) RETURN BOOLEAN
 );
 
 CREATE OR REPLACE TYPE BODY fechas IS
+STATIC FUNCTION validar_fecha(fecha DATE) RETURN DATE
+IS
+BEGIN
+    IF NOT regexp_like(fecha, '^[[:blank:]]*$') THEN
+        return (fecha);
+    ELSE
+         RAISE_APPLICATION_ERROR(-20001, 'ERROR: la fecha no puede estar vacía.');
+    end if;
+END;
+
+STATIC FUNCTION validar_fecha_fin(fecha_inicio DATE, fecha_fin DATE) RETURN DATE
+IS
+BEGIN
+    IF fecha_fin>fecha_inicio THEN
+        return (fecha_fin);
+    ELSE
+         RAISE_APPLICATION_ERROR(-20001, 'ERROR: la fecha de fin no puede ser antes de l fecha de inicio.');
+    end if;
+END;
+
+STATIC FUNCTION validar_vigencia(fecha_fin DATE) RETURN BOOLEAN
+IS
+BEGIN
+    IF fecha_fin > current_date THEN
+        return (TRUE);
+    ELSE
+        return (FALSE);
+    end if;
+END;
 
 END;
 
@@ -58,5 +88,24 @@ CREATE OR REPLACE TYPE precio_cantidad AS OBJECT(
 );
 
 CREATE OR REPLACE TYPE BODY precio_cantidad IS
+STATIC FUNCTION validar_cantidad(cantidad INTEGER) RETURN INTEGER
+IS
+BEGIN
+    IF NOT regexp_like(cantidad, '^[[:blank:]]*$') AND cantidad>0 THEN
+        return (cantidad);
+    ELSE
+        RAISE_APPLICATION_ERROR(-20001, 'ERROR: la cantidad no puede estar en blanco o ser menor igual a 0.');
+    end if;
+END;
+
+STATIC FUNCTION validar_precio(precio NUMBER) RETURN NUMBER
+IS
+BEGIN
+    IF NOT regexp_like(precio, '^[[:blank:]]*$') AND precio>=0 THEN
+        return (precio);
+    ELSE
+        RAISE_APPLICATION_ERROR(-20001, 'ERROR: el precio no puede estar en blanco o ser menor a 0.');
+    end if;
+END;
 
 END;

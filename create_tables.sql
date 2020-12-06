@@ -102,14 +102,24 @@ CREATE TABLE sucursal (
     CONSTRAINT fk_sucursal_zona FOREIGN KEY (id_zona) REFERENCES ubicacion (id) ON DELETE CASCADE
 );
 
+CREATE TABLE pto_referencia (
+    id INTEGER GENERATED ALWAYS AS IDENTITY,
+    descripcion VARCHAR(50) NOT NULL,
+
+    CONSTRAINT pk_pto_referencia PRIMARY KEY (id),
+    CONSTRAINT unique_pto_referencia UNIQUE (descripcion)
+);
+
 CREATE TABLE direccion (
     id INTEGER GENERATED ALWAYS AS IDENTITY,
     ced_cliente INTEGER NOT NULL,
-    id_zona INTEGEr NOT NULL,
+    id_zona INTEGER NOT NULL,
 
     CONSTRAINT pk_direccion PRIMARY KEY (id, ced_cliente, id_zona),
     CONSTRAINT fk_direccion_cliente FOREIGN KEY (ced_cliente) REFERENCES cliente (cedula) ON DELETE CASCADE,
-    CONSTRAINT fk_direccion_zona FOREIGN KEY (id_zona) REFERENCES zona (cedula) ON DELETE CASCADE
+    CONSTRAINT fk_direccion_zona FOREIGN KEY (id_zona) REFERENCES ubicacion (id) ON DELETE CASCADE,
+    CONSTRAINT fk_pto_referencia FOREIGN KEY (id_pto_referencia) REFERENCES pto_referencia (id)
+
 );
 
 CREATE TABLE unidad (
@@ -133,59 +143,44 @@ CREATE TABLE unidad (
     CONSTRAINT ch_estatus CHECK (estatus IN ('activo', 'en reparación'))
 );
 
-CREATE TABLE envio (
+
+CREATE TABLE pedido (
     tracking INTEGER GENERATED ALWAYS AS IDENTITY,
     fechas fechas,
+    total NUMBER(8,2) NOT NULL,
+    ced_cliente INTEGER NOT NULL,
+    id_aplicacion INTEGER NOT NULL,
+    id_aliada INTEGER NOT NULL,
     id_unidad  INTEGER NOT NULL,
     id_cliente_direccion INTEGER NOT NULL,
     id_zona_direccion INTEGER NOT NULL,
     id_direccion INTEGER NOT NULL,
     valoracion INTEGER,
 
-    CONSTRAINT pk_envio PRIMARY KEY (tracking),
-
-    CONSTRAINT fk_envio_cliente_direccion FOREIGN KEY (id_cliente_direccion)
-      REFERENCES direccion (ced_cliente),
-    CONSTRAINT fk_envio_zona_direccion FOREIGN KEY (id_zona_direccion)
-      REFERENCES direccion (id_zona),
-    CONSTRAINT ch_valoracion CHECK (valoracion BETWEEN 1 and 5)
-);
-
-CREATE TABLE pto_referencia (
-    id tracking INTEGER GENERATED ALWAYS AS IDENTITY,
-    descripcion VARCHAR(50) NOT NULL,
-
-    CONSTRAINT pk_pto_referencia PRIMARY KEY (id),
-    CONSTRAINT unique_pto_referencia UNIQUE (descripcion)
-);
-
-CREATE TABLE pedido (
-    id INTEGER GENERATED ALWAYS AS IDENTITY,
-    fechas fechas,
-    total NUMBER(8,2) NOT NULL,
-    ced_cliente INTEGER NOT NULL,
-    id_aplicacion INTEGER NOT NULL,
-    id_aliada INTEGER NOT NULL,
-    id_pto_referencia INTEGER NOT NULL,
-    tracking_envio INTEGER NOT NULL,
-
-    CONSTRAINT pk_pedido PRIMARY KEY (id),
+    CONSTRAINT pk_pedido PRIMARY KEY (tracking),
 
     CONSTRAINT fk_pedido_cliente FOREIGN KEY (ced_cliente) REFERENCES cliente (cedula),
     CONSTRAINT fk_pedido_aplicacion FOREIGN KEY (id_aplicacion) REFERENCES aplicacion (id),
     CONSTRAINT fk_pedido_aliada FOREIGN KEY (id_aliada) REFERENCES aliada (id),
-    CONSTRAINT fk_pedido_pto_referencia FOREIGN KEY (id_pto_referencia) REFERENCES pto_referencia (id),
-    CONSTRAINT fk_pedido_envio FOREIGN KEY (tracking_envio) REFERENCES envio (tracking)
+    CONSTRAINT fk_pedido_unidad FOREIGN KEY (id_unidad) REFERENCES unidad (id),
+    CONSTRAINT fk_pedido_cliente_direccion FOREIGN KEY (id_cliente_direccion)
+      REFERENCES direccion (ced_cliente),
+    CONSTRAINT fk_pedido_zona_direccion FOREIGN KEY (id_zona_direccion)
+      REFERENCES direccion (id_zona),
+    CONSTRAINT fk_pedido_direccion FOREIGN KEY (id_direccion)
+      REFERENCES direccion (id),
+
+    CONSTRAINT ch_valoracion CHECK (valoracion BETWEEN 1 and 5)
 );
 
 CREATE TABLE producto (
     id INTEGER GENERATED ALWAYS AS IDENTITY,
-    id_pedido INTEGER NOT NULL,
+    tracking_pedido INTEGER NOT NULL,
     cod_producto INTEGER NOT NULL,
     especifiacion precio_cantidad,
     id_sector INTEGER NOT NULL,
 
-    CONSTRAINT pk_producto PRIMARY KEY (id, id_pedido),
-    CONSTRAINT fk_producto_pedido FOREIGN KEY (id_pedido) REFERENCES pedido (id) ON DELETE CASCADE,
+    CONSTRAINT pk_producto PRIMARY KEY (id, tracking_pedido),
+    CONSTRAINT fk_producto_pedido FOREIGN KEY (tracking_pedido) REFERENCES pedido (tracking) ON DELETE CASCADE,
     CONSTRAINT fk_producto_sector FOREIGN KEY (id_sector) REFERENCES sector (id)
 );

@@ -15,7 +15,7 @@ CREATE TABLE cliente (
 
 CREATE TABLE aplicacion (
     id INTEGER GENERATED ALWAYS AS IDENTITY,
-    datos dato_empresa,
+    datos datos_empresa,
 
     CONSTRAINT pk_aplicacion PRIMARY KEY (id)
 );
@@ -37,7 +37,7 @@ CREATE TABLE servicio (
     especificacion precio_cantidad,
     periodo fechas,
 
-    CONSTRAINT pk_servicio PRIMARY KEY (id_aplicacion, id),
+    CONSTRAINT pk_servicio PRIMARY KEY (id, id_aplicacion),
     CONSTRAINT fk_servicio_aplicacion FOREIGN KEY (id_aplicacion) REFERENCES aplicacion (id) ON DELETE CASCADE
 );
 
@@ -51,7 +51,7 @@ CREATE TABLE sector (
 
 CREATE TABLE aliada (
     id INTEGER GENERATED ALWAYS AS IDENTITY,
-    datos dato_empresa,
+    datos datos_empresa,
     id_sector NOT NULL,
 
     CONSTRAINT pk_aliada PRIMARY KEY (id),
@@ -64,11 +64,12 @@ CREATE TABLE contrato (
     id_aliada INTEGER NOT NULL,
     fechas fechas,
     id_servicio INTEGER NOT NULL,
+    id_servicio_aplicacion INTEGER NOT NULL,
 
-    CONSTRAINT pk_contrato PRIMARY KEY (n_contrato, id_aliada, id_aplicacion),
-    CONSTRAINT fk_contrato_aliada FOREIGN KEY (id_aliada) REFERENCES aliada (id) ON DELETE CASCADE,
+    CONSTRAINT pk_contrato PRIMARY KEY (n_contrato, id_aplicacion, id_aliada),
     CONSTRAINT fk_contrato_aplicacion FOREIGN KEY (id_aplicacion) REFERENCES aplicacion (id) ON DELETE CASCADE,
-    CONSTRAINT fk_contrato_servicio FOREIGN KEY (id_servicio) REFERENCES servicio (id)
+    CONSTRAINT fk_contrato_aliada FOREIGN KEY (id_aliada) REFERENCES aliada (id) ON DELETE CASCADE,
+    CONSTRAINT fk_contrato_servicio FOREIGN KEY (id_servicio, id_servicio_aplicacion) REFERENCES servicio (id, id_aplicacion)
 );
 
 CREATE TABLE ubicacion (
@@ -114,12 +115,12 @@ CREATE TABLE direccion (
     id INTEGER GENERATED ALWAYS AS IDENTITY,
     ced_cliente INTEGER NOT NULL,
     id_zona INTEGER NOT NULL,
+    id_pto_referencia INTEGER NOT NULL,
 
     CONSTRAINT pk_direccion PRIMARY KEY (id, ced_cliente, id_zona),
     CONSTRAINT fk_direccion_cliente FOREIGN KEY (ced_cliente) REFERENCES cliente (cedula) ON DELETE CASCADE,
     CONSTRAINT fk_direccion_zona FOREIGN KEY (id_zona) REFERENCES ubicacion (id) ON DELETE CASCADE,
     CONSTRAINT fk_pto_referencia FOREIGN KEY (id_pto_referencia) REFERENCES pto_referencia (id)
-
 );
 
 CREATE TABLE unidad (
@@ -134,15 +135,12 @@ CREATE TABLE unidad (
     CONSTRAINT pk_unidad PRIMARY KEY (id),
     CONSTRAINT unique_placa UNIQUE (placa),
 
-    CONSTRAINT fk_unidad_aplicacion_oficina FOREIGN KEY (id_aplicacion_oficina)
-      REFERENCES oficina (id_zona),
-    CONSTRAINT fk_unidad_aplicacion_zona FOREIGN KEY (id_zona_oficina)
-      REFERENCES oficina (id_aplicacion),
+    CONSTRAINT fk_unidad_oficina FOREIGN KEY (id_aplicacion_oficina, id_zona_oficina)
+      REFERENCES oficina (id_aplicacion, id_zona),
 
     CONSTRAINT ch_tipo CHECK (tipo IN ('carro', 'camioneta', 'moto')),
     CONSTRAINT ch_estatus CHECK (estatus IN ('activo', 'en reparación'))
 );
-
 
 CREATE TABLE pedido (
     tracking INTEGER GENERATED ALWAYS AS IDENTITY,
@@ -163,12 +161,8 @@ CREATE TABLE pedido (
     CONSTRAINT fk_pedido_aplicacion FOREIGN KEY (id_aplicacion) REFERENCES aplicacion (id),
     CONSTRAINT fk_pedido_aliada FOREIGN KEY (id_aliada) REFERENCES aliada (id),
     CONSTRAINT fk_pedido_unidad FOREIGN KEY (id_unidad) REFERENCES unidad (id),
-    CONSTRAINT fk_pedido_cliente_direccion FOREIGN KEY (id_cliente_direccion)
-      REFERENCES direccion (ced_cliente),
-    CONSTRAINT fk_pedido_zona_direccion FOREIGN KEY (id_zona_direccion)
-      REFERENCES direccion (id_zona),
-    CONSTRAINT fk_pedido_direccion FOREIGN KEY (id_direccion)
-      REFERENCES direccion (id),
+    CONSTRAINT fk_pedido_direccion FOREIGN KEY (id_cliente_direccion,id_zona_direccion,id_direccion)
+      REFERENCES direccion (ced_cliente,id_zona,id),
 
     CONSTRAINT ch_valoracion CHECK (valoracion BETWEEN 1 and 5)
 );

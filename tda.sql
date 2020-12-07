@@ -52,7 +52,7 @@ BEGIN
         return (fecha);
     ELSE
          RAISE_APPLICATION_ERROR(-20001, 'ERROR: la fecha no puede estar vacía.');
-    end if;
+    END IF;
 END;
 
 STATIC FUNCTION validar_fecha_fin(fecha_inicio DATE, fecha_fin DATE) RETURN DATE
@@ -62,7 +62,7 @@ BEGIN
         return (fecha_fin);
     ELSE
          RAISE_APPLICATION_ERROR(-20001, 'ERROR: la fecha de fin no puede ser antes de l fecha de inicio.');
-    end if;
+    END IF;
 END;
 
 STATIC FUNCTION validar_vigencia(fecha_fin DATE) RETURN BOOLEAN
@@ -72,7 +72,7 @@ BEGIN
         return (TRUE);
     ELSE
         return (FALSE);
-    end if;
+    END IF;
 END;
 
 END;
@@ -95,7 +95,7 @@ BEGIN
         return (cantidad);
     ELSE
         RAISE_APPLICATION_ERROR(-20001, 'ERROR: la cantidad no puede estar en blanco o ser menor igual a 0.');
-    end if;
+    END IF;
 END;
 
 STATIC FUNCTION validar_precio(precio NUMBER) RETURN NUMBER
@@ -105,7 +105,7 @@ BEGIN
         return (precio);
     ELSE
         RAISE_APPLICATION_ERROR(-20001, 'ERROR: el precio no puede estar en blanco o ser menor a 0.');
-    end if;
+    END IF;
 END;
 
 END;

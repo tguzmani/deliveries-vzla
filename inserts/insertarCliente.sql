@@ -3,26 +3,32 @@ GRANT READ ON DIRECTORY IMAGEN TO SYSTEM;
 CREATE OR REPLACE DIRECTORY imagen AS 'C:\Users\Tomas\Projects\bases2';
 
 CREATE OR REPLACE PROCEDURE insertarCliente (
-    in_nombre IN varchar2,
-    in_rif IN varchar2,
-    in_imagen IN varchar2,
-    in_directorio IN varchar2
+    inCedula IN VARCHAR2,
+
+    inPrimerNombre IN VARCHAR2,
+    inSegundoNombre IN VARCHAR2,
+    inPrimerApellido IN VARCHAR2,
+    inSegundoApellido IN VARCHAR2,
+
+    inEmail IN VARCHAR2
+
+    inImagen IN VARCHAR2,
+    inDirectorio IN VARCHAR2
 ) AS
-
-    f_lob bfile;
-    b_lob blob;
-
+    f_lob BFILE;
+    b_lob BLOB;
 BEGIN
-    f_lob := bfilename(in_directorio, in_imagen); 
+    f_lob := bfilename(inDirectorio, inImagen); 
 
-    INSERT INTO cliente (datos, logo)
-    VALUES (datos_empresa(datos_empresa.VALIDAR_NOMBRE(in_nombre), DATOS_EMPRESA.validar_RIF(in_rif)), empty_blob())
-    RETURNING logo into b_lob;  
+    INSERT INTO cliente (cedula, primer_nombre, segundo_nombre, primer_apellido, segundo_apellido, email, foto)
+    VALUES (inCedula, inPrimerNombre, inSegundoNombre, inPrimerApellido, inSegundoApellido, inEmail, empty_blob())
+    RETURNING foto INTO b_lob;  
 
-    dbms_lob.fileopen(f_lob,dbms_lob.file_readonly);
+    dbms_lob.fileopen(f_lob, dbms_lob.file_readonly);
     dbms_lob.loadfromfile(b_lob, f_lob, dbms_lob.getlength(f_lob));
     dbms_lob.fileclose(f_lob);
-    commit;
+
+    COMMIT;
 END;
 
 DECLARE
@@ -46,3 +52,24 @@ BEGIN
     insertarCliente(8306312, 'Yulaida', 'Edith', 'Zambrano', 'Amarista', 'yulaidazambrano@deliveries.app', '14.jpg', directorio);
     insertarCliente(8742813, 'Fabrizio', 'Guillermo', 'Cabello', 'Liñares', 'fabriziocabello@deliveries.app', '15.jpg', directorio);
 END;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

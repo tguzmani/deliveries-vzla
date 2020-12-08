@@ -52,24 +52,3 @@ BEGIN
     insertarCliente(8306312, 'Yulaida', 'Edith', 'Zambrano', 'Amarista', 'yulaidazambrano@deliveries.app', '14.jpg', directorio);
     insertarCliente(8742813, 'Fabrizio', 'Guillermo', 'Cabello', 'Liñares', 'fabriziocabello@deliveries.app', '15.jpg', directorio);
 END;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

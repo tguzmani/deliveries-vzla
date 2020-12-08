@@ -54,7 +54,7 @@ CREATE TABLE aliada (
     id INTEGER GENERATED ALWAYS AS IDENTITY,
     datos datos_empresa,
     logo BLOB,
-    id_sector NOT NULL,
+    id_sector INTEGER,
 
     CONSTRAINT pk_aliada PRIMARY KEY (id),
     CONSTRAINT fk_aliada_sector FOREIGN KEY (id_sector) REFERENCES sector (id)

@@ -1,3 +1,12 @@
+-- Inserts
+
+-- Preferiblemente ubicar los inserts en forma alfabética para poder ubicarlos
+-- de forma más sencilla
+
+-- Contenidos
+-- Ubicacion
+
+-- Ubicacion
 INSERT INTO ubicacion VALUES (default, 'Distrito Capital', 'estado', default, default, default);
 INSERT INTO ubicacion VALUES (default, 'Miranda', 'estado', default, default, default);
 INSERT INTO ubicacion VALUES (default, 'La Guaira', 'estado', default, default, default);

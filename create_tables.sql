@@ -36,10 +36,11 @@ CREATE TABLE servicio (
     id INTEGER GENERATED ALWAYS AS IDENTITY,
     id_aplicacion INTEGER NOT NULL,
     especificacion precio_cantidad,
-    periodo fechas,
+    periodo VARCHAR(50),
 
     CONSTRAINT pk_servicio PRIMARY KEY (id, id_aplicacion),
-    CONSTRAINT fk_servicio_aplicacion FOREIGN KEY (id_aplicacion) REFERENCES aplicacion (id) ON DELETE CASCADE
+    CONSTRAINT fk_servicio_aplicacion FOREIGN KEY (id_aplicacion) REFERENCES aplicacion (id) ON DELETE CASCADE,
+    CONSTRAINT ch_servicio CHECK (periodo IN ('mensual', 'trimestral', 'anual'))
 );
 
 CREATE TABLE sector (

@@ -1,6 +1,6 @@
 GRANT READ ON DIRECTORY IMAGEN TO SYSTEM;
 
-CREATE OR REPLACE DIRECTORY imagen AS 'C:\Users\Tomas\Projects\bases2';
+CREATE OR REPLACE DIRECTORY imagen AS 'C:\deliveries';
 
 CREATE OR REPLACE PROCEDURE insertarCliente (
     inCedula IN VARCHAR2,

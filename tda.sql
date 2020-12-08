@@ -3,7 +3,6 @@
 --TDA: datos_empresa
 
 CREATE OR REPLACE TYPE datos_empresa AS OBJECT(
-    logo     BLOB,
     nombre    VARCHAR2(20),
     rif     VARCHAR2(20),
 

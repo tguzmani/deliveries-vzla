@@ -16,6 +16,7 @@ CREATE TABLE cliente (
 CREATE TABLE aplicacion (
     id INTEGER GENERATED ALWAYS AS IDENTITY,
     datos datos_empresa,
+    logo BLOB,
 
     CONSTRAINT pk_aplicacion PRIMARY KEY (id)
 );
@@ -52,6 +53,7 @@ CREATE TABLE sector (
 CREATE TABLE aliada (
     id INTEGER GENERATED ALWAYS AS IDENTITY,
     datos datos_empresa,
+    logo BLOB,
     id_sector NOT NULL,
 
     CONSTRAINT pk_aliada PRIMARY KEY (id),

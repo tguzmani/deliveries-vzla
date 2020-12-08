@@ -10,7 +10,7 @@ CREATE OR REPLACE PROCEDURE insertarCliente (
     inPrimerApellido IN VARCHAR2,
     inSegundoApellido IN VARCHAR2,
 
-    inEmail IN VARCHAR2
+    inEmail IN VARCHAR2,
 
     inImagen IN VARCHAR2,
     inDirectorio IN VARCHAR2

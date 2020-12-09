@@ -18,37 +18,36 @@ INSERT INTO contrato VALUES (default, 1, 9, fechas(...), 15, 1);
 INSERT INTO contrato VALUES (default, 13, 12, fechas(...), 5, 13);
 
 -- Oficina
-INSERT INTO oficina VALUES (7, 3);
-INSERT INTO oficina VALUES (3, 4);
-INSERT INTO oficina VALUES (7, 11);
-INSERT INTO oficina VALUES (14, 4);
-INSERT INTO oficina VALUES (15, 5);
-INSERT INTO oficina VALUES (4, 4);
-INSERT INTO oficina VALUES (8, 5);
-INSERT INTO oficina VALUES (14, 11);
-INSERT INTO oficina VALUES (12, 11);
-INSERT INTO oficina VALUES (14, 5);
-INSERT INTO oficina VALUES (7, 1);
-INSERT INTO oficina VALUES (6, 10);
-INSERT INTO oficina VALUES (13, 11);
-INSERT INTO oficina VALUES (12, 9);
-INSERT INTO oficina VALUES (15, 14);
-
-INSERT INTO oficina VALUES (7, 8);
-INSERT INTO oficina VALUES (1, 11);
-INSERT INTO oficina VALUES (15, 12);
-INSERT INTO oficina VALUES (10, 6);
-INSERT INTO oficina VALUES (6, 8);
-INSERT INTO oficina VALUES (10, 3);
-INSERT INTO oficina VALUES (14, 3);
-INSERT INTO oficina VALUES (6, 12);
-INSERT INTO oficina VALUES (4, 8);
-INSERT INTO oficina VALUES (9, 10);
-INSERT INTO oficina VALUES (13, 4);
-INSERT INTO oficina VALUES (13, 14);
+INSERT INTO oficina VALUES (7, 23);
+INSERT INTO oficina VALUES (3, 11);
+INSERT INTO oficina VALUES (7, 12);
+INSERT INTO oficina VALUES (14, 21);
+INSERT INTO oficina VALUES (15, 19);
 INSERT INTO oficina VALUES (4, 12);
-INSERT INTO oficina VALUES (4, 2);
-INSERT INTO oficina VALUES (4, );
+INSERT INTO oficina VALUES (8, 22);
+INSERT INTO oficina VALUES (14, 21);
+INSERT INTO oficina VALUES (12, 21);
+INSERT INTO oficina VALUES (14, 21);
+INSERT INTO oficina VALUES (7, 17);
+INSERT INTO oficina VALUES (6, 15);
+INSERT INTO oficina VALUES (13, 20);
+INSERT INTO oficina VALUES (12, 24);
+INSERT INTO oficina VALUES (15, 18);
+INSERT INTO oficina VALUES (7, 11);
+INSERT INTO oficina VALUES (1, 11);
+INSERT INTO oficina VALUES (15, 14);
+INSERT INTO oficina VALUES (10, 24);
+INSERT INTO oficina VALUES (6, 21);
+INSERT INTO oficina VALUES (10, 19);
+INSERT INTO oficina VALUES (14, 11);
+INSERT INTO oficina VALUES (6, 11);
+INSERT INTO oficina VALUES (4, 18);
+INSERT INTO oficina VALUES (9, 24);
+INSERT INTO oficina VALUES (13, 12);
+INSERT INTO oficina VALUES (13, 22);
+INSERT INTO oficina VALUES (4, 12);
+INSERT INTO oficina VALUES (4, 12);
+INSERT INTO oficina VALUES (4, 19);
 
 -- Registro
 INSERT INTO REGISTRO VALUES (1, 6035694, default, get_random_date(current_date));
@@ -232,7 +231,6 @@ INSERT INTO UBICACION VALUES (default, 'Baruta', 'municipio', 10.435469137523633
 INSERT INTO UBICACION VALUES (default, 'Sucre', 'municipio', 10.512271363522597, -66.78401629345602, 2);
 INSERT INTO UBICACION VALUES (default, 'Vargas', 'municipio', 10.617282684894848, -66.9269670943103, 3);
 INSERT INTO UBICACION VALUES (default, 'Altamira', 'zona', 10.509722952107035, -66.85184684519079,6);
--- Chacao Zona y Chacao Municipio tienen las mismas coordenadas
 INSERT INTO UBICACION VALUES (default, 'Chacao', 'zona', default, default, 6); 
 INSERT INTO UBICACION VALUES (default, 'Chacaito', 'zona', 10.492872589807865, -66.86731091466498, 6);
 INSERT INTO UBICACION VALUES (default, 'La Castellana', 'zona', 10.506892245049915, -66.85579505675713, 6);

@@ -3,25 +3,25 @@ GRANT READ ON DIRECTORY IMAGEN TO SYSTEM;
 CREATE OR REPLACE DIRECTORY imagen AS 'C:\deliveries';
 
 CREATE OR REPLACE PROCEDURE insertar_cliente (
-    inCedula IN VARCHAR2,
+    in_cedula IN VARCHAR2,
 
-    inPrimerNombre IN VARCHAR2,
-    inSegundoNombre IN VARCHAR2,
-    inPrimerApellido IN VARCHAR2,
-    inSegundoApellido IN VARCHAR2,
+    in_primer_nombre IN VARCHAR2,
+    in_segundo_nombre IN VARCHAR2,
+    in_primer_apellido IN VARCHAR2,
+    in_segundo_apellido IN VARCHAR2,
 
-    inEmail IN VARCHAR2,
+    in_email IN VARCHAR2,
 
-    inImagen IN VARCHAR2,
-    inDirectorio IN VARCHAR2
+    in_imagen IN VARCHAR2,
+    in_directorio IN VARCHAR2
 ) AS
     f_lob BFILE;
     b_lob BLOB;
 BEGIN
-    f_lob := bfilename(inDirectorio, inImagen); 
+    f_lob := bfilename(in_directorio, in_imagen); 
 
     INSERT INTO cliente (cedula, primer_nombre, segundo_nombre, primer_apellido, segundo_apellido, email, foto)
-    VALUES (inCedula, inPrimerNombre, inSegundoNombre, inPrimerApellido, inSegundoApellido, inEmail, empty_blob())
+    VALUES (in_cedula, in_primer_nombre, in_segundo_nombre, in_primer_apellido, in_segundo_apellido, in_email, empty_blob())
     RETURNING foto INTO b_lob;  
 
     dbms_lob.fileopen(f_lob, dbms_lob.file_readonly);

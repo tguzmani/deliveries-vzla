@@ -218,7 +218,7 @@ INSERT INTO UBICACION VALUES (default, 'Sucre', 'municipio', 10.512271363522597,
 INSERT INTO UBICACION VALUES (default, 'Vargas', 'municipio', 10.617282684894848, -66.9269670943103, 3);
 INSERT INTO UBICACION VALUES (default, 'Altamira', 'zona', 10.509722952107035, -66.85184684519079,6);
 -- Chacao Zona y Chacao Municipio tienen las mismas coordenadas
-INSERT INTO UBICACION VALUES (default, 'Chacao', 'zona', default, default,6); 
+INSERT INTO UBICACION VALUES (default, 'Chacao', 'zona', default, default, 6); 
 INSERT INTO UBICACION VALUES (default, 'Chacaito', 'zona', 10.492872589807865, -66.86731091466498, 6);
 INSERT INTO UBICACION VALUES (default, 'La Castellana', 'zona', 10.506892245049915, -66.85579505675713, 6);
 INSERT INTO UBICACION VALUES (default, 'Las Mercedes', 'zona', 10.482630760860538, -66.86104527457431, 7);

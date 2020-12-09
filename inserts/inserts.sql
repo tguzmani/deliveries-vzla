@@ -192,7 +192,7 @@ INSERT INTO sucursal VALUES (1, 14);
 INSERT INTO sucursal VALUES (1, 11);
 INSERT INTO sucursal VALUES (2, 16);
 INSERT INTO sucursal VALUES (2, 14);
-INSERT INTO sucursal VALUES (2, 14);
+INSERT INTO sucursal VALUES (2, 10);
 INSERT INTO sucursal VALUES (3, 13);
 INSERT INTO sucursal VALUES (4, 21);
 INSERT INTO sucursal VALUES (5, 16);

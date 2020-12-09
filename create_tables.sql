@@ -25,7 +25,7 @@ CREATE TABLE registro (
     id_aplicacion INTEGER NOT NULL,
     ced_cliente INTEGER NOT NULL,
     id INTEGER GENERATED ALWAYS AS IDENTITY,
-    fechas fechas,
+    fechas DATE,
 
     CONSTRAINT pk_registro PRIMARY KEY (id_aplicacion, ced_cliente, id),
     CONSTRAINT fk_registro_cliente FOREIGN KEY (ced_cliente) REFERENCES cliente (cedula) ON DELETE CASCADE,

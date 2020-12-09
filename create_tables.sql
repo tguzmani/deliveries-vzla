@@ -24,10 +24,9 @@ CREATE TABLE aplicacion (
 CREATE TABLE registro (
     id_aplicacion INTEGER NOT NULL,
     ced_cliente INTEGER NOT NULL,
-    id INTEGER GENERATED ALWAYS AS IDENTITY,
     fechas DATE,
 
-    CONSTRAINT pk_registro PRIMARY KEY (id_aplicacion, ced_cliente, id),
+    CONSTRAINT pk_registro PRIMARY KEY (id_aplicacion, ced_cliente),
     CONSTRAINT fk_registro_cliente FOREIGN KEY (ced_cliente) REFERENCES cliente (cedula) ON DELETE CASCADE,
     CONSTRAINT fk_registro_aplicacion FOREIGN KEY (id_aplicacion) REFERENCES aplicacion (id) ON DELETE CASCADE
 );
@@ -72,7 +71,7 @@ CREATE TABLE contrato (
     CONSTRAINT pk_contrato PRIMARY KEY (n_contrato, id_aplicacion, id_aliada),
     CONSTRAINT fk_contrato_aplicacion FOREIGN KEY (id_aplicacion) REFERENCES aplicacion (id) ON DELETE CASCADE,
     CONSTRAINT fk_contrato_aliada FOREIGN KEY (id_aliada) REFERENCES aliada (id) ON DELETE CASCADE,
-    CONSTRAINT fk_contrato_servicio FOREIGN KEY (id_servicio, id_servicio_aplicacion) REFERENCES servicio (id, id_aplicacion),
+    CONSTRAINT fk_contrato_servicio FOREIGN KEY (id_servicio, id_servicio_aplicacion) REFERENCES servicio (id, id_aplicacion)
 );
 
 CREATE TABLE ubicacion (

@@ -31,6 +31,7 @@ INSERT INTO oficina VALUES (13, 4);
 INSERT INTO oficina VALUES (13, 14);
 INSERT INTO oficina VALUES (4, 12);
 INSERT INTO oficina VALUES (4, 2);
+INSERT INTO oficina VALUES (4, );
 
 -- Registro
 INSERT INTO REGISTRO VALUES (1, 6035694, default, get_random_date(current_date));
@@ -201,35 +202,36 @@ INSERT INTO sucursal VALUES (15, 13);
 INSERT INTO sucursal VALUES (14, 14);
 INSERT INTO sucursal VALUES (6, 4);
 INSERT INTO sucursal VALUES (13, 1);
-INSERT INTO sucursal VALUES (5, 13);
+INSERT INTO sucursal VALUES (5, 14);
 
 
 
 -- Ubicacion
-INSERT INTO UBICACION VALUES (default, 'Distrito Capital', 'estado', default, default, default);
-INSERT INTO UBICACION VALUES (default, 'Miranda', 'estado', default, default, default);
-INSERT INTO UBICACION VALUES (default, 'La Guaira', 'estado', default, default, default);
-INSERT INTO UBICACION VALUES (default, 'Libertador', 'municipio', default, default, 1);
-INSERT INTO UBICACION VALUES (default, 'El Hatillo', 'municipio', default, default, 2);
-INSERT INTO UBICACION VALUES (default, 'Chacao', 'municipio', default, default, 2);
-INSERT INTO UBICACION VALUES (default, 'Baruta', 'municipio', default, default, 2);
-INSERT INTO UBICACION VALUES (default, 'Sucre', 'municipio', default, default, 2);
-INSERT INTO UBICACION VALUES (default, 'Vargas', 'municipio', default, default, 3);
-INSERT INTO UBICACION VALUES (default, 'Altamira', 'zona', default, default,6);
-INSERT INTO UBICACION VALUES (default, 'Chacao', 'zona', default, default,6);
-INSERT INTO UBICACION VALUES (default, 'Chacaito', 'zona', default, default,6);
-INSERT INTO UBICACION VALUES (default, 'La Castellana', 'zona', default, default,6);
-INSERT INTO UBICACION VALUES (default, 'Las Mercedes', 'zona', default, default,7);
-INSERT INTO UBICACION VALUES (default, 'Los Dos Caminos', 'zona', default, default,8);
-INSERT INTO UBICACION VALUES (default, 'Los Palos Grandes', 'zona', default, default,6);
-INSERT INTO UBICACION VALUES (default, 'San Bernardino', 'zona', default, default,4);
-INSERT INTO UBICACION VALUES (default, 'Avenida Baralt', 'zona', default, default,4);
-INSERT INTO UBICACION VALUES (default, 'Avenida Victoria', 'zona', default, default,4);
-INSERT INTO UBICACION VALUES (default, 'La Trinidad', 'zona', default, default,7);
-INSERT INTO UBICACION VALUES (default, 'Prados del Este', 'zona', default, default,7);
-INSERT INTO UBICACION VALUES (default, 'Catia la Mar', 'zona', default, default,9);
-INSERT INTO UBICACION VALUES (default, 'Caraballeda', 'zona', default, default,9);
-INSERT INTO UBICACION VALUES (default, 'Macuto', 'zona', default, default,9);
+INSERT INTO UBICACION VALUES (default, 'Distrito Capital', 'estado', 10.50071475276337, -66.9511029846569, default);
+INSERT INTO UBICACION VALUES (default, 'Miranda', 'estado', 10.275709860107188, -66.42898801626855, default);
+INSERT INTO UBICACION VALUES (default, 'La Guaira', 'estado', 10.616607794151536, -66.93314690371663, default);
+INSERT INTO UBICACION VALUES (default, 'Libertador', 'municipio', 10.502305479593335, -66.95148466218333, 1);
+INSERT INTO UBICACION VALUES (default, 'El Hatillo', 'municipio', 10.42467449286987, -66.82523422284868, 2);
+INSERT INTO UBICACION VALUES (default, 'Chacao', 'municipio', 10.494648052846701, -66.8550803794353, 2);
+INSERT INTO UBICACION VALUES (default, 'Baruta', 'municipio', 10.435469137523633, -66.87448588618497, 2);
+INSERT INTO UBICACION VALUES (default, 'Sucre', 'municipio', 10.512271363522597, -66.78401629345602, 2);
+INSERT INTO UBICACION VALUES (default, 'Vargas', 'municipio', 10.617282684894848, -66.9269670943103, 3);
+INSERT INTO UBICACION VALUES (default, 'Altamira', 'zona', 10.509722952107035, -66.85184684519079,6);
+-- Chacao Zona y Chacao Municipio tienen las mismas coordenadas
+INSERT INTO UBICACION VALUES (default, 'Chacao', 'zona', default, default,6); 
+INSERT INTO UBICACION VALUES (default, 'Chacaito', 'zona', 10.492872589807865, -66.86731091466498, 6);
+INSERT INTO UBICACION VALUES (default, 'La Castellana', 'zona', 10.506892245049915, -66.85579505675713, 6);
+INSERT INTO UBICACION VALUES (default, 'Las Mercedes', 'zona', 10.482630760860538, -66.86104527457431, 7);
+INSERT INTO UBICACION VALUES (default, 'Los Dos Caminos', 'zona', 10.501331217200084, -66.83224337638781, 8);
+INSERT INTO UBICACION VALUES (default, 'Los Palos Grandes', 'zona', 10.507249206930775, -66.84287282441545, 6);
+INSERT INTO UBICACION VALUES (default, 'San Bernardino', 'zona', 10.51535615951692, -66.90134834044454, 4);
+INSERT INTO UBICACION VALUES (default, 'Avenida Baralt', 'zona', 10.516816505005062, -66.91573571688004, 4);
+INSERT INTO UBICACION VALUES (default, 'Avenida Victoria', 'zona', 10.48666244401694, -66.90133777179757, 4);
+INSERT INTO UBICACION VALUES (default, 'La Trinidad', 'zona', 10.434606478526481, -66.87088099736482, 7);
+INSERT INTO UBICACION VALUES (default, 'Prados del Este', 'zona', 10.449036238696191, -66.88687882456107, 7);
+INSERT INTO UBICACION VALUES (default, 'Catia la Mar', 'zona', 10.599081805002227, -67.04842898578981, 9);
+INSERT INTO UBICACION VALUES (default, 'Caraballeda', 'zona', 10.624167217150097, -66.85092083117203, 9);
+INSERT INTO UBICACION VALUES (default, 'Macuto', 'zona', 10.616764438209742, -66.8960680472307, 9);
 
 --reiniciador de secuencia
 --alter table *nombre tabla*

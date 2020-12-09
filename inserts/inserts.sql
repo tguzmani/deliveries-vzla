@@ -1,6 +1,38 @@
 -- Inserts
 
---Registro
+-- Oficina
+INSERT INTO oficina VALUES (7, 3);
+INSERT INTO oficina VALUES (3, 4);
+INSERT INTO oficina VALUES (7, 11);
+INSERT INTO oficina VALUES (14, 4);
+INSERT INTO oficina VALUES (15, 5);
+INSERT INTO oficina VALUES (4, 4);
+INSERT INTO oficina VALUES (8, 5);
+INSERT INTO oficina VALUES (14, 11);
+INSERT INTO oficina VALUES (12, 11);
+INSERT INTO oficina VALUES (14, 5);
+INSERT INTO oficina VALUES (7, 1);
+INSERT INTO oficina VALUES (6, 10);
+INSERT INTO oficina VALUES (13, 11);
+INSERT INTO oficina VALUES (12, 9);
+INSERT INTO oficina VALUES (15, 14);
+
+INSERT INTO oficina VALUES (7, 8);
+INSERT INTO oficina VALUES (1, 11);
+INSERT INTO oficina VALUES (15, 12);
+INSERT INTO oficina VALUES (10, 6);
+INSERT INTO oficina VALUES (6, 8);
+INSERT INTO oficina VALUES (10, 3);
+INSERT INTO oficina VALUES (14, 3);
+INSERT INTO oficina VALUES (6, 12);
+INSERT INTO oficina VALUES (4, 8);
+INSERT INTO oficina VALUES (9, 10);
+INSERT INTO oficina VALUES (13, 4);
+INSERT INTO oficina VALUES (13, 14);
+INSERT INTO oficina VALUES (4, 12);
+INSERT INTO oficina VALUES (4, 2);
+
+-- Registro
 INSERT INTO REGISTRO VALUES (1, 6035694, default, get_random_date(current_date));
 INSERT INTO REGISTRO VALUES (1, 13749571, default, get_random_date(current_date));
 INSERT INTO REGISTRO VALUES (1, 5263491, default, get_random_date(current_date));
@@ -137,6 +169,41 @@ INSERT INTO SERVICIO VALUES (default, 14, PRECIO_CANTIDAD(PRECIO_CANTIDAD.VALIDA
     PRECIO_CANTIDAD.VALIDAR_PRECIO(450)), 'trimestral');
 INSERT INTO SERVICIO VALUES (default, 15, PRECIO_CANTIDAD(PRECIO_CANTIDAD.VALIDAR_CANTIDAD(500),
     PRECIO_CANTIDAD.VALIDAR_PRECIO(600)), 'anual');
+
+-- Sucursal
+INSERT INTO sucursal VALUES (8, 7);
+INSERT INTO sucursal VALUES (9, 11);
+INSERT INTO sucursal VALUES (12, 13);
+INSERT INTO sucursal VALUES (1, 14);
+INSERT INTO sucursal VALUES (11, 11);
+INSERT INTO sucursal VALUES (13, 6);
+INSERT INTO sucursal VALUES (7, 10);
+INSERT INTO sucursal VALUES (3, 1);
+INSERT INTO sucursal VALUES (11, 12);
+INSERT INTO sucursal VALUES (10, 11);
+INSERT INTO sucursal VALUES (11, 3);
+INSERT INTO sucursal VALUES (6, 10);
+INSERT INTO sucursal VALUES (1, 12);
+INSERT INTO sucursal VALUES (2, 3);
+INSERT INTO sucursal VALUES (11, 14);
+
+INSERT INTO sucursal VALUES (4, 7);
+INSERT INTO sucursal VALUES (12, 15);
+INSERT INTO sucursal VALUES (8, 11);
+INSERT INTO sucursal VALUES (13, 10);
+INSERT INTO sucursal VALUES (2, 10);
+INSERT INTO sucursal VALUES (5, 13);
+INSERT INTO sucursal VALUES (9, 7);
+INSERT INTO sucursal VALUES (14, 15);
+INSERT INTO sucursal VALUES (15, 10);
+INSERT INTO sucursal VALUES (2, 4);
+INSERT INTO sucursal VALUES (15, 13);
+INSERT INTO sucursal VALUES (14, 14);
+INSERT INTO sucursal VALUES (6, 4);
+INSERT INTO sucursal VALUES (13, 1);
+INSERT INTO sucursal VALUES (5, 13);
+
+
 
 -- Ubicacion
 INSERT INTO UBICACION VALUES (default, 'Distrito Capital', 'estado', default, default, default);

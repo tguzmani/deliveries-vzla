@@ -62,7 +62,6 @@ INSERT INTO REGISTRO VALUES (15, 12516807, default, get_random_date(current_date
 INSERT INTO REGISTRO VALUES (15, 8306312, default, get_random_date(current_date));
 INSERT INTO REGISTRO VALUES (15, 8742813, default, get_random_date(current_date));
 
-
 -- Sector
 INSERT INTO SECTOR VALUES (default, 'Restaurantes');
 INSERT INTO SECTOR VALUES (default, 'Farmacia');

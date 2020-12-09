@@ -1,7 +1,5 @@
---CODIGO DE SIMULACION DE Deliveries
-
 --FUNCIÓN GENERADORA DE FECHAS RANDOM
-create FUNCTION get_random_date(fecha_fin DATE)
+CREATE FUNCTION get_random_date(fecha_fin DATE)
 RETURN DATE IS
     fecha DATE;
 BEGIN

@@ -230,7 +230,7 @@ INSERT INTO UBICACION VALUES (default, 'Baruta', 'municipio', 10.435469137523633
 INSERT INTO UBICACION VALUES (default, 'Sucre', 'municipio', 10.512271363522597, -66.78401629345602, 2);
 INSERT INTO UBICACION VALUES (default, 'Vargas', 'municipio', 10.617282684894848, -66.9269670943103, 3);
 INSERT INTO UBICACION VALUES (default, 'Altamira', 'zona', 10.509722952107035, -66.85184684519079,6);
-INSERT INTO UBICACION VALUES (default, 'Chacao', 'zona', default, default, 6); 
+INSERT INTO UBICACION VALUES (default, 'Chacao', 'zona', 10.494648052846701, -66.8550803794353, 6);
 INSERT INTO UBICACION VALUES (default, 'Chacaito', 'zona', 10.492872589807865, -66.86731091466498, 6);
 INSERT INTO UBICACION VALUES (default, 'La Castellana', 'zona', 10.506892245049915, -66.85579505675713, 6);
 INSERT INTO UBICACION VALUES (default, 'Las Mercedes', 'zona', 10.482630760860538, -66.86104527457431, 7);
@@ -244,6 +244,30 @@ INSERT INTO UBICACION VALUES (default, 'Prados del Este', 'zona', 10.44903623869
 INSERT INTO UBICACION VALUES (default, 'Catia la Mar', 'zona', 10.599081805002227, -67.04842898578981, 9);
 INSERT INTO UBICACION VALUES (default, 'Caraballeda', 'zona', 10.624167217150097, -66.85092083117203, 9);
 INSERT INTO UBICACION VALUES (default, 'Macuto', 'zona', 10.616764438209742, -66.8960680472307, 9);
+
+-- Unidades
+CREATE OR REPLACE PROCEDURE insertar_unidades
+IS
+    office OFICINA%rowtype;
+    CURSOR c1 IS
+        SELECT * INTO office
+        FROM OFICINA;
+BEGIN
+    OPEN c1;
+    LOOP
+        FETCH c1 INTO office;
+        EXIT WHEN c1%NOTFOUND;
+        INSERT INTO UNIDAD VALUES (DEFAULT,get_random_placa(1),'camioneta','activo',office.ID_APLICACION,office.ID_ZONA,NULL);
+        INSERT INTO UNIDAD VALUES (DEFAULT,get_random_placa(1),'carro','activo',office.ID_APLICACION,office.ID_ZONA,NULL);
+        INSERT INTO UNIDAD VALUES (DEFAULT,get_random_placa(2),'moto','activo',office.ID_APLICACION,office.ID_ZONA,NULL);
+        INSERT INTO UNIDAD VALUES (DEFAULT,get_random_placa(2),'moto','activo',office.ID_APLICACION,office.ID_ZONA,NULL);
+        INSERT INTO UNIDAD VALUES (DEFAULT,get_random_placa(2),'moto','activo',office.ID_APLICACION,office.ID_ZONA,NULL);
+    END LOOP;
+    CLOSE c1;
+END;
+
+CALL insertar_unidades();
+
 
 --reiniciador de secuencia
 --alter table *nombre tabla*

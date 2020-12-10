@@ -30,6 +30,8 @@ INSERT INTO UBICACION VALUES (default, 'Macuto', 'zona', 10.616764438209742, -66
 -- Oficina
 INSERT INTO oficina VALUES (1, 20);
 INSERT INTO oficina VALUES (1, 11);
+INSERT INTO oficina VALUES (1, 15);
+INSERT INTO oficina VALUES (2, 16);
 INSERT INTO oficina VALUES (2, 21);
 INSERT INTO oficina VALUES (3, 24);
 INSERT INTO oficina VALUES (3, 18);
@@ -53,11 +55,9 @@ INSERT INTO oficina VALUES (12, 19);
 INSERT INTO oficina VALUES (13, 21);
 INSERT INTO oficina VALUES (13, 19);
 INSERT INTO oficina VALUES (14, 23);
-INSERT INTO oficina VALUES (14, 24);
+INSERT INTO oficina VALUES (14, 18);
 INSERT INTO oficina VALUES (15, 24);
 INSERT INTO oficina VALUES (15, 14);
-INSERT INTO oficina VALUES (15, 15);
-INSERT INTO oficina VALUES (15, 21);
 
 -- Registro
 INSERT INTO REGISTRO VALUES (1, 6035694, get_random_date(current_date));

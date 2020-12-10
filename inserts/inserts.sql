@@ -27,21 +27,21 @@ INSERT INTO UBICACION VALUES (default, 'Caraballeda', 'zona', 10.624167217150097
 INSERT INTO UBICACION VALUES (default, 'Macuto', 'zona', 10.616764438209742, -66.8960680472307, 9);
 
 -- Contrato
-INSERT INTO contrato VALUES (default, 12, 7, fechas(...), 13, 7);
-INSERT INTO contrato VALUES (default, 11, 5, fechas(...), 6, 1);
-INSERT INTO contrato VALUES (default, 8, 2, fechas(...), 1, 1);
-INSERT INTO contrato VALUES (default, 7, 15, fechas(...), 10, 12);
-INSERT INTO contrato VALUES (default, 12, 15, fechas(...), 13, 1);
-INSERT INTO contrato VALUES (default, 15, 3, fechas(...), 9, 8);
-INSERT INTO contrato VALUES (default, 13, 6, fechas(...), 8, 6);
-INSERT INTO contrato VALUES (default, 6, 11, fechas(...), 1, 8);
-INSERT INTO contrato VALUES (default, 14, 2, fechas(...), 9, 12);
-INSERT INTO contrato VALUES (default, 1, 9, fechas(...), 4, 13);
-INSERT INTO contrato VALUES (default, 3, 4, fechas(...), 7, 15);
-INSERT INTO contrato VALUES (default, 9, 6, fechas(...), 7, 7);
-INSERT INTO contrato VALUES (default, 8, 9, fechas(...), 3, 2);
-INSERT INTO contrato VALUES (default, 1, 9, fechas(...), 15, 1);
-INSERT INTO contrato VALUES (default, 13, 12, fechas(...), 5, 13);
+INSERT INTO contrato VALUES (default, 12, 7, fechas(fechas.validar_fecha(get_random_date(current_date)), null), 13, 7);
+INSERT INTO contrato VALUES (default, 11, 5, fechas(fechas.validar_fecha(get_random_date(current_date)), null), 6, 1);
+INSERT INTO contrato VALUES (default, 8, 2, fechas(fechas.validar_fecha(get_random_date(current_date)), null), 1, 1);
+INSERT INTO contrato VALUES (default, 7, 15, fechas(fechas.validar_fecha(get_random_date(current_date)), null), 10, 12);
+INSERT INTO contrato VALUES (default, 12, 15, fechas(fechas.validar_fecha(get_random_date(current_date)), null), 13, 1);
+INSERT INTO contrato VALUES (default, 15, 3, fechas(fechas.validar_fecha(get_random_date(current_date)), null), 9, 8);
+INSERT INTO contrato VALUES (default, 13, 6, fechas(fechas.validar_fecha(get_random_date(current_date)), null), 8, 6);
+INSERT INTO contrato VALUES (default, 6, 11, fechas(fechas.validar_fecha(get_random_date(current_date)), null), 1, 8);
+INSERT INTO contrato VALUES (default, 14, 2, fechas(fechas.validar_fecha(get_random_date(current_date)), null), 9, 12);
+INSERT INTO contrato VALUES (default, 1, 9, fechas(fechas.validar_fecha(get_random_date(current_date)), null), 4, 13);
+INSERT INTO contrato VALUES (default, 3, 4, fechas(fechas.validar_fecha(get_random_date(current_date)), null), 7, 15);
+INSERT INTO contrato VALUES (default, 9, 6, fechas(fechas.validar_fecha(get_random_date(current_date)), null), 7, 7);
+INSERT INTO contrato VALUES (default, 8, 9, fechas(fechas.validar_fecha(get_random_date(current_date)), null), 3, 2);
+INSERT INTO contrato VALUES (default, 1, 9, fechas(fechas.validar_fecha(get_random_date(current_date)), null), 15, 1);
+INSERT INTO contrato VALUES (default, 13, 12, fechas(fechas.validar_fecha(get_random_date(current_date)), null), 5, 13);
 
 -- Oficina
 INSERT INTO oficina VALUES (1, 20);

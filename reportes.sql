@@ -15,6 +15,7 @@ WHERE ofi.id_aplicacion = app.id
 AND ofi.id_zona = ubi.id
 AND uni.id_zona_oficina = ofi.id_zona
 AND uni.id_aplicacion_oficina = ofi.id_aplicacion
+AND ubi.tipo = 'estado';
 
 -- REPORTE 5
 

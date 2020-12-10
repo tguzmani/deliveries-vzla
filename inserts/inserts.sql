@@ -26,6 +26,23 @@ INSERT INTO UBICACION VALUES (default, 'Catia la Mar', 'zona', 10.59908180500222
 INSERT INTO UBICACION VALUES (default, 'Caraballeda', 'zona', 10.624167217150097, -66.85092083117203, 9);
 INSERT INTO UBICACION VALUES (default, 'Macuto', 'zona', 10.616764438209742, -66.8960680472307, 9);
 
+-- Contrato
+INSERT INTO contrato VALUES (default, 12, 7, fechas(TO_DATE('2020-01-25', 'YYYY-MM-DD'), null), 13, 7);
+INSERT INTO contrato VALUES (default, 11, 5, fechas(TO_DATE('2020-01-07', 'YYYY-MM-DD'), null), 6, 1);
+INSERT INTO contrato VALUES (default, 8, 2, fechas(TO_DATE('2020-07-06', 'YYYY-MM-DD'), null), 1, 1);
+INSERT INTO contrato VALUES (default, 7, 15, fechas(TO_DATE('2020-04-26', 'YYYY-MM-DD'), null), 10, 12);
+INSERT INTO contrato VALUES (default, 12, 15, fechas(TO_DATE('2020-10-17', 'YYYY-MM-DD'), null), 13, 1);
+INSERT INTO contrato VALUES (default, 15, 3, fechas(TO_DATE('2020-10-16', 'YYYY-MM-DD'), null), 9, 8);
+INSERT INTO contrato VALUES (default, 13, 6, fechas(TO_DATE('2020-02-09', 'YYYY-MM-DD'), null), 8, 6);
+INSERT INTO contrato VALUES (default, 6, 11, fechas(TO_DATE('2020-02-16', 'YYYY-MM-DD'), null), 1, 8);
+INSERT INTO contrato VALUES (default, 14, 2, fechas(TO_DATE('2020-08-08', 'YYYY-MM-DD'), null), 9, 12);
+INSERT INTO contrato VALUES (default, 1, 9, fechas(TO_DATE('2020-02-07', 'YYYY-MM-DD'), null), 4, 13);
+INSERT INTO contrato VALUES (default, 3, 4, fechas(TO_DATE('2020-08-27', 'YYYY-MM-DD'), null), 7, 15);
+INSERT INTO contrato VALUES (default, 9, 6, fechas(TO_DATE('2020-02-11', 'YYYY-MM-DD'), null), 7, 7);
+INSERT INTO contrato VALUES (default, 8, 9, fechas(TO_DATE('2020-10-04', 'YYYY-MM-DD'), null), 3, 2);
+INSERT INTO contrato VALUES (default, 1, 9, fechas(TO_DATE('2020-08-23', 'YYYY-MM-DD'), null), 15, 1);
+INSERT INTO contrato VALUES (default, 13, 12, fechas(TO_DATE('2020-11-11', 'YYYY-MM-DD'), null), 5, 13);
+
 -- Oficina
 INSERT INTO oficina VALUES (1, 20);
 INSERT INTO oficina VALUES (1, 11);
@@ -195,24 +212,6 @@ INSERT INTO SERVICIO VALUES (default, 14, PRECIO_CANTIDAD(PRECIO_CANTIDAD.VALIDA
     PRECIO_CANTIDAD.VALIDAR_PRECIO(450)), 'trimestral');
 INSERT INTO SERVICIO VALUES (default, 15, PRECIO_CANTIDAD(PRECIO_CANTIDAD.VALIDAR_CANTIDAD(500),
     PRECIO_CANTIDAD.VALIDAR_PRECIO(600)), 'anual');
-
--- Contrato
-INSERT INTO contrato VALUES (default, 12, 7, fechas(TO_DATE('2020-01-25', 'YYYY-MM-DD'), null), 13, 7);
-INSERT INTO contrato VALUES (default, 11, 5, fechas(TO_DATE('2020-01-7', 'YYYY-MM-DD'), null), 6, 1);
-INSERT INTO contrato VALUES (default, 8, 2, fechas(TO_DATE('2020-07-6', 'YYYY-MM-DD'), null), 1, 1);
-INSERT INTO contrato VALUES (default, 7, 15, fechas(TO_DATE('2020-04-26', 'YYYY-MM-DD'), null), 10, 12);
-INSERT INTO contrato VALUES (default, 12, 15, fechas(TO_DATE('2020-10-17', 'YYYY-MM-DD'), null), 13, 1);
-INSERT INTO contrato VALUES (default, 15, 3, fechas(TO_DATE('2020-10-16', 'YYYY-MM-DD'), null), 9, 8);
-INSERT INTO contrato VALUES (default, 13, 6, fechas(TO_DATE('2020-02-9', 'YYYY-MM-DD'), null), 8, 6);
-INSERT INTO contrato VALUES (default, 6, 11, fechas(TO_DATE('2020-02-16', 'YYYY-MM-DD'), null), 1, 8);
-INSERT INTO contrato VALUES (default, 14, 2, fechas(TO_DATE('2020-08-8', 'YYYY-MM-DD'), null), 9, 12);
-INSERT INTO contrato VALUES (default, 1, 9, fechas(TO_DATE('2020-02-7', 'YYYY-MM-DD'), null), 4, 13);
-INSERT INTO contrato VALUES (default, 3, 4, fechas(TO_DATE('2020-08-27', 'YYYY-MM-DD'), null), 7, 15);
-INSERT INTO contrato VALUES (default, 9, 6, fechas(TO_DATE('2020-02-11', 'YYYY-MM-DD'), null), 7, 7);
-INSERT INTO contrato VALUES (default, 8, 9, fechas(TO_DATE('2020-10-4', 'YYYY-MM-DD'), null), 3, 2);
-INSERT INTO contrato VALUES (default, 1, 9, fechas(TO_DATE('2020-08-23', 'YYYY-MM-DD'), null), 15, 1);
-INSERT INTO contrato VALUES (default, 13, 12, fechas(TO_DATE('2020-11-11', 'YYYY-MM-DD'), null), 5, 13);
-
 
 -- Sucursal
 INSERT INTO sucursal VALUES (1, 14);

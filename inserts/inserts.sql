@@ -179,12 +179,12 @@ INSERT INTO contrato VALUES (default, 2, 1, fechas(TO_DATE('2020-02-07', 'YYYY-M
 INSERT INTO contrato VALUES (default, 3, 12, fechas(TO_DATE('2020-11-21', 'YYYY-MM-DD'), TO_DATE('2020-12-21', 'YYYY-MM-DD')), 5, 3);
 INSERT INTO contrato VALUES (default, 3, 5, fechas(TO_DATE('2020-01-07', 'YYYY-MM-DD'), TO_DATE('2020-04-07', 'YYYY-MM-DD')), 6, 3);
 INSERT INTO contrato VALUES (default, 4, 4, fechas(TO_DATE('2020-08-27', 'YYYY-MM-DD'), TO_DATE('2020-09-27', 'YYYY-MM-DD')), 7, 4);
-INSERT INTO contrato VALUES (default, 4, 6, fechas(TO_DATE('2020-02-09', 'YYYY-MM-DD'), TO_DATE('2020-03-09', 'YYYY-MM-DD')), 8, 13);
+INSERT INTO contrato VALUES (default, 4, 6, fechas(TO_DATE('2020-02-09', 'YYYY-MM-DD'), TO_DATE('2020-03-09', 'YYYY-MM-DD')), 8, 4);
 INSERT INTO contrato VALUES (default, 5, 3, fechas(TO_DATE('2020-11-20', 'YYYY-MM-DD'), TO_DATE('2020-12-20', 'YYYY-MM-DD')), 9, 5);
 INSERT INTO contrato VALUES (default, 5, 2, fechas(TO_DATE('2020-08-8', 'YYYY-MM-DD'), TO_DATE('2020-09-8', 'YYYY-MM-DD')), 9, 5);
-INSERT INTO contrato VALUES (default, 5, 15, fechas(TO_DATE('2020-04-26', 'YYYY-MM-DD'), TO_DATE('2021-04-26', 'YYYY-MM-DD')), 10, 5);
-INSERT INTO contrato VALUES (default, 9, 7, fechas(TO_DATE('2020-08-25', 'YYYY-MM-DD'), TO_DATE('2020-09-25', 'YYYY-MM-DD')), 13, 9);
-INSERT INTO contrato VALUES (default, 9, 15, fechas(TO_DATE('2020-10-17', 'YYYY-MM-DD'), TO_DATE('2020-11-17', 'YYYY-MM-DD')), 13, 9);
+INSERT INTO contrato VALUES (default, 5, 13, fechas(TO_DATE('2020-04-26', 'YYYY-MM-DD'), TO_DATE('2021-04-26', 'YYYY-MM-DD')), 10, 5);
+INSERT INTO contrato VALUES (default, 8, 7, fechas(TO_DATE('2020-08-25', 'YYYY-MM-DD'), TO_DATE('2020-09-25', 'YYYY-MM-DD')), 13, 8);
+INSERT INTO contrato VALUES (default, 9, 15, fechas(TO_DATE('2020-10-17', 'YYYY-MM-DD'), TO_DATE('2020-11-17', 'YYYY-MM-DD')), 14, 9);
 INSERT INTO contrato VALUES (default, 10, 9, fechas(TO_DATE('2020-10-23', 'YYYY-MM-DD'), TO_DATE('2020-01-23', 'YYYY-MM-DD')), 15, 10);
 INSERT INTO contrato VALUES (default, 13, 6, fechas(TO_DATE('2020-02-11', 'YYYY-MM-DD'), TO_DATE('2020-03-11', 'YYYY-MM-DD')), 18, 13);
 

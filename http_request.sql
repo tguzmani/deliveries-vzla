@@ -28,25 +28,28 @@ BEGIN
 END;
 /
 
-CREATE OR REPLACE PROCEDURE get_time (
+CREATE OR REPLACE FUNCTION get_travel_time (
     in_origin_lat NUMBER,
     in_origin_long NUMBER,
     in_destination_lat NUMBER,
     in_destination_long NUMBER
-)
+) RETURN VARCHAR2
 IS
+    -- HTTP Request
     req utl_http.req;
     res utl_http.resp;
 
+    -- Ruta
     route VARCHAR2(4000) := 'localhost:8000/?';
     query_origins VARCHAR2(4000) := 
         'originLat=' || in_origin_lat || '&originLong=' || in_origin_long;
     query_destination VARCHAR2(4000) := 
         '&destinationLat=' || in_destination_lat || '&destinationLong=' || in_destination_long;
-
     url VARCHAR(4000) := route || query_origins || query_destination;
 
+    -- Containers
     buffer VARCHAR2(4000);
+    travel_time VARCHAR2(10);
 BEGIN
     req := utl_http.begin_request(url, 'GET',' HTTP/1.1');
     utl_http.set_header(req, 'content-type', 'application/json'); 
@@ -55,20 +58,23 @@ BEGIN
     BEGIN
       LOOP
         utl_http.read_line(res, buffer);
-        dbms_output.put_line(url);
-        dbms_output.put_line(buffer);
+        -- dbms_output.put_line(url);
+        travel_time := buffer;
       END LOOP;
-      utl_http.end_response(res);
+
     EXCEPTION
       WHEN utl_http.end_of_body 
       THEN
         utl_http.end_response(res);
+        RETURN travel_time;
     END;
 END;
 
-CALL get_time(
+SELECT get_travel_time(
     10.50071475276337,
     -66.9511029846569,
-    10.42467449286987,
-    -66.82523422284868
-);
+    10.48666244401694,
+    -66.90133777179757
+) AS travel_time FROM dual;
+
+-- xd

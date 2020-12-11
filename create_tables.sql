@@ -36,6 +36,7 @@ CREATE TABLE servicio (
     id_aplicacion INTEGER NOT NULL,
     especificacion precio_cantidad,
     periodo VARCHAR(50),
+    fecha FECHAS,
 
     CONSTRAINT pk_servicio PRIMARY KEY (id, id_aplicacion),
     CONSTRAINT fk_servicio_aplicacion FOREIGN KEY (id_aplicacion) REFERENCES aplicacion (id) ON DELETE CASCADE,

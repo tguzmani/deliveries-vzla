@@ -76,5 +76,3 @@ SELECT get_travel_time(
     10.48666244401694,
     -66.90133777179757
 ) AS travel_time FROM dual;
-
--- xd

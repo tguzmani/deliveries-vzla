@@ -25,7 +25,7 @@ app.get('/', async (req, res) => {
 
   try {
     const response = await axios.get(url)
-    return res.json(response.data.rows[0].elements[0].duration.text)
+    return res.json(response.data.rows[0].elements[0].duration.value)
   } catch (error) {
     return res.status(400).send('Error')
   }

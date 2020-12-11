@@ -28,44 +28,35 @@ BEGIN
 END;
 /
 
--- (1/3) Parece que para poder utilizar bien los JSON hay que utilizar una tabla auxiliar
--- En esta se guardan las filas de JSON y luego con un SELECT (más abajo)
--- Se extrae información de las mismas
-
-CREATE TABLE json_http_helper (
-    id INTEGER GENERATED ALWAYS AS IDENTITY,
-    fecha DATE DEFAULT CURRENT_DATE,
-    data CLOB,
-
-    CONSTRAINT ch_json CHECK (data IS JSON)
-);
-
--- (2/3) Este es el procedimiento de prueba. Una vez domine su uso, me muevo al API de Google
-CREATE OR REPLACE PROCEDURE test_http (
-    in_query VARCHAR
+CREATE OR REPLACE PROCEDURE get_time (
+    in_origin_lat NUMBER,
+    in_origin_long NUMBER,
+    in_destination_lat NUMBER,
+    in_destination_long NUMBER
 )
 IS
     req utl_http.req;
     res utl_http.resp;
-    url VARCHAR2(4000) := 'http://localhost:8000/?data=' || in_query;
-    name VARCHAR2(4000);
+
+    route VARCHAR2(4000) := 'localhost:8000/?';
+    query_origins VARCHAR2(4000) := 
+        'originLat=' || in_origin_lat || '&originLong=' || in_origin_long;
+    query_destination VARCHAR2(4000) := 
+        '&destinationLat=' || in_destination_lat || '&destinationLong=' || in_destination_long;
+
+    url VARCHAR(4000) := route || query_origins || query_destination;
+
     buffer VARCHAR2(4000);
 BEGIN
     req := utl_http.begin_request(url, 'GET',' HTTP/1.1');
-    -- utl_http.set_header(req, 'user-agent', 'mozilla/4.0'); 
     utl_http.set_header(req, 'content-type', 'application/json'); 
-    -- utl_http.set_header(req, 'Content-Length', length(content));
-
-    -- utl_http.write_text(req, content);
     res := utl_http.get_response(req);
-
-    DELETE FROM json_http_helper;
 
     BEGIN
       LOOP
         utl_http.read_line(res, buffer);
+        dbms_output.put_line(url);
         dbms_output.put_line(buffer);
-        INSERT INTO json_http_helper VALUES (default, default, buffer);
       END LOOP;
       utl_http.end_response(res);
     EXCEPTION
@@ -75,11 +66,9 @@ BEGIN
     END;
 END;
 
-CALL test_http('350');
-
--- (3/3) Verificar que el SP hace lo que debe
-SELECT jt.*
-FROM json_http_helper,
-JSON_TABLE(data, '$'
-    COLUMNS (distance INTEGER PATH '$.distance'))
-AS jt;
+CALL get_time(
+    10.50071475276337,
+    -66.9511029846569,
+    10.42467449286987,
+    -66.82523422284868
+);

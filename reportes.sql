@@ -17,6 +17,12 @@ BEGIN
 END;
 
 -- REPORTE 2
+SELECT c.cedula, c.FOTO, c.PRIMER_NOMBRE, c.SEGUNDO_APELLIDO,
+       c.SEGUNDO_NOMBRE, c.SEGUNDO_APELLIDO, c.EMAIL, a.LOGO,
+       a.DATOS.NOMBRE, r.FECHAS, (SELECT u.NOMBRE FROM UBICACION u, DIRECCION d WHERE c.CEDULA=d.CED_CLIENTE
+           and u.ID=d.ID_ZONA)
+FROM CLIENTE c, APLICACION a, REGISTRO r
+WHERE r.CED_CLIENTE = c.CEDULA AND a.ID = r.ID_APLICACION;
 -- Require funcion MIN(contrato.fecha_inicio)
 -- Require funcion listar_estados()
 SELECT *

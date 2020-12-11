@@ -38,4 +38,3 @@ BEGIN
     RETURN n_placa;
 END;
 
-

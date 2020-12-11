@@ -26,12 +26,26 @@ INSERT INTO UBICACION VALUES (default, 'Catia la Mar', 'zona', 10.59908180500222
 INSERT INTO UBICACION VALUES (default, 'Caraballeda', 'zona', 10.624167217150097, -66.85092083117203, 9);
 INSERT INTO UBICACION VALUES (default, 'Macuto', 'zona', 10.616764438209742, -66.8960680472307, 9);
 
+-- Contrato
+INSERT INTO contrato VALUES (default, 12, 7, fechas(TO_DATE('2020-01-25', 'YYYY-MM-DD'), null), 13, 7);
+INSERT INTO contrato VALUES (default, 11, 5, fechas(TO_DATE('2020-01-7', 'YYYY-MM-DD'), null), 6, 1);
+INSERT INTO contrato VALUES (default, 8, 2, fechas(TO_DATE('2020-07-6', 'YYYY-MM-DD'), null), 1, 1);
+INSERT INTO contrato VALUES (default, 7, 15, fechas(TO_DATE('2020-04-26', 'YYYY-MM-DD'), null), 10, 12);
+INSERT INTO contrato VALUES (default, 12, 15, fechas(TO_DATE('2020-10-17', 'YYYY-MM-DD'), null), 13, 1);
+INSERT INTO contrato VALUES (default, 15, 3, fechas(TO_DATE('2020-10-16', 'YYYY-MM-DD'), null), 9, 8);
+INSERT INTO contrato VALUES (default, 13, 6, fechas(TO_DATE('2020-02-9', 'YYYY-MM-DD'), null), 8, 6);
+INSERT INTO contrato VALUES (default, 6, 11, fechas(TO_DATE('2020-02-16', 'YYYY-MM-DD'), null), 1, 8);
+INSERT INTO contrato VALUES (default, 14, 2, fechas(TO_DATE('2020-08-8', 'YYYY-MM-DD'), null), 9, 12);
+INSERT INTO contrato VALUES (default, 1, 9, fechas(TO_DATE('2020-02-7', 'YYYY-MM-DD'), null), 4, 13);
+INSERT INTO contrato VALUES (default, 3, 4, fechas(TO_DATE('2020-08-27', 'YYYY-MM-DD'), null), 7, 15);
+INSERT INTO contrato VALUES (default, 9, 6, fechas(TO_DATE('2020-02-11', 'YYYY-MM-DD'), null), 7, 7);
+INSERT INTO contrato VALUES (default, 8, 9, fechas(TO_DATE('2020-10-4', 'YYYY-MM-DD'), null), 3, 2);
+INSERT INTO contrato VALUES (default, 1, 9, fechas(TO_DATE('2020-08-23', 'YYYY-MM-DD'), null), 15, 1);
+INSERT INTO contrato VALUES (default, 13, 12, fechas(TO_DATE('2020-11-11', 'YYYY-MM-DD'), null), 5, 13);
 
 -- Oficina
 INSERT INTO oficina VALUES (1, 20);
 INSERT INTO oficina VALUES (1, 11);
-INSERT INTO oficina VALUES (1, 15);
-INSERT INTO oficina VALUES (2, 16);
 INSERT INTO oficina VALUES (2, 21);
 INSERT INTO oficina VALUES (3, 24);
 INSERT INTO oficina VALUES (3, 18);
@@ -55,9 +69,11 @@ INSERT INTO oficina VALUES (12, 19);
 INSERT INTO oficina VALUES (13, 21);
 INSERT INTO oficina VALUES (13, 19);
 INSERT INTO oficina VALUES (14, 23);
-INSERT INTO oficina VALUES (14, 18);
+INSERT INTO oficina VALUES (14, 24);
 INSERT INTO oficina VALUES (15, 24);
 INSERT INTO oficina VALUES (15, 14);
+INSERT INTO oficina VALUES (15, 15);
+INSERT INTO oficina VALUES (15, 21);
 
 -- Registro
 INSERT INTO REGISTRO VALUES (1, 6035694, get_random_date(current_date));
@@ -67,30 +83,59 @@ INSERT INTO REGISTRO VALUES (1, 8052968, get_random_date(current_date));
 INSERT INTO REGISTRO VALUES (2, 11914781, get_random_date(current_date));
 INSERT INTO REGISTRO VALUES (2, 14850119, get_random_date(current_date));
 INSERT INTO REGISTRO VALUES (2, 9234140, get_random_date(current_date));
+INSERT INTO REGISTRO VALUES (2, 11192772, get_random_date(current_date));
+INSERT INTO REGISTRO VALUES (3, 7727507, get_random_date(current_date));
 INSERT INTO REGISTRO VALUES (3, 8843392, get_random_date(current_date));
 INSERT INTO REGISTRO VALUES (3, 13908954, get_random_date(current_date));
+INSERT INTO REGISTRO VALUES (3, 13659465, get_random_date(current_date));
 INSERT INTO REGISTRO VALUES (4, 12516807, get_random_date(current_date));
 INSERT INTO REGISTRO VALUES (4, 8306312, get_random_date(current_date));
+INSERT INTO REGISTRO VALUES (4, 8742813, get_random_date(current_date));
+INSERT INTO REGISTRO VALUES (4, 6035694, get_random_date(current_date));
+INSERT INTO REGISTRO VALUES (5, 13749571, get_random_date(current_date));
 INSERT INTO REGISTRO VALUES (5, 5263491, get_random_date(current_date));
+INSERT INTO REGISTRO VALUES (5, 8052968, get_random_date(current_date));
 INSERT INTO REGISTRO VALUES (5, 11914781, get_random_date(current_date));
+INSERT INTO REGISTRO VALUES (6, 14850119, get_random_date(current_date));
+INSERT INTO REGISTRO VALUES (6, 9234140, get_random_date(current_date));
 INSERT INTO REGISTRO VALUES (6, 11192772, get_random_date(current_date));
 INSERT INTO REGISTRO VALUES (6, 7727507, get_random_date(current_date));
+INSERT INTO REGISTRO VALUES (7, 8843392, get_random_date(current_date));
 INSERT INTO REGISTRO VALUES (7, 13908954, get_random_date(current_date));
 INSERT INTO REGISTRO VALUES (7, 13659465, get_random_date(current_date));
+INSERT INTO REGISTRO VALUES (7, 12516807, get_random_date(current_date));
 INSERT INTO REGISTRO VALUES (8, 8306312, get_random_date(current_date));
+INSERT INTO REGISTRO VALUES (8, 8742813, get_random_date(current_date));
+INSERT INTO REGISTRO VALUES (8, 6035694, get_random_date(current_date));
 INSERT INTO REGISTRO VALUES (8, 13749571, get_random_date(current_date));
+INSERT INTO REGISTRO VALUES (9, 5263491, get_random_date(current_date));
+INSERT INTO REGISTRO VALUES (9, 8052968, get_random_date(current_date));
 INSERT INTO REGISTRO VALUES (9, 11914781, get_random_date(current_date));
 INSERT INTO REGISTRO VALUES (9, 14850119, get_random_date(current_date));
+INSERT INTO REGISTRO VALUES (10, 9234140, get_random_date(current_date));
 INSERT INTO REGISTRO VALUES (10, 11192772, get_random_date(current_date));
+INSERT INTO REGISTRO VALUES (10, 7727507, get_random_date(current_date));
 INSERT INTO REGISTRO VALUES (10, 8843392, get_random_date(current_date));
+INSERT INTO REGISTRO VALUES (11, 13908954, get_random_date(current_date));
+INSERT INTO REGISTRO VALUES (11, 13659465, get_random_date(current_date));
 INSERT INTO REGISTRO VALUES (11, 12516807, get_random_date(current_date));
+INSERT INTO REGISTRO VALUES (11, 8306312, get_random_date(current_date));
 INSERT INTO REGISTRO VALUES (12, 8742813, get_random_date(current_date));
 INSERT INTO REGISTRO VALUES (12, 6035694, get_random_date(current_date));
+INSERT INTO REGISTRO VALUES (12, 13749571, get_random_date(current_date));
+INSERT INTO REGISTRO VALUES (12, 5263491, get_random_date(current_date));
 INSERT INTO REGISTRO VALUES (13, 8052968, get_random_date(current_date));
+INSERT INTO REGISTRO VALUES (13, 11914781, get_random_date(current_date));
+INSERT INTO REGISTRO VALUES (13, 14850119, get_random_date(current_date));
 INSERT INTO REGISTRO VALUES (13, 9234140, get_random_date(current_date));
+INSERT INTO REGISTRO VALUES (14, 11192772, get_random_date(current_date));
+INSERT INTO REGISTRO VALUES (14, 7727507, get_random_date(current_date));
+INSERT INTO REGISTRO VALUES (14, 8843392, get_random_date(current_date));
 INSERT INTO REGISTRO VALUES (14, 13908954, get_random_date(current_date));
 INSERT INTO REGISTRO VALUES (15, 13659465, get_random_date(current_date));
-
+INSERT INTO REGISTRO VALUES (15, 12516807, get_random_date(current_date));
+INSERT INTO REGISTRO VALUES (15, 8306312, get_random_date(current_date));
+INSERT INTO REGISTRO VALUES (15, 8742813, get_random_date(current_date));
 
 -- Sector
 INSERT INTO SECTOR VALUES (default, 'Restaurantes');
@@ -137,7 +182,6 @@ INSERT INTO SERVICIO VALUES (default, 2, PRECIO_CANTIDAD(PRECIO_CANTIDAD.VALIDAR
     PRECIO_CANTIDAD.VALIDAR_PRECIO(500)), 'anual');
 INSERT INTO SERVICIO VALUES (default, 3, PRECIO_CANTIDAD(PRECIO_CANTIDAD.VALIDAR_CANTIDAD(100),
     PRECIO_CANTIDAD.VALIDAR_PRECIO(200)), 'mensual');
-
 INSERT INTO SERVICIO VALUES (default, 3, PRECIO_CANTIDAD(PRECIO_CANTIDAD.VALIDAR_CANTIDAD(500),
     PRECIO_CANTIDAD.VALIDAR_PRECIO(500)), 'trimestral');
 INSERT INTO SERVICIO VALUES (default, 4, PRECIO_CANTIDAD(PRECIO_CANTIDAD.VALIDAR_CANTIDAD(100),
@@ -148,7 +192,6 @@ INSERT INTO SERVICIO VALUES (default, 5, PRECIO_CANTIDAD(PRECIO_CANTIDAD.VALIDAR
     PRECIO_CANTIDAD.VALIDAR_PRECIO(250)), 'mensual');
 INSERT INTO SERVICIO VALUES (default, 5, PRECIO_CANTIDAD(PRECIO_CANTIDAD.VALIDAR_CANTIDAD(2000),
     PRECIO_CANTIDAD.VALIDAR_PRECIO(1000)), 'anual');
-
 INSERT INTO SERVICIO VALUES (default, 6, PRECIO_CANTIDAD(PRECIO_CANTIDAD.VALIDAR_CANTIDAD(400),
     PRECIO_CANTIDAD.VALIDAR_PRECIO(500)), 'trimestral');
 INSERT INTO SERVICIO VALUES (default, 7, PRECIO_CANTIDAD(PRECIO_CANTIDAD.VALIDAR_CANTIDAD(800),
@@ -159,7 +202,6 @@ INSERT INTO SERVICIO VALUES (default, 9, PRECIO_CANTIDAD(PRECIO_CANTIDAD.VALIDAR
     PRECIO_CANTIDAD.VALIDAR_PRECIO(100)), 'mensual');
 INSERT INTO SERVICIO VALUES (default, 10, PRECIO_CANTIDAD(PRECIO_CANTIDAD.VALIDAR_CANTIDAD(300),
     PRECIO_CANTIDAD.VALIDAR_PRECIO(400)), 'trimestral');
-
 INSERT INTO SERVICIO VALUES (default, 11, PRECIO_CANTIDAD(PRECIO_CANTIDAD.VALIDAR_CANTIDAD(200),
     PRECIO_CANTIDAD.VALIDAR_PRECIO(300)), 'mensual');
 INSERT INTO SERVICIO VALUES (default, 12, PRECIO_CANTIDAD(PRECIO_CANTIDAD.VALIDAR_CANTIDAD(100),

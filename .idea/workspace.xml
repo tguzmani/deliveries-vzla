@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="6f28894e-fe3b-4e3c-a735-04d5f7aa4f6b" name="Default Changelist" comment="">
+    <list default="true" id="7f7d4d3a-9929-4132-9028-cdf37a7230b2" name="Default Changelist" comment="Modificación del SP para el reporte 1">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/inserts/inserts.sql" beforeDir="false" afterPath="$PROJECT_DIR$/inserts/inserts.sql" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -13,6 +14,7 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="1lTkWas0u1RBdY3Ry4Ln2hwgRX9" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -35,5 +37,9 @@
       </map>
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Modificación del SP para el reporte 1" />
+    <option name="LAST_COMMIT_MESSAGE" value="Modificación del SP para el reporte 1" />
   </component>
 </project>

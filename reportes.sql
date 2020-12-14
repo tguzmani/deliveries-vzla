@@ -38,19 +38,27 @@ AND ubi.tipo = 'estado';
 -- REPORTE 5
 
 -- REPORTE 6
-SELECT c.cedula, c.FOTO, c.PRIMER_NOMBRE, c.SEGUNDO_APELLIDO,
-       c.SEGUNDO_NOMBRE, c.SEGUNDO_APELLIDO, c.EMAIL, a.LOGO,
-       a.DATOS.NOMBRE, r.FECHAS
-FROM CLIENTE c, APLICACION a, REGISTRO r
-WHERE r.CED_CLIENTE = c.CEDULA AND a.ID = r.ID_APLICACION ;
-
-SELECT c.PRIMER_NOMBRE, c.FOTO, c.PRIMER_NOMBRE, c.SEGUNDO_APELLIDO,
-       c.SEGUNDO_NOMBRE, c.SEGUNDO_APELLIDO, c.EMAIL, GET_ESTADO(u.NOMBRE) AS Estado, p.DESCRIPCION AS "Dirección de Envío"
-FROM UBICACION u, CLIENTE c, DIRECCION d, PTO_REFERENCIA p
-WHERE d.ID_ZONA = u.ID and c.CEDULA=d.CED_CLIENTE and GET_ESTADO(u.NOMBRE) = 'Miranda' and p.ID=d.ID_PTO_REFERENCIA;
-
-SELECT c.PRIMER_NOMBRE, r.FECHAS, GET_ESTADO(u.NOMBRE)
-FROM CLIENTE c, UBICACION u
-JOIN DIRECCION D on D.CED_CLIENTE = c.CEDULA
-JOIN REGISTRO R on R.CED_CLIENTE = c.CEDULA
-WHERE GET_ESTADO(u.NOMBRE) = 'Miranda';
+create PROCEDURE report_six(cursor_6 OUT sys_refcursor, estado VARCHAR, fecha DATE) IS
+BEGIN
+    OPEN cursor_6 FOR
+        SELECT c.CEDULA                        AS Cedula,
+               c.FOTO                          AS Foto,
+               c.PRIMER_NOMBRE                 AS "Primer Nombre",
+               c.SEGUNDO_NOMBRE                AS "Segundo Nombre",
+               c.PRIMER_APELLIDO               AS "Primer Apellido",
+               c.SEGUNDO_APELLIDO              AS "Segundo Apellido",
+               c.EMAIL                         AS Email,
+               a.LOGO                          AS "Aplicación Registrada",
+               a.DATOS.NOMBRE                  AS "Nombre de la Aplicación Registrada",
+               TO_CHAR(r.FECHAS, 'DD-MM-YYYY') AS "Cliente desde",
+               GET_ESTADO(u.NOMBRE)            AS "Estado",
+               p.DESCRIPCION                   AS "Dirección de Envío"
+        FROM CLIENTE c
+                 JOIN DIRECCION D on D.CED_CLIENTE = c.CEDULA
+                 JOIN REGISTRO R on R.CED_CLIENTE = c.CEDULA
+                 JOIN UBICACION U on U.ID = D.ID_ZONA
+                 JOIN APLICACION A on A.ID = R.ID_APLICACION
+                 JOIN PTO_REFERENCIA P on P.ID = D.ID_PTO_REFERENCIA
+        WHERE GET_ESTADO(u.NOMBRE) = estado AND r.FECHAS<fecha AND D.ID_ZONA = u.ID
+        ORDER BY c.PRIMER_NOMBRE;
+END;

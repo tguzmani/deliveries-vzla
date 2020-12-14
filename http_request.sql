@@ -51,6 +51,8 @@ IS
     buffer VARCHAR2(4000);
     travel_time NUMBER;
 BEGIN
+    DBMS_OUTPUT.PUT_LINE(in_origin_lat);
+
     req := utl_http.begin_request(url, 'GET',' HTTP/1.1');
     utl_http.set_header(req, 'content-type', 'application/json');
     res := utl_http.get_response(req);

@@ -33,7 +33,7 @@ CREATE OR REPLACE FUNCTION get_travel_time (
     in_origin_long NUMBER,
     in_destination_lat NUMBER,
     in_destination_long NUMBER
-) RETURN VARCHAR2
+) RETURN NUMBER
 IS
     -- HTTP Request
     req utl_http.req;

@@ -64,7 +64,8 @@ AS
             WHERE u.ID_APLICACION_OFICINA = o.ID_APLICACION AND
                   o.ID_APLICACION = a.ID AND
                   o.ID_ZONA = u.ID_ZONA_OFICINA AND
-                  a.ID = in_application_id
+                  a.ID = in_application_id AND
+                  u.estatus = 'activo'
             FETCH FIRST in_units_to_deactivate ROWS ONLY;
 BEGIN
     FOR unidad IN lista_inactivas
@@ -109,6 +110,13 @@ UPDATE unidad SET estatus = 'activo';
 -- Punto 2: Se reparan entre 10 y 20% de unidades dañadas
 ------------------------------------------------------------------------------------------------------
 
+DECLARE
+    BEGIN
+    FOR i IN 1..5 LOOP
+        deactivate_units_all_apps();
+    END LOOP;
+END;
+
 ---------------------------------------------------
 -- Selects
 ---------------------------------------------------
@@ -134,3 +142,53 @@ ORDER BY a.id;
 -- Stored Procedures
 ---------------------------------------------------
 
+CREATE OR REPLACE PROCEDURE repair_units_by_app (
+    in_units_to_deactivate NUMBER,
+    in_application_id aplicacion.id%TYPE
+)
+AS
+    CURSOR lista_inactivas IS
+        SELECT DISTINCT u.id as id_unidad, a.id as id_app
+            FROM unidad u, oficina o, aplicacion a
+            WHERE u.ID_APLICACION_OFICINA = o.ID_APLICACION AND
+                  o.ID_APLICACION = a.ID AND
+                  o.ID_ZONA = u.ID_ZONA_OFICINA AND
+                  a.ID = in_application_id AND
+                  u.estatus = 'en reparación'
+            FETCH FIRST in_units_to_deactivate ROWS ONLY;
+BEGIN
+    FOR unidad IN lista_inactivas
+        LOOP
+            DBMS_OUTPUT.PUT_LINE( '    id unidad = ' || unidad.id_unidad);
+            UPDATE unidad SET estatus = 'activo' WHERE id = unidad.id_unidad;
+        END LOOP;
+END;
+
+-- Lista cuántas unidades activas tiene cada aplicación
+-- Una vez obtenidos estos parámetros se procede a desactivar
+CREATE OR REPLACE PROCEDURE repair_units_all_apps
+AS
+    CURSOR lista_inactivas IS
+        SELECT DISTINCT CEIL(COUNT(a.datos.nombre)*random_probability(0.1,0.2)) as inactivas,
+                        a.id
+        FROM unidad u, oficina o, aplicacion a
+        WHERE u.ID_APLICACION_OFICINA = o.ID_APLICACION AND
+              o.ID_APLICACION = a.ID AND
+              o.ID_ZONA = u.ID_ZONA_OFICINA AND
+              u.estatus = 'en reparación'
+        GROUP BY a.id
+        ORDER BY a.id;
+
+BEGIN
+    FOR unidad IN lista_inactivas
+        LOOP
+            DBMS_OUTPUT.PUT_LINE('id app = ' || unidad.id || ' unidades a reparar = ' || unidad.inactivas);
+            repair_units_by_app(unidad.inactivas, unidad.id);
+        END LOOP;
+END;
+
+CALL repair_units_all_apps();
+
+------------------------------------------------------------------------------------------------------
+-- Punto 3: Se reparan entre 10 y 20% de unidades dañadas
+------------------------------------------------------------------------------------------------------

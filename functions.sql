@@ -38,3 +38,16 @@ BEGIN
     RETURN n_placa;
 END;
 
+CREATE OR REPLACE FUNCTION get_estado(zona VARCHAR)
+    RETURN VARCHAR IS
+    estado UBICACION.nombre%type;
+BEGIN
+    SELECT u.NOMBRE
+    INTO estado
+    FROM UBICACION u
+    WHERE u.TIPO = 'estado' and LEVEL = 3
+    START WITH u.NOMBRE = zona
+    CONNECT BY PRIOR u.ID_PADRE = u.id;
+
+    RETURN estado;
+END;

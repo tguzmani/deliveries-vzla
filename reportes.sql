@@ -27,14 +27,33 @@ FROM aliada a, contrato c;
 -- REPORTE 3
 
 -- REPORTE 4
-SELECT *
-FROM aplicacion app, oficina ofi, unidad uni, ubicacion ubi
-WHERE ofi.id_aplicacion = app.id
-AND ofi.id_zona = ubi.id
-AND uni.id_zona_oficina = ofi.id_zona
-AND uni.id_aplicacion_oficina = ofi.id_aplicacion
-AND ubi.tipo = 'estado';
-
+create PROCEDURE report_four(cursor_4 OUT sys_refcursor, estado VARCHAR) IS
+BEGIN
+    OPEN cursor_4 FOR
+        SELECT a1.LOGO,
+               Unidades.Empresa,
+               Unidades.Estado,
+               Unidades."Unidad de transporte",
+               Unidades."Cantidad Disponible",
+               Unidades."Cantidad En Reparación"
+        FROM (SELECT a.ID                              as aux,
+                     a.DATOS.NOMBRE                    AS Empresa,
+                     GET_ESTADO(u.NOMBRE)              AS Estado,
+                     U2.TIPO                           AS "Unidad de transporte",
+                     CONCAT(SUM(DECODE(U2.ESTATUS, 'activo', 1, 0)),
+                            CONCAT(' ', 'unidad(es)')) AS "Cantidad Disponible",
+                     CONCAT(SUM(DECODE(U2.ESTATUS, 'en reparacion', 1, 0)),
+                            CONCAT(' ', 'unidad(es)')) AS "Cantidad En Reparación"
+              FROM APLICACION a
+                       JOIN OFICINA O on a.ID = O.ID_APLICACION
+                       JOIN UBICACION U on U.ID = O.ID_ZONA
+                       JOIN UNIDAD U2 on O.ID_APLICACION = U2.ID_APLICACION_OFICINA and O.ID_ZONA = U2.ID_ZONA_OFICINA
+              WHERE GET_ESTADO(u.NOMBRE) = estado
+                AND O.ID_ZONA = u.ID
+              GROUP BY a.id, a.DATOS.NOMBRE, GET_ESTADO(u.NOMBRE), U2.TIPO
+              ORDER BY a.DATOS.NOMBRE, U2.TIPO) Unidades
+        INNER JOIN APLICACION a1 ON a1.id = aux;
+END;
 -- REPORTE 5
 
 -- REPORTE 6

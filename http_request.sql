@@ -29,10 +29,10 @@ END;
 /
 
 CREATE OR REPLACE FUNCTION get_travel_time (
-    in_origin_lat NUMBER,
-    in_origin_long NUMBER,
-    in_destination_lat NUMBER,
-    in_destination_long NUMBER
+    in_origin_long IN UBICACION.latitud%type,
+    in_origin_lat IN UBICACION.longitud%type,
+    in_destination_long IN UBICACION.latitud%type,
+    in_destination_lat IN UBICACION.longitud%type
 ) RETURN NUMBER
 IS
     -- HTTP Request
@@ -42,9 +42,9 @@ IS
     -- Ruta
     route VARCHAR2(4000) := 'localhost:8000/?';
     query_origins VARCHAR2(4000) :=
-        'originLat=' || in_origin_lat || '&originLong=' || in_origin_long;
+        'originLat=' || in_origin_long || '&originLong=' || in_origin_lat;
     query_destination VARCHAR2(4000) :=
-        '&destinationLat=' || in_destination_lat || '&destinationLong=' || in_destination_long;
+        '&destinationLat=' || in_destination_long || '&destinationLong=' || in_destination_lat;
     url VARCHAR(4000) := route || query_origins || query_destination;
 
     -- Containers
@@ -68,7 +68,7 @@ BEGIN
       WHEN utl_http.end_of_body
       THEN
         utl_http.end_response(res);
-        RETURN travel_time/60;
+        RETURN ROUND(travel_time/60,2);
     END;
 END;
 

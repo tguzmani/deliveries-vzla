@@ -38,7 +38,7 @@ BEGIN
     RETURN n_placa;
 END;
 
-create FUNCTION get_estado(zona VARCHAR)
+CREATE OR REPLACE FUNCTION get_estado(zona VARCHAR)
     RETURN VARCHAR IS
     estado UBICACION.nombre%type;
 BEGIN
@@ -46,7 +46,7 @@ BEGIN
     INTO estado
     FROM UBICACION u
     WHERE u.TIPO = 'estado' and LEVEL = 3
-    START WITH u.id = zona
+    START WITH u.NOMBRE = zona
     CONNECT BY PRIOR u.ID_PADRE = u.id;
 
     RETURN estado;

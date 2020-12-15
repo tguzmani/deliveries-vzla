@@ -53,9 +53,9 @@ BEGIN
         contador:=contador+1;
         evento:= TRUNC(DBMS_RANDOM.VALUE(0,10));
         IF (evento<3) THEN
-            dbms_output.put_line('-------------------------------------------------------');
             --dbms_output.put_line(evento || ') CLIENTE: ' || aux.CEDULA || '. APLICACION: ' || aux.ID_APP || '. ALIADA: ' || aux.ID_ALIADA || '.');
             CREAR_PEDIDO(in_fecha,aux.CEDULA,aux.ID_APP,aux.ID_ALIADA);
+            dbms_output.put_line('-------------------------------------------------------');
         END IF;
     END LOOP;
     CLOSE c1;
@@ -174,7 +174,7 @@ BEGIN
     total := 0;
 
     SELECT s.ID INTO aux_sector FROM ALIADA a, SECTOR s WHERE s.ID = a.ID_SECTOR AND a.ID=in_ali;
-    dbms_output.put_line('-SECTOR: ' || aux_sector);
+    --dbms_output.put_line('-SECTOR: ' || aux_sector);
 
     dbms_output.put_line('-PRODUCTOS:');
 

@@ -59,5 +59,5 @@ select random_quantity(), random_price(), random_period() from dual;
 -- (m4.1) Punto 1: Definición de acuerdos
 ------------------------------------------------------------------------------------------------------
 
-select * from contrato;
+select * from servicio;
 

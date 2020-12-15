@@ -8,17 +8,32 @@
 -- (m4.0) Funciones
 ------------------------------------------------------------------------------------------------------
 
+create or replace function random_integer(
+    maximum number
+) return number is
+begin
+    return ROUND(DBMS_RANDOM.VALUE(1, maximum));
+end;
+
+create or replace function num_rows_application
+return number is
+    num_rows number;
+begin
+    select count(*) into num_rows from aplicacion;
+    return num_rows;
+end;
+
 -- Devuelve un número redondo entre 50 y 3000
 create or replace function random_quantity
 return number is
     quantity NUMBER;
 begin
     quantity := TRUNC(DBMS_RANDOM.VALUE(1, 3), 1)*POWER(10, ROUND(DBMS_RANDOM.VALUE(1, 3)));
-    if quantity < 50 THEN
-        RETURN 50;
+    if quantity < 50 then
+        return 50;
     end if;
 
-    RETURN quantity;
+    return quantity;
 end;
 
 -- Devuelve un precio razonable para el nivel del país
@@ -55,9 +70,25 @@ end;
 
 select random_quantity(), random_price(), random_period() from dual;
 
+select random_integer(1,num_rows_application()) from dual;
+
 ------------------------------------------------------------------------------------------------------
 -- (m4.1) Punto 1: Definición de acuerdos
 ------------------------------------------------------------------------------------------------------
 
-select * from servicio;
+create or replace procedure new_contracts
+is
+    random_rows number := random_integer(num_rows_application());
 
+    cursor application_list is
+        select id from aplicacion
+        order by DBMS_RANDOM.RANDOM()
+        fetch first random_rows rows only;
+begin
+    for culo in application_list
+    loop
+        DBMS_OUTPUT.PUT_LINE(culo.id)  ;
+    end loop;
+end;
+
+call new_contracts();

@@ -148,6 +148,7 @@ INSERT INTO contrato VALUES (default, 8, 7, fechas(TO_DATE('2020-08-25', 'YYYY-M
 INSERT INTO contrato VALUES (default, 9, 15, fechas(TO_DATE('2020-10-17', 'YYYY-MM-DD'), TO_DATE('2020-11-17', 'YYYY-MM-DD')), 14, 9);
 INSERT INTO contrato VALUES (default, 10, 9, fechas(TO_DATE('2020-10-23', 'YYYY-MM-DD'), TO_DATE('2020-01-23', 'YYYY-MM-DD')), 15, 10);
 INSERT INTO contrato VALUES (default, 13, 6, fechas(TO_DATE('2020-03-15', 'YYYY-MM-DD'), TO_DATE('2020-04-15', 'YYYY-MM-DD')), 18, 13);
+INSERT INTO contrato VALUES (default, 1, 2, fechas(TO_DATE('2020-10-07', 'YYYY-MM-DD'), TO_DATE('2020-11-07', 'YYYY-MM-DD')), 2, 1);
 
 -- Ubicacion
 INSERT INTO UBICACION VALUES (default, 'Distrito Capital', 'estado', 10.50071475276337, -66.9511029846569, default);

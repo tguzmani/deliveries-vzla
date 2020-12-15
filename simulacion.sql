@@ -34,6 +34,7 @@ BEGIN
     CLOSE c1;
 END;
 
+
 --SE EJECUTA CON
 CALL simulate_day(to_date('01/12/2020','DD/MM/YYYY'));
 
@@ -44,6 +45,7 @@ CALL simulate_day(to_date('01/12/2020','DD/MM/YYYY'));
 
 
 --SP QUE CREA UN PEDIDO ALEATORIO PARA UNA FECHA, CLIENTE, APLICACION Y ALiADO DADO
+
 
 CREATE OR REPLACE PROCEDURE crear_pedido(in_fecha IN DATE, in_cedula IN INTEGER, in_app IN INTEGER, in_ali IN INTEGER)
 IS
@@ -62,8 +64,10 @@ IS
     tiempo_entrega NUMBER;
 
     fecha_entrega DATE;
-    total PEDIDO.total%type;
+    aux_total PEDIDO.total%type;
     valoracion INTEGER;
+
+    nuevo_tracking PEDIDO.tracking%type;
 
 BEGIN
     dbms_output.put_line('NUEVO PEDIDO: ');
@@ -101,11 +105,6 @@ BEGIN
     fecha_entrega:= fecha_pedido + (tiempo_recogida+tiempo_entrega)/1440;
     dbms_output.put_line('-HORA ENTREGA: ' || TO_CHAR(fecha_entrega,'DD/MM/YYYY - HH24:MI:SS.'));
 
-    --SE INCLUYEN LOS PRODUCTOS
-    total := crear_productos(in_ali);
-
-    dbms_output.put_line('-TOTAL: ' || total || '$');
-
     --VALORACION
     valoracion:= DBMS_RANDOM.VALUE(1,8);
     IF (valoracion>5) THEN
@@ -114,7 +113,16 @@ BEGIN
 
     dbms_output.put_line('-VALORACION: ' || valoracion || ' estrellas.');
 
-    --INSERT INTO PEDIDO VALUES (DEFAULT,FECHAS(fecha_pedido,fecha_entrega),0,in_cedula,in_app,in_ali,ID_UNIDAD,aux_direccion.CED_CLIENTE,aux_direccion.ID_ZONA,aux_direccion.ID,valoracion);
+    INSERT INTO PEDIDO VALUES (DEFAULT,FECHAS(fecha_pedido,fecha_entrega),0,in_cedula,in_app,in_ali,ID_UNIDAD,aux_direccion.CED_CLIENTE,aux_direccion.ID_ZONA,aux_direccion.ID,valoracion);
+
+    SELECT p.TRACKING INTO nuevo_tracking FROM PEDIDO p WHERE p.TOTAL=0;
+
+    --SE INCLUYEN LOS PRODUCTOS
+    aux_total := crear_productos(in_ali,nuevo_tracking);
+    dbms_output.put_line('-TOTAL: ' || aux_total || '$');
+
+    UPDATE PEDIDO p SET p.TOTAL=aux_total WHERE p.TOTAL=0;
+
 end;
 
 --DATOS DE PRUEBA
@@ -125,16 +133,20 @@ CALL CREAR_PEDIDO(to_date('01/12/2020','DD/MM/YYYY'),5263491,5,3);
 -----------------------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------------------
 
-CREATE OR REPLACE FUNCTION crear_productos(in_ali IN INTEGER)
+CREATE OR REPLACE FUNCTION crear_productos(in_ali IN INTEGER, in_tracking IN INTEGER)
 RETURN NUMBER
 IS
     n_pedidos INTEGER;
     cantidad INTEGER;
     precio PEDIDO.total%type;
     total PEDIDO.total%type;
+    aux_sector SECTOR.id%type;
 BEGIN
     n_pedidos := DBMS_RANDOM.VALUE(1,3);
     total := 0;
+
+    SELECT s.ID INTO aux_sector FROM ALIADA a, SECTOR s WHERE s.ID = a.ID_SECTOR AND a.ID=in_ali;
+    dbms_output.put_line('-SECTOR: ' || aux_sector);
 
     dbms_output.put_line('-PRODUCTOS:');
 
@@ -143,7 +155,7 @@ BEGIN
         cantidad := DBMS_RANDOM.VALUE(1,3);
         precio := DBMS_RANDOM.VALUE(0.5,15);
         dbms_output.put_line(n_pedidos || ')CODIGO: ' || get_random_cod_producto() || '- CANTIDAD: ' || cantidad || '- PRECIO: ' || precio || '$');
-        --INSERT INTO PRODUCTO VALUES (DEFAULT,,get_random_cod_producto(),PRECIO_CANTIDAD(PRECIO_CANTIDAD.VALIDAR_CANTIDAD(),PRECIO_CANTIDAD.VALIDAR_PRECIO()));
+        INSERT INTO PRODUCTO VALUES (DEFAULT,in_tracking,get_random_cod_producto(),PRECIO_CANTIDAD(PRECIO_CANTIDAD.VALIDAR_CANTIDAD(cantidad),PRECIO_CANTIDAD.VALIDAR_PRECIO(precio)),aux_sector);
         n_pedidos := n_pedidos-1;
         total := total + precio*cantidad;
     end loop;

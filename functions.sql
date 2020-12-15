@@ -51,3 +51,16 @@ BEGIN
 
     RETURN estado;
 END;
+
+create FUNCTION get_startDate(aliada VARCHAR, app VARCHAR) RETURN VARCHAR IS
+    fecha date ;
+BEGIN
+    SELECT MIN(TO_CHAR(c.FECHAS.FECHA_INICIO, 'DD-MM-YYYY'))
+    INTO fecha
+    FROM CONTRATO c
+             INNER JOIN ALIADA A2 on A2.ID = c.ID_ALIADA
+             INNER JOIN APLICACION A3 on A3.ID = c.ID_APLICACION
+    WHERE a2.DATOS.NOMBRE = aliada AND a3.DATOS.NOMBRE = app;
+
+    RETURN TO_CHAR(fecha, 'DD-MM-YYYY');
+END;

@@ -46,7 +46,6 @@ CALL simulate_day(to_date('01/12/2020','DD/MM/YYYY'));
 
 --SP QUE CREA UN PEDIDO ALEATORIO PARA UNA FECHA, CLIENTE, APLICACION Y ALiADO DADO
 
-
 CREATE OR REPLACE PROCEDURE crear_pedido(in_fecha IN DATE, in_cedula IN INTEGER, in_app IN INTEGER, in_ali IN INTEGER)
 IS
     minuto_pedido NUMBER;
@@ -85,9 +84,8 @@ BEGIN
     --SE BUSCA LA SUCURSAL MAS CERCANA A SU DIRECCION
     id_zona_sucursal:=GET_CLOSER_SUCURSAL(in_cedula,in_ali,aux_direccion.ID_ZONA);
 
-    --SE BUSCA LA UNIDAD MAS CERCANA DE LA APLICACION PARA RECOGER EL PEDIDO
+    --SE BUSCA LA OFICINA MAS CERCANA DE LA APLICACION PARA ENVIAR UNA UNIDAD
     id_zona_oficina:= get_closer_oficina(in_app,id_zona_sucursal);
-    id_unidad:= get_unidad_libre(in_app,id_zona_oficina,fecha_pedido);
 
     --SE CALCULA EL TIEMPO DE RECOGIDA Y ENTREGA
     SELECT * INTO aux_zona_oficina FROM UBICACION u WHERE u.ID = id_zona_oficina;
@@ -104,6 +102,9 @@ BEGIN
 
     fecha_entrega:= fecha_pedido + (tiempo_recogida+tiempo_entrega)/1440;
     dbms_output.put_line('-HORA ENTREGA: ' || TO_CHAR(fecha_entrega,'DD/MM/YYYY - HH24:MI:SS.'));
+
+    --SE BUSCA LA UNIDAD LIBRE DE LA OFICINA DE LA APLICACION PARA REALIZAR EL ENVIO
+    id_unidad:= get_unidad_libre(in_app,id_zona_oficina,fecha_pedido,tiempo_recogida+tiempo_entrega);
 
     --VALORACION
     valoracion:= DBMS_RANDOM.VALUE(1,8);
@@ -237,7 +238,7 @@ END;
 -----------------------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------------------
 
-CREATE OR REPLACE FUNCTION get_unidad_libre(in_app INTEGER, in_zona_oficina INTEGER, in_fecha DATE)
+CREATE OR REPLACE FUNCTION get_unidad_libre(in_app INTEGER, in_zona_oficina INTEGER, in_fecha DATE, in_tiempo_delivery NUMBER)
 RETURN INTEGER
 IS
     aux_unidad UNIDAD%rowtype;
@@ -246,7 +247,7 @@ BEGIN
     SELECT * INTO aux_unidad FROM
         (SELECT * FROM UNIDAD x
         WHERE x.ID_APLICACION_OFICINA= in_app AND x.ID_ZONA_OFICINA=in_zona_oficina AND x.ESTATUS='activo'
-          AND (SELECT count(p.TRACKING) FROM PEDIDO p WHERE p.ID_UNIDAD=x.ID AND in_fecha BETWEEN p.FECHAS.FECHA_INICIO AND p.FECHAS.FECHA_FIN)=0
+          AND (SELECT count(p.TRACKING) FROM PEDIDO p WHERE p.ID_UNIDAD=x.ID AND ((in_fecha BETWEEN p.FECHAS.FECHA_INICIO AND p.FECHAS.FECHA_FIN) OR (in_fecha+in_tiempo_delivery BETWEEN p.FECHAS.FECHA_INICIO AND p.FECHAS.FECHA_FIN)))=0
         ORDER BY DBMS_RANDOM.VALUE)
         WHERE ROWNUM=1;
             dbms_output.put_line('-UNIDAD: ' || aux_unidad.ID || ' - PLACA: ' || aux_unidad.PLACA || ' - ESTATUS: ' || aux_unidad.ESTATUS || ' - TIPO: ' || aux_unidad.TIPO);

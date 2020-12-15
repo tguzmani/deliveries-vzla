@@ -113,15 +113,6 @@ END;
 -- Selects
 ---------------------------------------------------
 
-SELECT DISTINCT COUNT(*), a.id
-FROM unidad u, oficina o, aplicacion a
-WHERE u.ID_APLICACION_OFICINA = o.ID_APLICACION AND
-      o.ID_APLICACION = a.ID AND
-      o.ID_ZONA = u.ID_ZONA_OFICINA AND
-      u.estatus = 'en reparación'
-GROUP BY a.id
-ORDER BY a.id;
-
 SELECT DISTINCT *
 FROM unidad u, oficina o, aplicacion a
 WHERE u.ID_APLICACION_OFICINA = o.ID_APLICACION AND
@@ -182,7 +173,7 @@ END;
 CALL repair_units_all_apps();
 
 ------------------------------------------------------------------------------------------------------
--- Punto 3: Si el 30% de las unidades se dañan, entonces se adquieren unidades nuevas
+-- Punto 3: Si más del 50% de las unidades se dañan, entonces se adquieren unidades nuevas
 ------------------------------------------------------------------------------------------------------
 
 CREATE OR REPLACE FUNCTION num_units_by_status_and_app (
@@ -230,6 +221,8 @@ DECLARE
         GROUP BY a.id
         ORDER BY a.id;
 
+    critical_proportion NUMBER := 0.5;
+
     proportion NUMBER;
     num_deactivated_units NUMBER;
     unit_type VARCHAR2(50);
@@ -243,7 +236,7 @@ BEGIN
 
         proportion := num_deactivated_units / unidad.num_unidades;
 
-        IF proportion >= 0.3 THEN
+        IF proportion >= critical_proportion THEN
             DBMS_OUTPUT.PUT_LINE('TRIGGER: proportion = ' || proportion || ' from app id = ' || unidad.id_aplicacion);
             FOR i IN 1..num_deactivated_units
             LOOP
@@ -273,7 +266,7 @@ BEGIN
                 ORDER BY DBMS_RANDOM.VALUE
                 FETCH FIRST 1 ROW ONLY;
 
-                -- DBMS_OUTPUT.PUT_LINE('se van a comprar ' || num_deactivated_units || ' ' || '(' || i || '/' || num_deactivated_units || ')');
+                DBMS_OUTPUT.PUT_LINE('se van a comprar ' || num_deactivated_units || ' ' || '(' || i || '/' || num_deactivated_units || ')');
 
                 INSERT INTO unidad VALUES (DEFAULT,
                                            plate_number,
@@ -303,7 +296,29 @@ CALL deactivate_units_all_apps();
 CALL repair_units_all_apps();
 
 -- Las unidades nuevas están después del ID = 140
-SELECT * FROM unidad WHERE ID > 140 ORDER BY 1 DESC;
+SELECT COUNT(*) FROM unidad WHERE ID > 140 ORDER BY 1 DESC;
 
 -- Eliminar todas las unidades nuevas
 DELETE FROM unidad WHERE ID > 140;
+
+--
+SELECT DISTINCT COUNT(*), a.id
+FROM unidad u, oficina o, aplicacion a
+WHERE u.ID_APLICACION_OFICINA = o.ID_APLICACION AND
+      o.ID_APLICACION = a.ID AND
+      o.ID_ZONA = u.ID_ZONA_OFICINA AND
+      u.estatus = 'en reparación'
+GROUP BY a.id
+ORDER BY a.id;
+
+--
+SELECT DISTINCT COUNT(*), a.id
+FROM unidad u, oficina o, aplicacion a
+WHERE u.ID_APLICACION_OFICINA = o.ID_APLICACION AND
+      o.ID_APLICACION = a.ID AND
+      o.ID_ZONA = u.ID_ZONA_OFICINA
+GROUP BY a.id
+ORDER BY a.id;
+
+--
+SELECT * FROM unidad;

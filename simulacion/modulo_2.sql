@@ -1,3 +1,18 @@
+------------------------------------------------------------------------------------------------------
+-- Módulo II
+--
+-- Contenidos
+-- (m2.0) Funciones
+-- (m2.1) Unidades a desactivar
+-- (m2.2) Unidades a reparar
+-- (m2.3) Unidades a adquirir
+-- (m2.4) Pruebas finales del módulo
+------------------------------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------------------------------
+-- (m2.0) Funciones
+------------------------------------------------------------------------------------------------------
+
 -- Crea un numero al azar entre 0 y 1, no incluyente
 CREATE OR REPLACE FUNCTION random_probability(
     minimo NUMBER,
@@ -13,31 +28,8 @@ BEGIN
 END;
 
 ------------------------------------------------------------------------------------------------------
--- Punto 1: Se dañan entre 2 y 10% de unidades a la semana
+-- (m2.1) Punto 1: Se dañan entre 2 y 10% de unidades a la semana
 ------------------------------------------------------------------------------------------------------
-
----------------------------------------------------
--- Selects
----------------------------------------------------
-
--- Numero de unidades activas por aplicacion
-SELECT DISTINCT COUNT(*), a.id
-FROM unidad u, oficina o, aplicacion a
-WHERE u.ID_APLICACION_OFICINA = o.ID_APLICACION AND
-      o.ID_APLICACION = a.ID AND
-      o.ID_ZONA = u.ID_ZONA_OFICINA AND
-      u.estatus = 'activo'
-GROUP BY a.id
-ORDER BY a.id;
-
--- Numero de unidades por aplicacion
-SELECT DISTINCT COUNT(*), a.id
-FROM unidad u, oficina o, aplicacion a
-WHERE u.ID_APLICACION_OFICINA = o.ID_APLICACION AND
-      o.ID_APLICACION = a.ID AND
-      o.ID_ZONA = u.ID_ZONA_OFICINA
-GROUP BY a.id
-ORDER BY a.id;
 
 ---------------------------------------------------
 -- Stored Procedures
@@ -90,24 +82,9 @@ BEGIN
         END LOOP;
 END;
 
-CALL deactivate_units_all_apps();
-
--- Verificar que las unidades se hayan desactivado
-SELECT * FROM unidad;
-
--- Restaurar y verificar que los estados a activo
-UPDATE unidad SET estatus = 'activo';
-
 ------------------------------------------------------------------------------------------------------
--- Punto 2: Se reparan entre 10 y 20% de unidades dañadas
+-- (m2.2) Punto 2: Se reparan entre 10 y 20% de unidades dañadas
 ------------------------------------------------------------------------------------------------------
-
-DECLARE
-    BEGIN
-    FOR i IN 1..5 LOOP
-        deactivate_units_all_apps();
-    END LOOP;
-END;
 
 ---------------------------------------------------
 -- Selects
@@ -173,7 +150,7 @@ END;
 CALL repair_units_all_apps();
 
 ------------------------------------------------------------------------------------------------------
--- Punto 3: Si más del 50% de las unidades se dañan, entonces se adquieren unidades nuevas
+-- (m2.3) Punto 3: Si más del 50% de las unidades se dañan, entonces se adquieren unidades nuevas
 ------------------------------------------------------------------------------------------------------
 
 CREATE OR REPLACE FUNCTION num_units_by_status_and_app (
@@ -238,7 +215,7 @@ BEGIN
 
         IF proportion >= critical_proportion THEN
             DBMS_OUTPUT.PUT_LINE('TRIGGER: proportion = ' || proportion || ' from app id = ' || unidad.id_aplicacion);
-            FOR i IN 1..num_deactivated_units
+            FOR i IN 1..ROUND(num_deactivated_units*1/3)
             LOOP
                 -- Elegir vehículo al azar
                 SELECT u.tipo
@@ -279,21 +256,18 @@ BEGIN
     END LOOP;
 END;
 
-SELECT DISTINCT o.id_zona as id_zona_oficina
-FROM unidad u, oficina o, aplicacion a
-WHERE u.ID_APLICACION_OFICINA = o.ID_APLICACION AND
-      o.ID_APLICACION = a.ID AND
-      o.ID_ZONA = u.ID_ZONA_OFICINA AND
-      a.id = 3
-ORDER BY DBMS_RANDOM.VALUE
-FETCH FIRST 1 ROW ONLY;
-
 ------------------------------------------------------------------------------------------------------
--- Prueba final del módulo
+-- (m2.4) Prueba final del módulo
 ------------------------------------------------------------------------------------------------------
 
 CALL deactivate_units_all_apps();
 CALL repair_units_all_apps();
+
+-- Select general de la tabla unidad
+SELECT * FROM unidad;
+
+-- Restaurar los estados a activo
+UPDATE unidad SET estatus = 'activo';
 
 -- Las unidades nuevas están después del ID = 140
 SELECT COUNT(*) FROM unidad WHERE ID > 140 ORDER BY 1 DESC;
@@ -301,7 +275,7 @@ SELECT COUNT(*) FROM unidad WHERE ID > 140 ORDER BY 1 DESC;
 -- Eliminar todas las unidades nuevas
 DELETE FROM unidad WHERE ID > 140;
 
---
+-- Unidades en reparación por aplicacion
 SELECT DISTINCT COUNT(*), a.id
 FROM unidad u, oficina o, aplicacion a
 WHERE u.ID_APLICACION_OFICINA = o.ID_APLICACION AND
@@ -311,7 +285,17 @@ WHERE u.ID_APLICACION_OFICINA = o.ID_APLICACION AND
 GROUP BY a.id
 ORDER BY a.id;
 
---
+-- Unidades activas por aplicacion
+SELECT DISTINCT COUNT(*), a.id
+FROM unidad u, oficina o, aplicacion a
+WHERE u.ID_APLICACION_OFICINA = o.ID_APLICACION AND
+      o.ID_APLICACION = a.ID AND
+      o.ID_ZONA = u.ID_ZONA_OFICINA AND
+      u.estatus = 'activo'
+GROUP BY a.id
+ORDER BY a.id;
+
+-- Unidades por aplicación
 SELECT DISTINCT COUNT(*), a.id
 FROM unidad u, oficina o, aplicacion a
 WHERE u.ID_APLICACION_OFICINA = o.ID_APLICACION AND
@@ -319,6 +303,3 @@ WHERE u.ID_APLICACION_OFICINA = o.ID_APLICACION AND
       o.ID_ZONA = u.ID_ZONA_OFICINA
 GROUP BY a.id
 ORDER BY a.id;
-
---
-SELECT * FROM unidad;

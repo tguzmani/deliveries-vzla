@@ -1,6 +1,33 @@
 --CODIGO DE SIMULACION DE Deliveries
 --SE RECOMIENDA COMPILAR LAS FUNCIONES Y SP ANTES DE PROBARLO
 
+--SP DE SIMULACION, SE DA UNA FECHA DE INICIO Y UNA FECHA DE FIN
+
+CREATE OR REPLACE PROCEDURE simulacion (fecha_inicio IN DATE, fecha_fin IN DATE)
+IS
+    dias_transcurridos INTEGER;
+BEGIN
+    IF fecha_inicio>fecha_fin THEN
+        RAISE_APPLICATION_ERROR(-20001, 'ERROR: Fecha de inicio de simulación mayor a fecha de fin.');
+    end if;
+    IF fecha_fin-fecha_inicio > 31 THEN
+        RAISE_APPLICATION_ERROR(-20001, 'ERROR: Tiempo maximo de simulacion es un mes');
+    end if;
+    dias_transcurridos:=0;
+    WHILE (fecha_inicio+dias_transcurridos <= fecha_fin)
+        LOOP
+            dbms_output.put_line( '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++');
+            dbms_output.put_line( 'DIA: ' || dias_transcurridos || '- FECHA: ' || TO_CHAR(fecha_inicio+dias_transcurridos,'DD/MM/YYYY'));
+            dbms_output.put_line( '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++');
+            simulate_day(fecha_inicio+dias_transcurridos);
+            dias_transcurridos := dias_transcurridos + 1;
+        end loop;
+end;
+
+--EJEMPLO
+CALL SIMULACION(to_date('01/07/2020','DD/MM/YYYY'),to_date('10/07/2020','DD/MM/YYYY'));
+
+
 -----------------------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------------------
@@ -34,6 +61,7 @@ BEGIN
     CLOSE c1;
 END;
 
+
 --SE EJECUTA CON
 CALL simulate_day(to_date('01/12/2020','DD/MM/YYYY'));
 
@@ -62,8 +90,10 @@ IS
     tiempo_entrega NUMBER;
 
     fecha_entrega DATE;
-    total PEDIDO.total%type;
+    aux_total PEDIDO.total%type;
     valoracion INTEGER;
+
+    nuevo_tracking PEDIDO.tracking%type;
 
 BEGIN
     dbms_output.put_line('NUEVO PEDIDO: ');
@@ -81,9 +111,8 @@ BEGIN
     --SE BUSCA LA SUCURSAL MAS CERCANA A SU DIRECCION
     id_zona_sucursal:=GET_CLOSER_SUCURSAL(in_cedula,in_ali,aux_direccion.ID_ZONA);
 
-    --SE BUSCA LA UNIDAD MAS CERCANA DE LA APLICACION PARA RECOGER EL PEDIDO
+    --SE BUSCA LA OFICINA MAS CERCANA DE LA APLICACION PARA ENVIAR UNA UNIDAD
     id_zona_oficina:= get_closer_oficina(in_app,id_zona_sucursal);
-    id_unidad:= get_unidad_libre(in_app,id_zona_oficina,fecha_pedido);
 
     --SE CALCULA EL TIEMPO DE RECOGIDA Y ENTREGA
     SELECT * INTO aux_zona_oficina FROM UBICACION u WHERE u.ID = id_zona_oficina;
@@ -101,10 +130,8 @@ BEGIN
     fecha_entrega:= fecha_pedido + (tiempo_recogida+tiempo_entrega)/1440;
     dbms_output.put_line('-HORA ENTREGA: ' || TO_CHAR(fecha_entrega,'DD/MM/YYYY - HH24:MI:SS.'));
 
-    --SE INCLUYEN LOS PRODUCTOS
-    total := crear_productos(in_ali);
-
-    dbms_output.put_line('-TOTAL: ' || total || '$');
+    --SE BUSCA LA UNIDAD LIBRE DE LA OFICINA DE LA APLICACION PARA REALIZAR EL ENVIO
+    id_unidad:= get_unidad_libre(in_app,id_zona_oficina,fecha_pedido,tiempo_recogida+tiempo_entrega);
 
     --VALORACION
     valoracion:= DBMS_RANDOM.VALUE(1,8);
@@ -114,7 +141,16 @@ BEGIN
 
     dbms_output.put_line('-VALORACION: ' || valoracion || ' estrellas.');
 
-    --INSERT INTO PEDIDO VALUES (DEFAULT,FECHAS(fecha_pedido,fecha_entrega),0,in_cedula,in_app,in_ali,ID_UNIDAD,aux_direccion.CED_CLIENTE,aux_direccion.ID_ZONA,aux_direccion.ID,valoracion);
+    INSERT INTO PEDIDO VALUES (DEFAULT,FECHAS(fecha_pedido,fecha_entrega),0,in_cedula,in_app,in_ali,ID_UNIDAD,aux_direccion.CED_CLIENTE,aux_direccion.ID_ZONA,aux_direccion.ID,valoracion);
+
+    SELECT p.TRACKING INTO nuevo_tracking FROM PEDIDO p WHERE p.TOTAL=0;
+
+    --SE INCLUYEN LOS PRODUCTOS
+    aux_total := crear_productos(in_ali,nuevo_tracking);
+    dbms_output.put_line('-TOTAL: ' || aux_total || '$');
+
+    UPDATE PEDIDO p SET p.TOTAL=aux_total WHERE p.TOTAL=0;
+
 end;
 
 --DATOS DE PRUEBA
@@ -125,16 +161,20 @@ CALL CREAR_PEDIDO(to_date('01/12/2020','DD/MM/YYYY'),5263491,5,3);
 -----------------------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------------------
 
-CREATE OR REPLACE FUNCTION crear_productos(in_ali IN INTEGER)
+CREATE OR REPLACE FUNCTION crear_productos(in_ali IN INTEGER, in_tracking IN INTEGER)
 RETURN NUMBER
 IS
     n_pedidos INTEGER;
     cantidad INTEGER;
     precio PEDIDO.total%type;
     total PEDIDO.total%type;
+    aux_sector SECTOR.id%type;
 BEGIN
     n_pedidos := DBMS_RANDOM.VALUE(1,3);
     total := 0;
+
+    SELECT s.ID INTO aux_sector FROM ALIADA a, SECTOR s WHERE s.ID = a.ID_SECTOR AND a.ID=in_ali;
+    dbms_output.put_line('-SECTOR: ' || aux_sector);
 
     dbms_output.put_line('-PRODUCTOS:');
 
@@ -143,7 +183,7 @@ BEGIN
         cantidad := DBMS_RANDOM.VALUE(1,3);
         precio := DBMS_RANDOM.VALUE(0.5,15);
         dbms_output.put_line(n_pedidos || ')CODIGO: ' || get_random_cod_producto() || '- CANTIDAD: ' || cantidad || '- PRECIO: ' || precio || '$');
-        --INSERT INTO PRODUCTO VALUES (DEFAULT,,get_random_cod_producto(),PRECIO_CANTIDAD(PRECIO_CANTIDAD.VALIDAR_CANTIDAD(),PRECIO_CANTIDAD.VALIDAR_PRECIO()));
+        INSERT INTO PRODUCTO VALUES (DEFAULT,in_tracking,get_random_cod_producto(),PRECIO_CANTIDAD(PRECIO_CANTIDAD.VALIDAR_CANTIDAD(cantidad),PRECIO_CANTIDAD.VALIDAR_PRECIO(precio)),aux_sector);
         n_pedidos := n_pedidos-1;
         total := total + precio*cantidad;
     end loop;
@@ -225,7 +265,7 @@ END;
 -----------------------------------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------------------------------
 
-CREATE OR REPLACE FUNCTION get_unidad_libre(in_app INTEGER, in_zona_oficina INTEGER, in_fecha DATE)
+CREATE OR REPLACE FUNCTION get_unidad_libre(in_app INTEGER, in_zona_oficina INTEGER, in_fecha DATE, in_tiempo_delivery NUMBER)
 RETURN INTEGER
 IS
     aux_unidad UNIDAD%rowtype;
@@ -234,7 +274,7 @@ BEGIN
     SELECT * INTO aux_unidad FROM
         (SELECT * FROM UNIDAD x
         WHERE x.ID_APLICACION_OFICINA= in_app AND x.ID_ZONA_OFICINA=in_zona_oficina AND x.ESTATUS='activo'
-          AND (SELECT count(p.TRACKING) FROM PEDIDO p WHERE p.ID_UNIDAD=x.ID AND in_fecha BETWEEN p.FECHAS.FECHA_INICIO AND p.FECHAS.FECHA_FIN)=0
+          AND (SELECT count(p.TRACKING) FROM PEDIDO p WHERE p.ID_UNIDAD=x.ID AND ((in_fecha BETWEEN p.FECHAS.FECHA_INICIO AND p.FECHAS.FECHA_FIN) OR (in_fecha+in_tiempo_delivery BETWEEN p.FECHAS.FECHA_INICIO AND p.FECHAS.FECHA_FIN)))=0
         ORDER BY DBMS_RANDOM.VALUE)
         WHERE ROWNUM=1;
             dbms_output.put_line('-UNIDAD: ' || aux_unidad.ID || ' - PLACA: ' || aux_unidad.PLACA || ' - ESTATUS: ' || aux_unidad.ESTATUS || ' - TIPO: ' || aux_unidad.TIPO);

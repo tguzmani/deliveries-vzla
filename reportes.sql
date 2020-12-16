@@ -18,18 +18,35 @@ BEGIN
 END;
 
 -- REPORTE 2
-SELECT DISTINCT a.DATOS.NOMBRE, GET_STARTDATE(a.DATOS.NOMBRE, A2.DATOS.NOMBRE) AS "Fecha de registro",
-       A2.DATOS.NOMBRE, TO_CHAR(C.FECHAS.FECHA_INICIO, 'DD-MM-YYYY') AS "Fecha desde",
-       TO_CHAR(C.FECHAS.FECHA_FIN, 'DD-MM-YYYY') AS "Fecha hasta",
-       CONCAT('$',CONCAT(S.ESPECIFICACION.PRECIO,CONCAT(' ',S.PERIODO))) AS "Monto de contrato"
-FROM ALIADA a
-INNER JOIN CONTRATO C on a.ID = C.ID_ALIADA
-INNER JOIN APLICACION A2 on A2.ID = C.ID_APLICACION
-INNER JOIN OFICINA O on A2.ID = O.ID_APLICACION
-INNER JOIN SERVICIO S on S.ID = C.ID_SERVICIO and S.ID_APLICACION = C.ID_SERVICIO_APLICACION
-ORDER BY a.DATOS.NOMBRE;
-
---SELECT A2.DATOS.NOMBRE, LISTAGG(A.DATOS.NOMBRE, ' - ') WITHIN GROUP (ORDER BY A.DATOS.NOMBRE) Empresa
+CREATE OR REPLACE PROCEDURE report_two(cursor_2 OUT sys_refcursor, estado VARCHAR) IS
+BEGIN
+    OPEN cursor_2 FOR
+        SELECT a1.LOGO AS "Logo",
+               "Fecha de registro",
+               "Aplicación registrada para el delivery",
+               "Fecha desde",
+               "Fecha hasta",
+               "Estado(s) donde hace delivery",
+               "Monto de contrato"
+        FROM (SELECT DISTINCT a.ID                                                                 AS aux,
+                              a.DATOS.NOMBRE,
+                              c.FECHAS.FECHA_INICIO,
+                              GET_STARTDATE(a.DATOS.NOMBRE, A2.DATOS.NOMBRE)                       AS "Fecha de registro",
+                              A2.DATOS.NOMBRE                                                      AS "Aplicación registrada para el delivery",
+                              TO_CHAR(C.FECHAS.FECHA_INICIO, 'DD-MM-YYYY')                         AS "Fecha desde",
+                              TO_CHAR(C.FECHAS.FECHA_FIN, 'DD-MM-YYYY')                            AS "Fecha hasta",
+                              GET_ESTADOS_DELIVERY(a.DATOS.NOMBRE)                                 AS "Estado(s) donde hace delivery",
+                              CONCAT('$',
+                                     CONCAT(S.ESPECIFICACION.PRECIO, CONCAT(' ', S.PERIODO)))      AS "Monto de contrato"
+              FROM ALIADA a
+                       INNER JOIN CONTRATO C on a.ID = C.ID_ALIADA
+                       INNER JOIN APLICACION A2 on C.ID_APLICACION = A2.ID
+                       INNER JOIN SERVICIO S on C.ID_SERVICIO = S.ID
+                       INNER JOIN SUCURSAL S2 on a.ID = S2.ID_ALIADA
+              WHERE 0 < INSTR(estado, GET_ESTADO(S2.ID_ZONA)) OR estado IS NULL
+              ORDER BY a.DATOS.NOMBRE, a2.DATOS.NOMBRE) t
+        INNER JOIN ALIADA A1 ON a1.ID = aux;
+END;
 
 -- REPORTE 3
 
@@ -61,8 +78,10 @@ BEGIN
         INNER JOIN APLICACION a1 ON a1.id = aux;
 END;
 
--- REPORTE 5
 
+
+-- REPORTE 5
+--ORDER BY numero de envios FETCH NEXT 5 ROWS ONLY; para tener el top 5
 -- REPORTE 6
 create PROCEDURE report_six(cursor_6 OUT sys_refcursor, estado VARCHAR, fecha DATE) IS
 BEGIN

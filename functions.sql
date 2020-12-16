@@ -65,6 +65,42 @@ BEGIN
     RETURN TO_CHAR(fecha, 'DD-MM-YYYY');
 END;
 
+create or replace FUNCTION get_estados_delivery(in_aliada VARCHAR)
+    RETURN VARCHAR IS
+    CURSOR c1 IS
+        SELECT UNIQUE e.NOMBRE
+        FROM ALIADA a,
+             SUCURSAL s,
+             UBICACION z,
+             UBICACION m,
+             UBICACION e
+        WHERE a.ID = s.ID_ALIADA
+          AND z.ID = s.ID_ZONA
+          AND m.ID = z.ID_PADRE
+          AND m.ID_PADRE = e.ID
+          AND a.DATOS.NOMBRE = in_aliada;
+    estado   VARCHAR(50);
+    estados  VARCHAR(3000);
+    contador INTEGER;
+BEGIN
+    estados := '';
+    contador := 0;
+    OPEN c1;
+    LOOP
+        FETCH c1 INTO estado;
+        EXIT WHEN c1%NOTFOUND;
+        contador := contador + 1;
+        IF (contador > 1) THEN
+            estados := CONCAT(estados, ', ');
+        end if;
+        estados := CONCAT(estados, estado);
+    END LOOP;
+
+    CLOSE c1;
+
+    RETURN estados;
+END;
+
 --FUNCION QUE GENERA CODIGO DE PRODUCTO ALEATORIO
 CREATE OR REPLACE FUNCTION get_random_cod_producto
 RETURN INTEGER IS

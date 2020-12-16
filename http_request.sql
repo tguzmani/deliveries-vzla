@@ -51,8 +51,6 @@ IS
     buffer VARCHAR2(4000);
     travel_time NUMBER;
 BEGIN
-    DBMS_OUTPUT.PUT_LINE(in_origin_lat);
-
     req := utl_http.begin_request(url, 'GET',' HTTP/1.1');
     utl_http.set_header(req, 'content-type', 'application/json');
     res := utl_http.get_response(req);
@@ -61,6 +59,7 @@ BEGIN
       LOOP
         utl_http.read_line(res, buffer);
         -- dbms_output.put_line(url);
+        DBMS_OUTPUT.PUT_LINE('response = '|| buffer);
         travel_time := TO_NUMBER(buffer);
       END LOOP;
 
@@ -78,3 +77,4 @@ SELECT get_travel_time(
     10.48666244401694,
     -66.90133777179757
 ) AS travel_time FROM dual;
+

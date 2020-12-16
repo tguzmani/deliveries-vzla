@@ -2,12 +2,12 @@
 -- Módulo III
 --
 -- Contenidos
--- (m4.0) Funciones
--- (m4.1) Definición de contratos
+-- (m3.0) Funciones
+-- (m3.1) Definición de contratos
 ------------------------------------------------------------------------------------------------------
 
 ------------------------------------------------------------------------------------------------------
--- (m4.0) Funciones
+-- (m3.0) Funciones
 ------------------------------------------------------------------------------------------------------
 
 create or replace procedure separator(symbol varchar2, length in number)
@@ -96,7 +96,7 @@ end;
 select random_quantity(), random_price(), random_period() from dual;
 
 ------------------------------------------------------------------------------------------------------
--- (m4.1) Punto 1: Definición de acuerdos
+-- (m3.1) Punto 1: Definición de acuerdos
 ------------------------------------------------------------------------------------------------------
 
 create or replace procedure new_contracts

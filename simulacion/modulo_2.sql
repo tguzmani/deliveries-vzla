@@ -146,8 +146,6 @@ BEGIN
         END LOOP;
 END;
 
-CALL repair_units_all_apps();
-
 ------------------------------------------------------------------------------------------------------
 -- (m2.3) Punto 3: Si más del 50% de las unidades se dañan, entonces se adquieren unidades nuevas
 ------------------------------------------------------------------------------------------------------
@@ -180,8 +178,6 @@ WHERE u.ID_APLICACION_OFICINA = o.ID_APLICACION AND
       a.id = 6
 GROUP BY a.id
 ORDER BY a.id;
-
-CALL deactivate_units_all_apps();
 
 UPDATE unidad SET estatus = 'activo';
 

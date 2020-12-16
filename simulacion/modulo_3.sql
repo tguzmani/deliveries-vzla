@@ -2,7 +2,7 @@
 -- Módulo III
 --
 -- (m3.0) Funciones
--- (m3.1) Stored Procedures
+-- (m3.1) Stored Procedures generales
 -- (m3.2) Generar nuevos contratos y servicios
 -- (m3.3) Pruebas del módulo
 ------------------------------------------------------------------------------------------------------
@@ -98,7 +98,7 @@ end;
 select random_quantity(), random_price(), random_period() from dual;
 
 ------------------------------------------------------------------------------------------------------
--- (m3.1) Stored Procedures
+-- (m3.1) Stored Procedures generales
 ------------------------------------------------------------------------------------------------------
 
 create or replace procedure separator(symbol varchar2, length in number)

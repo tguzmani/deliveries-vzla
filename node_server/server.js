@@ -27,6 +27,10 @@ app.get('/', async (req, res) => {
     const response = await axios.get(url)
     return res.json(response.data.rows[0].elements[0].duration.value)
   } catch (error) {
-    return res.status(400).send(error.message)
+    return res
+      .status(400)
+      .send(
+        error.message + ' (' + error.lineNumber + ':' + error.columnNumber + ')'
+      )
   }
 })

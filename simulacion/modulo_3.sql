@@ -1,29 +1,15 @@
 ------------------------------------------------------------------------------------------------------
 -- Módulo III
 --
--- Contenidos
 -- (m3.0) Funciones
--- (m3.1) Definición de contratos
+-- (m3.1) Stored Procedures
+-- (m3.2) Generar nuevos contratos y servicios
+-- (m3.3) Pruebas del módulo
 ------------------------------------------------------------------------------------------------------
 
 ------------------------------------------------------------------------------------------------------
 -- (m3.0) Funciones
 ------------------------------------------------------------------------------------------------------
-
-create or replace procedure separator(symbol varchar2, length in number)
-is
-    out varchar(80);
-begin
-    select rpad(symbol, length, symbol) into out from dual;
-    DBMS_OUTPUT.PUT_LINE(out);
-end;
-
-create or replace procedure puts(string in varchar2)
-is
-    out varchar(250);
-begin
-    DBMS_OUTPUT.PUT_LINE(string);
-end;
 
 create or replace function random_integer(
     maximum number
@@ -61,17 +47,18 @@ begin
     return quantity;
 end;
 
--- Devuelve un precio razonable para el nivel del país
+-- Genera un precio en función de la cantidad
 create or replace function random_price(quantity number)
 return number is
     price NUMBER;
 begin
-    price := quantity + ROUND(DBMS_RANDOM.VALUE(-3, 3))*POWER(10, ROUND(DBMS_RANDOM.VALUE(1, 2)));
+    -- price := quantity + ROUND(DBMS_RANDOM.VALUE(-3, 3))*POWER(10, ROUND(DBMS_RANDOM.VALUE(1, 2)));
+    price := quantity * (random_integer(5) + 7) / 10;
     if false THEN
         RETURN 50;
     end if;
 
-    RETURN price;
+    return abs(price);
 end;
 
 -- Elige al azar entre anual, trimestral y mensual
@@ -93,10 +80,44 @@ begin
     return period;
 end;
 
+create or replace function offset_by_period(periodo varchar2)
+return number is
+    offset number;
+begin
+    if periodo = 'anual' then
+        offset := 365;
+    elsif periodo = 'trimestral' then
+        offset := 90;
+    else
+        offset := 30;
+    end if;
+
+    return offset;
+end;
+
 select random_quantity(), random_price(), random_period() from dual;
 
 ------------------------------------------------------------------------------------------------------
--- (m3.1) Punto 1: Definición de acuerdos
+-- (m3.1) Stored Procedures
+------------------------------------------------------------------------------------------------------
+
+create or replace procedure separator(symbol varchar2, length in number)
+is
+    out varchar(80);
+begin
+    select rpad(symbol, length, symbol) into out from dual;
+    DBMS_OUTPUT.PUT_LINE(out);
+end;
+
+create or replace procedure puts(string in varchar2)
+is
+    out varchar(250);
+begin
+    DBMS_OUTPUT.PUT_LINE(string);
+end;
+
+------------------------------------------------------------------------------------------------------
+-- (m3.2) Generar nuevos contratos y servicios
 ------------------------------------------------------------------------------------------------------
 
 create or replace procedure new_contracts
@@ -106,6 +127,7 @@ is
     ending_date date;
     periodo varchar2(50);
     id_aliada number;
+    id_aplicacion number;
     id_servicio number;
     quantity number;
     price number;
@@ -118,14 +140,7 @@ begin
     for app in application_list
     loop
         periodo := random_period();
-
-        if periodo = 'anual' then
-            ending_date := initial_date + 365;
-        elsif periodo = 'trimestral' then
-            ending_date := initial_date + 90;
-        else
-            ending_date := initial_date + 30;
-        end if;
+        ending_date := initial_date + offset_by_period(periodo);
 
         quantity := random_quantity();
         price := random_price(quantity);
@@ -133,33 +148,85 @@ begin
         -- estos son los datos del insert de servicio
         separator('=',80);
         puts('DATOS SERVICIO');
-        DBMS_OUTPUT.PUT_LINE(app.id);
-        DBMS_OUTPUT.PUT_LINE(initial_date);
-        DBMS_OUTPUT.PUT_LINE(periodo);
-        DBMS_OUTPUT.PUT_LINE(ending_date);
+        DBMS_OUTPUT.PUT_LINE('app.id = ' || app.id);
+        DBMS_OUTPUT.PUT_LINE('periodo = ' || periodo);
+        DBMS_OUTPUT.PUT_LINE('initial_date = ' || initial_date);
+        DBMS_OUTPUT.PUT_LINE('ending_date = ' || ending_date);
         insert into servicio values (default,
                                      app.id,
                                      precio_cantidad(quantity, price),
                                      periodo,
-                                     fechas(initial_date, ending_date)) returning id into id_servicio;
+                                     fechas(initial_date, ending_date))
+                                     returning id, id_aplicacion into id_servicio, id_aplicacion;
         separator('-',40);
 
-        id_aliada := random_integer(num_rows_aliada());
+        select id_aliada
+        into id_aliada
+        from oficina o, sucursal s, ubicacion u
+        where o.id_zona = s.id_zona and
+              o.id_zona = u.id and
+              o.id_aplicacion = id_aplicacion
+        order by DBMS_RANDOM.RANDOM()
+        fetch first row only;
+
         puts('DATOS CONTRATO');
-        DBMS_OUTPUT.PUT_LINE(app.id);
-        DBMS_OUTPUT.PUT_LINE(id_aliada);
-        DBMS_OUTPUT.PUT_LINE(initial_date);
-        DBMS_OUTPUT.PUT_LINE(periodo);
-        DBMS_OUTPUT.PUT_LINE('id servicio = ' || id_servicio);
-        DBMS_OUTPUT.PUT_LINE(ending_date);
+        DBMS_OUTPUT.PUT_LINE('app.id = ' || app.id);
+        DBMS_OUTPUT.PUT_LINE('id_aliada = ' || id_aliada);
+        DBMS_OUTPUT.PUT_LINE('id_servicio = ' || id_servicio);
+        DBMS_OUTPUT.PUT_LINE('periodo = ' || periodo);
+        DBMS_OUTPUT.PUT_LINE('initial_date = ' || initial_date);
+        DBMS_OUTPUT.PUT_LINE('ending_date = ' || ending_date);
+        insert into contrato values (default,
+                                     id_aplicacion,
+                                     id_aliada,
+                                     fechas(initial_date, ending_date),
+                                     id_servicio,
+                                     id_aplicacion);
     end loop;
 end;
 
+
+------------------------------------------------------------------------------------------------------
+-- (m3.3) Pruebas del módulo
+------------------------------------------------------------------------------------------------------
+
+-- Verificar que todas las funciones hayan sido compiladas
+select random_integer(10),
+       num_rows_application(),
+       num_rows_aliada(),
+       random_quantity(),
+       random_price(10),
+       random_period(),
+       offset_by_period('mensual')
+from dual;
+
+-- Llamar una sola vez
 call new_contracts();
 
-select * from servicio order by id desc;
+-- Llamar n veces
+declare
+    n number := 20;
+begin
+    for i in 1..n loop
+        new_contracts();
+    end loop;
+end;
 
+-- Selects y deletes sencillos
+select * from contrato order by n_contrato desc;
+select * from contrato where n_contrato > 15;
+delete from contrato where n_contrato > 15;
+
+select * from servicio order by id desc;
+select * from servicio where id > 20;
 delete from servicio where id > 20;
+
+-- Borrar de ambas tablas
+begin
+    delete from contrato where n_contrato > 15;
+    delete from servicio where id > 20;
+end;
+
 
 
 

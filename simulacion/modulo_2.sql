@@ -1,7 +1,6 @@
 ------------------------------------------------------------------------------------------------------
 -- Módulo II
 --
--- Contenidos
 -- (m2.0) Funciones
 -- (m2.1) Unidades a desactivar
 -- (m2.2) Unidades a reparar

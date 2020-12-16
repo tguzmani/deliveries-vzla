@@ -49,6 +49,23 @@ BEGIN
 END;
 
 -- REPORTE 3
+SELECT s.NOMBRE,
+       a.ID,
+       a.DATOS.NOMBRE,
+       app.DATOS.NOMBRE,
+       min(p.FECHAS.FECHA_INICIO),
+       max(p.FECHAS.FECHA_FIN),
+       e.NOMBRE,
+       COUNT(p.TRACKING)
+FROM PEDIDO p
+         INNER JOIN ALIADA a on a.ID = p.ID_ALIADA
+         INNER JOIN SECTOR s ON s.ID = a.ID_SECTOR
+         INNER JOIN APLICACION app on p.ID_APLICACION = app.ID
+         INNER JOIN UBICACION u on p.ID_ZONA_DIRECCION = u.id
+         INNER JOIN UBICACION m on m.ID = u.ID_PADRE
+         INNER JOIN UBICACION e on e.ID = m.ID_PADRE
+GROUP BY s.NOMBRE, a.ID, a.DATOS.NOMBRE, app.DATOS.NOMBRE, e.NOMBRE
+ORDER BY 3;
 
 -- REPORTE 4
 create PROCEDURE report_four(cursor_4 OUT sys_refcursor, estado VARCHAR) IS
@@ -78,10 +95,18 @@ BEGIN
         INNER JOIN APLICACION a1 ON a1.id = aux;
 END;
 
-
-
 -- REPORTE 5
+SELECT e.NOMBRE, a.ID, app.DATOS.NOMBRE, app.ID, m.NOMBRE, count(p.TRACKING)
+FROM PEDIDO p
+         INNER JOIN ALIADA a on a.ID = p.ID_ALIADA
+         INNER JOIN APLICACION app on p.ID_APLICACION = app.ID
+         INNER JOIN UBICACION u on p.ID_ZONA_DIRECCION = u.id
+         INNER JOIN UBICACION m on m.ID = u.ID_PADRE
+         INNER JOIN UBICACION e on e.ID = m.ID_PADRE
+GROUP BY e.NOMBRE, a.ID, app.DATOS.NOMBRE, app.ID, m.NOMBRE
+ORDER BY 6 DESC;
 --ORDER BY numero de envios FETCH NEXT 5 ROWS ONLY; para tener el top 5
+
 -- REPORTE 6
 create PROCEDURE report_six(cursor_6 OUT sys_refcursor, estado VARCHAR, fecha DATE) IS
 BEGIN

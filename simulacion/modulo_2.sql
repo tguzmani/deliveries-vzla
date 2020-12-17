@@ -83,6 +83,9 @@ AS
     application_name varchar(50);
 
 BEGIN
+    separator('=', 60);
+    DBMS_OUTPUT.PUT_LINE('AVERÍA DE UNIDADES');
+    separator('=', 60);
 
     FOR unidad IN lista_inactivas LOOP
         select a.datos.nombre into application_name
@@ -159,6 +162,10 @@ AS
     application_name varchar2(50);
 
 BEGIN
+    separator('=', 60);
+    DBMS_OUTPUT.PUT_LINE('REPARACIÓN DE UNIDADES');
+    separator('=', 60);
+
     FOR unidad IN lista_inactivas
         LOOP
             select a.datos.nombre into application_name

@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.12.2.final using JasperReports Library version 6.12.2-75c5e90a222ab406e416cbf590a5397028a52de3  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Reporte4" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="012a7c01-f34e-4d38-980a-9b3916163185">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="ProyectoBDII"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<parameter name="Estado" class="java.lang.String"/>
+	<queryString language="plsql">
+		<![CDATA[{call report_four($P{ORACLE_REF_CURSOR},  $P{Estado})}]]>
+	</queryString>
+	<field name="LOGO" class="java.awt.Image">
+		<property name="com.jaspersoft.studio.field.label" value="LOGO"/>
+	</field>
+	<field name="EMPRESA" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="EMPRESA"/>
+	</field>
+	<field name="ESTADO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="ESTADO"/>
+	</field>
+	<field name="Unidad de transporte" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="Unidad de transporte"/>
+	</field>
+	<field name="Cantidad Disponible" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="Cantidad Disponible"/>
+	</field>
+	<field name="Cantidad En Reparación" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="Cantidad En Reparación"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="30" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="550" height="30" uuid="4c3a93aa-42b2-4d31-a169-ede0d6e4528d"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="Roboto" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="555" height="30" uuid="0c4c4f2a-c495-46e5-8bf1-f036b270b673"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="Roboto" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Inventario de transporte por proveedor de servicio]]></text>
+			</staticText>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="30">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="110" height="30" forecolor="#FFFFFF" backcolor="#1B56E0" uuid="a79952ac-daf6-4fd8-8ebb-a9e7432ed94c">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="edca6a63-2ab2-4f8c-a27a-fa1a12c9a974"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="2.0" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[LOGO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="110" y="0" width="77" height="30" forecolor="#FFFFFF" backcolor="#1B56E0" uuid="328da2eb-80b1-4cee-8541-b42b89710901">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="e8cd4cb7-e169-4158-a0f8-e46ffe145d29"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="2.0" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[EMPRESA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="187" y="0" width="92" height="30" forecolor="#FFFFFF" backcolor="#1B56E0" uuid="a1c54315-8522-42f5-a8ef-7ea2f8630289">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="45c6235c-20ba-441f-a6b0-00c4bcec6cd1"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="2.0" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[ESTADO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="279" y="0" width="92" height="30" forecolor="#FFFFFF" backcolor="#1B56E0" uuid="4c684595-3910-49cc-8092-d8a0cea128af">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="173a79e2-e1aa-4ccf-8e63-fa3e022bab4c"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="2.0" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Unidad de transporte]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="371" y="0" width="92" height="30" forecolor="#FFFFFF" backcolor="#1B56E0" uuid="b5ade0aa-2289-4407-a20b-aca6ace01587">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="2acb20c5-6554-42cc-b7ef-3293005e3108"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="2.0" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cantidad Disponible]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="463" y="0" width="92" height="30" forecolor="#FFFFFF" backcolor="#1B56E0" uuid="21449ed6-e732-45cd-9b39-2073cc125352">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d6f48152-d8f4-421c-a9cb-87d1e566074a"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="2.0" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cantidad En Reparación]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="60" splitType="Stretch">
+			<textField>
+				<reportElement x="110" y="0" width="77" height="60" uuid="760fa708-a113-4da6-808c-ca6b20da141b">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="e8cd4cb7-e169-4158-a0f8-e46ffe145d29"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="2.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{EMPRESA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="187" y="0" width="92" height="60" uuid="f4ca1754-0b6e-48b7-ad5a-72ac0cb0daed">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="45c6235c-20ba-441f-a6b0-00c4bcec6cd1"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="2.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{ESTADO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="279" y="0" width="92" height="60" uuid="e611a779-d9b6-4f00-b4e3-35aa59a97151">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="173a79e2-e1aa-4ccf-8e63-fa3e022bab4c"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="2.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{Unidad de transporte}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="371" y="0" width="92" height="60" uuid="a6d1768c-7962-4f45-8be2-f68cc8773a74">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="2acb20c5-6554-42cc-b7ef-3293005e3108"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="2.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{Cantidad Disponible}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="463" y="0" width="92" height="60" uuid="2bee3d46-569e-494c-b9e3-deda5c3a7b95">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d6f48152-d8f4-421c-a9cb-87d1e566074a"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="2.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{Cantidad En Reparación}]]></textFieldExpression>
+			</textField>
+			<image hAlign="Center" vAlign="Middle">
+				<reportElement x="0" y="0" width="110" height="60" uuid="777bba15-52b1-49e8-bfbe-62eb344cf0a4">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="2.0"/>
+				</box>
+				<imageExpression><![CDATA[$F{LOGO}]]></imageExpression>
+			</image>
+		</band>
+	</detail>
+</jasperReport>

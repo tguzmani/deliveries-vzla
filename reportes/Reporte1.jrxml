@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.12.2.final using JasperReports Library version 6.12.2-75c5e90a222ab406e416cbf590a5397028a52de3  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Reporte1" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="48fc5fca-e003-46fd-a7dc-109a345f7451">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="ProyectoBDII"/>
+	<subDataset name="Reporte1" uuid="198d6754-3116-47b0-9ce3-15b1550080a1">
+		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="ProyectoBDII"/>
+		<queryString language="plsql">
+			<![CDATA[{call report_one($P{ORACLE_REF_CURSOR})}]]>
+		</queryString>
+		<field name="Logo Empresa" class="java.awt.Image">
+			<property name="com.jaspersoft.studio.field.label" value="Logo Empresa"/>
+		</field>
+		<field name="EMPRESA" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="EMPRESA"/>
+		</field>
+		<field name="Acuerdo de servicio" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="Acuerdo de servicio"/>
+		</field>
+		<field name="Precio segun acuerdo de servicio" class="java.math.BigDecimal">
+			<property name="com.jaspersoft.studio.field.label" value="Precio segun acuerdo de servicio"/>
+		</field>
+	</subDataset>
+	<queryString language="plsql">
+		<![CDATA[{call report_one($P{ORACLE_REF_CURSOR})}]]>
+	</queryString>
+	<field name="Logo Empresa" class="java.awt.Image">
+		<property name="com.jaspersoft.studio.field.label" value="Logo Empresa"/>
+	</field>
+	<field name="Empresa" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="Empresa"/>
+	</field>
+	<field name="Acuerdo de servicio" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="Acuerdo de servicio"/>
+	</field>
+	<field name="Fecha Vigencia" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="Fecha Vigencia"/>
+	</field>
+	<field name="Precio segun acuerdo de servicio" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="Precio segun acuerdo de servicio"/>
+	</field>
+	<title>
+		<band height="30" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="550" height="30" uuid="7bc87f97-2a03-4a6c-bd89-925749ab627c"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="Roboto" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Presupuesto de proveedores de servicios de delivery]]></text>
+			</staticText>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="30" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="110" height="30" forecolor="#FFFFFF" backcolor="#1B56E0" uuid="c7071318-41a8-4af1-87eb-b2339c8522c1">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="83f50109-d44f-4629-a125-d3b130d7eede"/>
+				</reportElement>
+				<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0">
+					<pen lineWidth="2.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Logo Empresa]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="110" y="0" width="100" height="30" forecolor="#FFFFFF" backcolor="#1B56E0" uuid="0c7803b3-ab83-4b48-8fcc-e048a5acb0f0">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="30c9d4fb-1d19-4bfd-8e5b-3376d7a27359"/>
+				</reportElement>
+				<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0">
+					<pen lineWidth="2.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[EMPRESA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="210" y="0" width="110" height="30" forecolor="#FFFFFF" backcolor="#1B56E0" uuid="dd10aff3-b28c-4f17-a948-afe795b7fa1a">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="8887c67a-cd58-4e5d-b74f-b7ef1a608491"/>
+				</reportElement>
+				<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0">
+					<pen lineWidth="2.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Acuerdo de servicio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="430" y="0" width="125" height="30" forecolor="#FFFFFF" backcolor="#1B56E0" uuid="6ea772cb-e38c-414b-8dd3-32acf8116d71">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="322513ab-c88a-4b0d-a0e1-bec0030cfeb5"/>
+				</reportElement>
+				<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0">
+					<pen lineWidth="2.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Precio segun acuerdo de servicio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="320" y="0" width="110" height="30" forecolor="#FFFFFF" backcolor="#1B56E0" uuid="66f94cf6-2f9f-4554-aa1d-f3558c1f62f6">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="26edd5c4-bdbb-457b-848c-e32b63a688f9"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="2.0" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Fecha Vigencia]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="70" splitType="Stretch">
+			<textField>
+				<reportElement x="110" y="0" width="100" height="70" uuid="fca9cb48-f927-4742-8e05-f33046197900">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="30c9d4fb-1d19-4bfd-8e5b-3376d7a27359"/>
+				</reportElement>
+				<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0">
+					<pen lineWidth="2.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{Empresa}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="210" y="0" width="110" height="70" uuid="02778dba-8072-480d-aada-d20a6003e9c4">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="8887c67a-cd58-4e5d-b74f-b7ef1a608491"/>
+				</reportElement>
+				<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0">
+					<pen lineWidth="2.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{Acuerdo de servicio}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="430" y="0" width="125" height="70" uuid="a3156651-8c5f-4797-a055-b2217975b879">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="322513ab-c88a-4b0d-a0e1-bec0030cfeb5"/>
+				</reportElement>
+				<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0">
+					<pen lineWidth="2.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{Precio segun acuerdo de servicio}]]></textFieldExpression>
+			</textField>
+			<image hAlign="Center" vAlign="Middle">
+				<reportElement positionType="Float" x="0" y="0" width="110" height="70" uuid="79c147f4-194c-4828-84dd-d5c31eadd527"/>
+				<box>
+					<pen lineWidth="2.0"/>
+				</box>
+				<imageExpression><![CDATA[$F{Logo Empresa}]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="320" y="0" width="110" height="70" uuid="8bdddfbd-dc4f-4df6-bb4f-ca0e9bb032e9">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="26edd5c4-bdbb-457b-848c-e32b63a688f9"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="2.0" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{Fecha Vigencia}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

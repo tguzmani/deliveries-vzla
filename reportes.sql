@@ -49,23 +49,42 @@ BEGIN
 END;
 
 -- REPORTE 3
-SELECT s.NOMBRE                   AS "Sector",
-       a.ID,
-       a.DATOS.NOMBRE             AS "Nombre de la empresa",
-       app.DATOS.NOMBRE           AS "Aplicación utilizada para el delivery",
-       min(p.FECHAS.FECHA_INICIO) AS "Fecha de inicio",
-       max(p.FECHAS.FECHA_FIN)    AS "Fecha de fin",
-       e.NOMBRE                   AS "Estado",
-       COUNT(p.TRACKING)          AS "Cantidad de envios realizados en ese rango de tiempo"
-FROM PEDIDO p
-         INNER JOIN ALIADA a on a.ID = p.ID_ALIADA
-         INNER JOIN SECTOR s ON s.ID = a.ID_SECTOR
-         INNER JOIN APLICACION app on p.ID_APLICACION = app.ID
-         INNER JOIN UBICACION u on p.ID_ZONA_DIRECCION = u.id
-         INNER JOIN UBICACION m on m.ID = u.ID_PADRE
-         INNER JOIN UBICACION e on e.ID = m.ID_PADRE
-GROUP BY s.NOMBRE, a.ID, a.DATOS.NOMBRE, app.DATOS.NOMBRE, e.NOMBRE
-ORDER BY 3;
+create PROCEDURE report_three(cursor_3 OUT sys_refcursor, comercio VARCHAR, f_inicio DATE, f_fin DATE,
+                                         estado VARCHAR) IS
+BEGIN
+    OPEN cursor_3 FOR
+        SELECT "Sector",
+               a1.LOGO AS "Logo de la empresa",
+               "Nombre de la empresa",
+               "Aplicación utilizada para el delivery",
+               "Fecha de inicio",
+               "Fecha de fin",
+               "Estado",
+               "Cantidad de envios realizados en ese rango de tiempo"
+        FROM (
+                 SELECT s.NOMBRE                   AS "Sector",
+                        a.ID                       AS "aux",
+                        a.DATOS.NOMBRE             AS "Nombre de la empresa",
+                        app.DATOS.NOMBRE           AS "Aplicación utilizada para el delivery",
+                        TO_CHAR(min(p.FECHAS.FECHA_INICIO), 'DD-MM-YYYY') AS "Fecha de inicio",
+                        TO_CHAR(max(p.FECHAS.FECHA_FIN), 'DD-MM-YYYY')   AS "Fecha de fin",
+                        e.NOMBRE                   AS "Estado",
+                        COUNT(p.TRACKING)          AS "Cantidad de envios realizados en ese rango de tiempo"
+                 FROM PEDIDO p
+                          INNER JOIN ALIADA a on a.ID = p.ID_ALIADA
+                          INNER JOIN SECTOR s ON s.ID = a.ID_SECTOR
+                          INNER JOIN APLICACION app on p.ID_APLICACION = app.ID
+                          INNER JOIN UBICACION u on p.ID_ZONA_DIRECCION = u.id
+                          INNER JOIN UBICACION m on m.ID = u.ID_PADRE
+                          INNER JOIN UBICACION e on e.ID = m.ID_PADRE
+                 WHERE (0 < INSTR(comercio, a.DATOS.NOMBRE) OR comercio IS NULL) AND
+                       (0 < INSTR(estado, e.NOMBRE) OR estado IS NULL) AND
+                       (p.FECHAS.FECHA_INICIO >= f_inicio OR f_inicio IS NULL) AND
+                       (p.FECHAS.FECHA_FIN <= f_fin OR f_fin IS NULL)
+                 GROUP BY s.NOMBRE, a.ID, a.DATOS.NOMBRE, app.DATOS.NOMBRE, e.NOMBRE
+                 ORDER BY 3) Pedidos
+        INNER JOIN ALIADA a1 ON a1.id = "aux";
+END;
 
 -- REPORTE 4
 create PROCEDURE report_four(cursor_4 OUT sys_refcursor, estado VARCHAR) IS
@@ -91,7 +110,8 @@ BEGIN
                        JOIN UNIDAD U2 on O.ID_APLICACION = U2.ID_APLICACION_OFICINA and O.ID_ZONA = U2.ID_ZONA_OFICINA
               WHERE GET_ESTADO(o.ID_ZONA) = estado AND O.ID_ZONA = u.ID
               GROUP BY a.id, a.DATOS.NOMBRE, GET_ESTADO(o.ID_ZONA), U2.TIPO
-              ORDER BY a.DATOS.NOMBRE, U2.TIPO) Unidades
+              ORDER BY a.DATOS.NOMBRE, U2.TIPO
+            ) Unidades
         INNER JOIN APLICACION a1 ON a1.id = aux;
 END;
 

@@ -54,11 +54,11 @@ IS
     travel_time NUMBER;
 BEGIN
     -- Debugging
-    DBMS_OUTPUT.PUT_LINE('in_origin_long = ' || in_origin_long);
-    DBMS_OUTPUT.PUT_LINE('in_origin_lat = ' || in_origin_lat);
-    DBMS_OUTPUT.PUT_LINE('in_destination_long = ' || in_destination_long);
-    DBMS_OUTPUT.PUT_LINE('in_destination_lat = ' || in_destination_lat);
-    DBMS_OUTPUT.PUT_LINE('url = ' || url);
+    -- DBMS_OUTPUT.PUT_LINE('in_origin_long = ' || in_origin_long);
+    -- DBMS_OUTPUT.PUT_LINE('in_origin_lat = ' || in_origin_lat);
+    -- DBMS_OUTPUT.PUT_LINE('in_destination_long = ' || in_destination_long);
+    -- DBMS_OUTPUT.PUT_LINE('in_destination_lat = ' || in_destination_lat);
+    -- DBMS_OUTPUT.PUT_LINE('url = ' || url);
 
     req := utl_http.begin_request(url, 'GET',' HTTP/1.1');
     utl_http.set_header(req, 'content-type', 'application/json');

@@ -116,6 +116,13 @@ begin
     DBMS_OUTPUT.PUT_LINE(string);
 end;
 
+create or replace procedure rollback_m3 is
+begin
+    delete from contrato where n_contrato > 15;
+    delete from servicio where id > 20;
+end;
+
+
 ------------------------------------------------------------------------------------------------------
 -- (m3.2) Generar nuevos contratos y servicios
 ------------------------------------------------------------------------------------------------------
@@ -146,19 +153,19 @@ begin
         price := random_price(quantity);
 
         -- estos son los datos del insert de servicio
-        separator('=',80);
-        puts('DATOS SERVICIO');
-        DBMS_OUTPUT.PUT_LINE('app.id = ' || app.id);
-        DBMS_OUTPUT.PUT_LINE('periodo = ' || periodo);
-        DBMS_OUTPUT.PUT_LINE('initial_date = ' || initial_date);
-        DBMS_OUTPUT.PUT_LINE('ending_date = ' || ending_date);
+        -- separator('=',80);
+        -- puts('DATOS SERVICIO');
+        -- DBMS_OUTPUT.PUT_LINE('app.id = ' || app.id);
+        -- DBMS_OUTPUT.PUT_LINE('periodo = ' || periodo);
+        -- DBMS_OUTPUT.PUT_LINE('initial_date = ' || initial_date);
+        -- DBMS_OUTPUT.PUT_LINE('ending_date = ' || ending_date);
         insert into servicio values (default,
                                      app.id,
                                      precio_cantidad(quantity, price),
                                      periodo,
                                      fechas(initial_date, ending_date))
                                      returning id, id_aplicacion into id_servicio, id_aplicacion;
-        separator('-',40);
+        -- separator('-',40);
 
         select id_aliada
         into id_aliada
@@ -169,13 +176,13 @@ begin
         order by DBMS_RANDOM.RANDOM()
         fetch first row only;
 
-        puts('DATOS CONTRATO');
-        DBMS_OUTPUT.PUT_LINE('app.id = ' || app.id);
-        DBMS_OUTPUT.PUT_LINE('id_aliada = ' || id_aliada);
-        DBMS_OUTPUT.PUT_LINE('id_servicio = ' || id_servicio);
-        DBMS_OUTPUT.PUT_LINE('periodo = ' || periodo);
-        DBMS_OUTPUT.PUT_LINE('initial_date = ' || initial_date);
-        DBMS_OUTPUT.PUT_LINE('ending_date = ' || ending_date);
+        -- puts('DATOS CONTRATO');
+        -- DBMS_OUTPUT.PUT_LINE('app.id = ' || app.id);
+        -- DBMS_OUTPUT.PUT_LINE('id_aliada = ' || id_aliada);
+        -- DBMS_OUTPUT.PUT_LINE('id_servicio = ' || id_servicio);
+        -- DBMS_OUTPUT.PUT_LINE('periodo = ' || periodo);
+        -- DBMS_OUTPUT.PUT_LINE('initial_date = ' || initial_date);
+        -- DBMS_OUTPUT.PUT_LINE('ending_date = ' || ending_date);
         insert into contrato values (default,
                                      id_aplicacion,
                                      id_aliada,
@@ -222,10 +229,7 @@ select * from servicio where id > 20;
 delete from servicio where id > 20;
 
 -- Borrar de ambas tablas
-begin
-    delete from contrato where n_contrato > 15;
-    delete from servicio where id > 20;
-end;
+call rollback_m3();
 
 
 

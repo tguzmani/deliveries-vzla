@@ -62,7 +62,7 @@ BEGIN
             if mod((fecha_inicio + dias_transcurridos), 7) = 0 then
                 -- esto ocurre cada 7 días
                 -- se ejecuta 3 veces para disparar el trigger
-                for i in 1..3 loop
+                for i in 1..4 loop
                     deactivate_units_all_apps();
                 end loop;
 

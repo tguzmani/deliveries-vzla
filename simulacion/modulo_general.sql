@@ -54,7 +54,7 @@ BEGIN
     WHILE (fecha_inicio+dias_transcurridos <= fecha_fin)
         LOOP
             dbms_output.put_line( '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++');
-            dbms_output.put_line( 'DIA: ' || dias_transcurridos+1 || '- FECHA: ' || TO_CHAR(fecha_inicio+dias_transcurridos,'DD/MM/YYYY'));
+            dbms_output.put_line( 'DIA: ' || dias_transcurridos || '- FECHA: ' || TO_CHAR(fecha_inicio+dias_transcurridos,'DD/MM/YYYY'));
             dbms_output.put_line( '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++');
             simulate_day(fecha_inicio+dias_transcurridos);
             dias_transcurridos := dias_transcurridos + 1;

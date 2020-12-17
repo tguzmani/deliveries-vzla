@@ -49,14 +49,14 @@ BEGIN
 END;
 
 -- REPORTE 3
-SELECT s.NOMBRE,
+SELECT s.NOMBRE                   AS "Sector",
        a.ID,
-       a.DATOS.NOMBRE,
-       app.DATOS.NOMBRE,
-       min(p.FECHAS.FECHA_INICIO),
-       max(p.FECHAS.FECHA_FIN),
-       e.NOMBRE,
-       COUNT(p.TRACKING)
+       a.DATOS.NOMBRE             AS "Nombre de la empresa",
+       app.DATOS.NOMBRE           AS "Aplicación utilizada para el delivery",
+       min(p.FECHAS.FECHA_INICIO) AS "Fecha de inicio",
+       max(p.FECHAS.FECHA_FIN)    AS "Fecha de fin",
+       e.NOMBRE                   AS "Estado",
+       COUNT(p.TRACKING)          AS "Cantidad de envios realizados en ese rango de tiempo"
 FROM PEDIDO p
          INNER JOIN ALIADA a on a.ID = p.ID_ALIADA
          INNER JOIN SECTOR s ON s.ID = a.ID_SECTOR
@@ -96,16 +96,33 @@ BEGIN
 END;
 
 -- REPORTE 5
-SELECT e.NOMBRE, a.ID, app.DATOS.NOMBRE, app.ID, m.NOMBRE, count(p.TRACKING)
-FROM PEDIDO p
-         INNER JOIN ALIADA a on a.ID = p.ID_ALIADA
-         INNER JOIN APLICACION app on p.ID_APLICACION = app.ID
-         INNER JOIN UBICACION u on p.ID_ZONA_DIRECCION = u.id
-         INNER JOIN UBICACION m on m.ID = u.ID_PADRE
-         INNER JOIN UBICACION e on e.ID = m.ID_PADRE
-GROUP BY e.NOMBRE, a.ID, app.DATOS.NOMBRE, app.ID, m.NOMBRE
-ORDER BY 6 DESC;
---ORDER BY numero de envios FETCH NEXT 5 ROWS ONLY; para tener el top 5
+create PROCEDURE report_five(cursor_5 OUT sys_refcursor, estado VARCHAR) IS
+BEGIN
+    OPEN cursor_5 FOR
+        SELECT "Estado",
+               a1.LOGO AS "Empresa",
+               "Nombre de proveedor de servicio",
+               a2.LOGO AS "Logo de proveedor de servicio",
+               "Municipio",
+               "Cantidad de envíos recibidos"
+        FROM (SELECT a.ID              AS "aux1",
+                     app.ID            AS "aux2",
+                     e.NOMBRE          AS "Estado",
+                     app.DATOS.NOMBRE  AS "Nombre de proveedor de servicio",
+                     m.NOMBRE          AS "Municipio",
+                     count(p.TRACKING) AS "Cantidad de envíos recibidos"
+              FROM PEDIDO p
+                       INNER JOIN ALIADA a on a.ID = p.ID_ALIADA
+                       INNER JOIN APLICACION app on p.ID_APLICACION = app.ID
+                       INNER JOIN UBICACION u on p.ID_ZONA_DIRECCION = u.id
+                       INNER JOIN UBICACION m on m.ID = u.ID_PADRE
+                       INNER JOIN UBICACION e on e.ID = m.ID_PADRE
+              WHERE e.NOMBRE = estado
+              GROUP BY a.ID, app.ID, e.NOMBRE, app.DATOS.NOMBRE, m.NOMBRE
+              ORDER BY "Cantidad de envíos recibidos" DESC FETCH NEXT 5 ROWS ONLY) pedidos
+        INNER JOIN ALIADA a1 ON a1.ID = "aux1"
+        INNER JOIN APLICACION a2 ON a2.ID = "aux2";
+END;
 
 -- REPORTE 6
 create PROCEDURE report_six(cursor_6 OUT sys_refcursor, estado VARCHAR, fecha DATE) IS

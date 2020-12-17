@@ -134,16 +134,20 @@ is
     ending_date date;
     periodo varchar2(50);
     id_aliada number;
+    aliada_name varchar(50);
     id_aplicacion number;
     id_servicio number;
     quantity number;
     price number;
 
     cursor application_list is
-        select id from aplicacion
+        select a.id, a.datos.nombre as nombre from aplicacion a
         order by DBMS_RANDOM.RANDOM()
         fetch first random_rows rows only;
 begin
+    separator('=', 60);
+    DBMS_OUTPUT.PUT_LINE('OFERTA DE SERVICIOS');
+    separator('=', 60);
     for app in application_list
     loop
         periodo := random_period();
@@ -159,6 +163,11 @@ begin
         -- DBMS_OUTPUT.PUT_LINE('periodo = ' || periodo);
         -- DBMS_OUTPUT.PUT_LINE('initial_date = ' || initial_date);
         -- DBMS_OUTPUT.PUT_LINE('ending_date = ' || ending_date);
+        separator('-', 40);
+        DBMS_OUTPUT.PUT_LINE('La aplicación ' || app.nombre || ' ofrece ' ||
+                             quantity || ' pedidos, por $' || price || ', cuya duración es ' ||
+                             periodo || '. (del ' || initial_date || ' al ' || ending_date || ')');
+
         insert into servicio values (default,
                                      app.id,
                                      precio_cantidad(quantity, price),
@@ -176,6 +185,9 @@ begin
         order by DBMS_RANDOM.RANDOM()
         fetch first row only;
 
+        select a.datos.nombre into aliada_name
+        from aliada a where id = id_aliada;
+
         -- puts('DATOS CONTRATO');
         -- DBMS_OUTPUT.PUT_LINE('app.id = ' || app.id);
         -- DBMS_OUTPUT.PUT_LINE('id_aliada = ' || id_aliada);
@@ -183,6 +195,11 @@ begin
         -- DBMS_OUTPUT.PUT_LINE('periodo = ' || periodo);
         -- DBMS_OUTPUT.PUT_LINE('initial_date = ' || initial_date);
         -- DBMS_OUTPUT.PUT_LINE('ending_date = ' || ending_date);
+
+        DBMS_OUTPUT.PUT_LINE(aliada_name || ' adquiere el contrato con ' || app.nombre || ' de ' ||
+                             quantity || ' pedidos, por $' || price || ', cuya duración es ' ||
+                             periodo || '. (del ' || initial_date || ' al ' || ending_date || ')');
+
         insert into contrato values (default,
                                      id_aplicacion,
                                      id_aliada,

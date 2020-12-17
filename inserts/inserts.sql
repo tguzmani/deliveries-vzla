@@ -306,10 +306,6 @@ END;
 
 CALL insertar_unidades();
 
---Pedidos
-
---Productos
-
 --reiniciador de secuencia
 --alter table *nombre tabla*
 --modify  id generated always as identity restart start with 1;

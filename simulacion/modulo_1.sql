@@ -232,3 +232,8 @@ CALL CREAR_PEDIDO(to_date('01/12/2020','DD/MM/YYYY'),11914781,2,1);
 
 select * from pedido;
 select * from producto;
+
+begin
+    delete from pedido;
+    delete from producto;
+end;

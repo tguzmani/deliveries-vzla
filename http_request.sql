@@ -68,7 +68,7 @@ BEGIN
       LOOP
         utl_http.read_line(res, buffer);
         -- dbms_output.put_line(url);
-        DBMS_OUTPUT.PUT_LINE('response = '|| buffer);
+        -- DBMS_OUTPUT.PUT_LINE('response = '|| buffer);
         travel_time := TO_NUMBER(buffer);
       END LOOP;
 

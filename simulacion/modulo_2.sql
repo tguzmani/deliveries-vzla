@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------------------------------
 -- Módulo II
 --
--- (m2.0) Funciones
+-- (m2.0) Funciones y Stored Procedures generales
 -- (m2.1) Unidades a desactivar
 -- (m2.2) Unidades a reparar
 -- (m2.3) Unidades a adquirir
@@ -9,7 +9,7 @@
 ------------------------------------------------------------------------------------------------------
 
 ------------------------------------------------------------------------------------------------------
--- (m2.0) Funciones
+-- (m2.0) Funciones y Stored Procedures generales
 ------------------------------------------------------------------------------------------------------
 
 -- Crea un numero al azar entre 0 y 1, no incluyente
@@ -25,6 +25,12 @@ BEGIN
 
     RETURN TRUNC(DBMS_RANDOM.VALUE(minimo, maximo), 2);
 END;
+
+create or replace procedure rollback_m2 is
+begin
+    delete from unidad where id > 140;
+    update unidad set estatus = 'activo';
+end;
 
 ------------------------------------------------------------------------------------------------------
 -- (m2.1) Punto 1: Se dañan entre 2 y 10% de unidades a la semana
@@ -42,7 +48,7 @@ CREATE OR REPLACE PROCEDURE deactivate_units_by_app (
 )
 AS
     CURSOR lista_inactivas IS
-        SELECT DISTINCT u.id as id_unidad, a.id as id_app
+        SELECT DISTINCT u.id as id_unidad, a.id as id_app, u.tipo, u.placa
             FROM unidad u, oficina o, aplicacion a
             WHERE u.ID_APLICACION_OFICINA = o.ID_APLICACION AND
                   o.ID_APLICACION = a.ID AND
@@ -53,6 +59,7 @@ AS
 BEGIN
     FOR unidad IN lista_inactivas
         LOOP
+            DBMS_OUTPUT.PUT_LINE('Se reporta avería en la unidad placa ' || unidad.placa || ' (' || unidad.tipo || ')');
             -- DBMS_OUTPUT.PUT_LINE( '    id unidad = ' || unidad.id_unidad);
             UPDATE unidad SET estatus = 'en reparación' WHERE id = unidad.id_unidad;
         END LOOP;
@@ -73,11 +80,23 @@ AS
         GROUP BY a.id
         ORDER BY a.id;
 
+    application_name varchar(50);
+
 BEGIN
-    FOR unidad IN lista_inactivas
-        LOOP
-            -- DBMS_OUTPUT.PUT_LINE('id app = ' || unidad.id || ' unidades a desactivar = ' || unidad.inactivas);
-            deactivate_units_by_app(unidad.inactivas, unidad.id);
+    separator('=', 60);
+    DBMS_OUTPUT.PUT_LINE('AVERÍA DE UNIDADES');
+    separator('=', 60);
+
+    FOR unidad IN lista_inactivas LOOP
+        select a.datos.nombre into application_name
+        from aplicacion a where id = unidad.id;
+
+        separator('-', 40);
+        DBMS_OUTPUT.PUT_LINE('La aplicación ' || application_name || ' reportó ' || unidad.inactivas ||
+                             ' unidad(es) averiada(s)');
+
+        -- DBMS_OUTPUT.PUT_LINE('id app = ' || unidad.id || ' unidades a desactivar = ' || unidad.inactivas);
+        deactivate_units_by_app(unidad.inactivas, unidad.id);
         END LOOP;
 END;
 
@@ -107,7 +126,7 @@ CREATE OR REPLACE PROCEDURE repair_units_by_app (
 )
 AS
     CURSOR lista_inactivas IS
-        SELECT DISTINCT u.id as id_unidad, a.id as id_app
+        SELECT DISTINCT u.id as id_unidad, a.id as id_app, u.placa, u.tipo
             FROM unidad u, oficina o, aplicacion a
             WHERE u.ID_APLICACION_OFICINA = o.ID_APLICACION AND
                   o.ID_APLICACION = a.ID AND
@@ -115,9 +134,11 @@ AS
                   a.ID = in_application_id AND
                   u.estatus = 'en reparación'
             FETCH FIRST in_units_to_deactivate ROWS ONLY;
+
 BEGIN
     FOR unidad IN lista_inactivas
         LOOP
+            DBMS_OUTPUT.PUT_LINE('Se reparó la unidad placa ' || unidad.placa || ' (' || unidad.tipo || ')');
             -- DBMS_OUTPUT.PUT_LINE( '    id unidad = ' || unidad.id_unidad);
             UPDATE unidad SET estatus = 'activo' WHERE id = unidad.id_unidad;
         END LOOP;
@@ -138,9 +159,22 @@ AS
         GROUP BY a.id
         ORDER BY a.id;
 
+    application_name varchar2(50);
+
 BEGIN
+    separator('=', 60);
+    DBMS_OUTPUT.PUT_LINE('REPARACIÓN DE UNIDADES');
+    separator('=', 60);
+
     FOR unidad IN lista_inactivas
         LOOP
+            select a.datos.nombre into application_name
+            from aplicacion a where id = unidad.id;
+
+            separator('-', 40);
+            DBMS_OUTPUT.PUT_LINE('La aplicación ' || application_name || ' reparará ' || unidad.inactivas ||
+                             ' unidad(es) averiada(s)');
+
             -- DBMS_OUTPUT.PUT_LINE('id app = ' || unidad.id || ' unidades a reparar = ' || unidad.inactivas);
             repair_units_by_app(unidad.inactivas, unidad.id);
         END LOOP;
@@ -200,6 +234,8 @@ DECLARE
     unit_type VARCHAR2(50);
     plate_number VARCHAR(50);
     zona_oficina INTEGER;
+
+    application_name varchar2(50);
 BEGIN
     FOR unidad in listar_num_unidades
     LOOP
@@ -209,7 +245,7 @@ BEGIN
         proportion := num_deactivated_units / unidad.num_unidades;
 
         IF proportion >= critical_proportion THEN
-            DBMS_OUTPUT.PUT_LINE('TRIGGER: proportion = ' || proportion || ' from app id = ' || unidad.id_aplicacion);
+            -- DBMS_OUTPUT.PUT_LINE('TRIGGER: proportion = ' || proportion || ' from app id = ' || unidad.id_aplicacion);
             FOR i IN 1..ROUND(num_deactivated_units*1/3)
             LOOP
                 -- Elegir vehículo al azar
@@ -238,7 +274,16 @@ BEGIN
                 ORDER BY DBMS_RANDOM.VALUE
                 FETCH FIRST 1 ROW ONLY;
 
-                DBMS_OUTPUT.PUT_LINE('se van a comprar ' || num_deactivated_units || ' ' || '(' || i || '/' || num_deactivated_units || ')');
+                select a.datos.nombre into application_name
+                from aplicacion a where id = unidad.id_aplicacion;
+
+                separator('-', 40);
+                DBMS_OUTPUT.PUT_LINE('[trigger]');
+                DBMS_OUTPUT.PUT_LINE('La empresa ' || application_name ||
+                                     ' comprará ' || ROUND(num_deactivated_units*1/3) || ' unidad(es) nueva(s)');
+                DBMS_OUTPUT.PUT_LINE('- ' || unit_type || ' placa ' || plate_number);
+
+                -- DBMS_OUTPUT.PUT_LINE('se van a comprar ' || num_deactivated_units || ' ' || '(' || i || '/' || num_deactivated_units || ')');
 
                 INSERT INTO unidad VALUES (DEFAULT,
                                            plate_number,
@@ -258,17 +303,12 @@ END;
 CALL deactivate_units_all_apps();
 CALL repair_units_all_apps();
 
+
 -- Select general de la tabla unidad
 SELECT * FROM unidad;
 
--- Restaurar los estados a activo
-UPDATE unidad SET estatus = 'activo';
-
 -- Las unidades nuevas están después del ID = 140
 SELECT COUNT(*) FROM unidad WHERE ID > 140 ORDER BY 1 DESC;
-
--- Eliminar todas las unidades nuevas
-DELETE FROM unidad WHERE ID > 140;
 
 -- Unidades en reparación por aplicacion
 SELECT DISTINCT COUNT(*), a.id
@@ -298,3 +338,5 @@ WHERE u.ID_APLICACION_OFICINA = o.ID_APLICACION AND
       o.ID_ZONA = u.ID_ZONA_OFICINA
 GROUP BY a.id
 ORDER BY a.id;
+
+call rollback_m2();

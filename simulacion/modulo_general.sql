@@ -59,7 +59,11 @@ BEGIN
             simulate_day(fecha_inicio+dias_transcurridos);
             dias_transcurridos := dias_transcurridos + 1;
 
+<<<<<<< HEAD
             if mod(dias_transcurridos, 7) = 0 then
+=======
+            if mod((dias_transcurridos+1), 7) = 0 then
+>>>>>>> b7ae7d7881b431ce4e86bbef2cfa8f05d38b2de7
                 -- esto ocurre cada 7 días
                 -- se ejecuta 3 veces para disparar el trigger
                 for i in 1..4 loop

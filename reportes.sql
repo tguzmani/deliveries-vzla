@@ -169,3 +169,152 @@ BEGIN
         WHERE GET_ESTADO(d.ID_ZONA) = estado AND r.FECHAS<fecha AND D.ID_ZONA = u.ID
         ORDER BY c.PRIMER_NOMBRE;
 END;
+
+--REPORTE 7
+create PROCEDURE report_seven(cursor_7 OUT sys_refcursor, estado VARCHAR, f_inicio DATE, f_fin DATE, proveedor VARCHAR) IS
+BEGIN
+    OPEN cursor_7 FOR
+        SELECT
+            "Estado",
+            "Nombre de proveedor de servicio",
+            a.LOGO as "Logo proveedor de servicio",
+            "Dirección de envío",
+            "Referencia",
+            "#Tracking",
+            "Fecha de inicio",
+            "Fecha de fin",
+            "Cantidad de productos a enviar",
+            "Email cliente"
+        FROM (SELECT
+                e.NOMBRE as "Estado",
+                app.DATOS.NOMBRE as "Nombre de proveedor de servicio",
+                app.ID as "aux",
+                z.NOMBRE as "Dirección de envío",
+                pto.DESCRIPCION as "Referencia",
+                p.TRACKING as "#Tracking",
+                p.FECHAS.FECHA_INICIO as "Fecha de inicio",
+                p.FECHAS.FECHA_FIN as "Fecha de fin",
+                SUM(p2.ESPECIFICACION.CANTIDAD) as "Cantidad de productos a enviar",
+                c.EMAIL as "Email cliente"
+            FROM PEDIDO p
+            INNER JOIN UBICACION z ON p.ID_ZONA_DIRECCION = z.ID
+            INNER JOIN UBICACION m ON z.ID_PADRE = m.ID
+            INNER JOIN UBICACION e ON m.ID_PADRE = e.ID
+            INNER JOIN APLICACION app on app.ID = p.ID_APLICACION
+            INNER JOIN PTO_REFERENCIA pto on pto.ID = p.ID_DIRECCION
+            INNER JOIN PRODUCTO p2 on p.TRACKING = p2.TRACKING_PEDIDO
+            INNER JOIN CLIENTE c on p.CED_CLIENTE = c.CEDULA
+            WHERE (0 < INSTR(proveedor, app.DATOS.NOMBRE) OR proveedor IS NULL) AND
+                  (0 < INSTR(estado, e.NOMBRE) OR estado IS NULL) AND
+                  (p.FECHAS.FECHA_INICIO >= f_inicio OR f_inicio IS NULL) AND
+                  (p.FECHAS.FECHA_FIN <= f_fin OR f_fin IS NULL)
+            GROUP BY e.NOMBRE, app.DATOS.NOMBRE, app.ID, z.NOMBRE, pto.DESCRIPCION, p.TRACKING, p.FECHAS.FECHA_INICIO, p.FECHAS.FECHA_FIN, c.EMAIL)
+        INNER JOIN APLICACION a ON a.ID = "aux";
+END;
+
+--REPORTE 9
+create PROCEDURE report_nine(cursor_9 OUT sys_refcursor, estado VARCHAR, f_inicio DATE, f_fin DATE, zona VARCHAR) IS
+BEGIN
+    OPEN cursor_9 FOR
+        SELECT
+            TO_CHAR(MIN(p.FECHAS.FECHA_INICIO),'DD-MM-YYYY') AS "Fecha de inicio",
+            TO_CHAR(MAX(p.FECHAS.FECHA_FIN),'DD-MM-YYYY') AS "Fecha de fin",
+            e.NOMBRE AS "Estado",
+            z.NOMBRE AS "Zona",
+            s.NOMBRE AS "Sector del producto",
+            SUM(p2.ESPECIFICACION.CANTIDAD) AS "Cantidad productos"
+        FROM SECTOR s
+        INNER JOIN PRODUCTO p2 on s.ID = p2.ID_SECTOR
+        INNER JOIN PEDIDO p on p2.TRACKING_PEDIDO = p.TRACKING
+        INNER JOIN UBICACION z ON p.ID_ZONA_DIRECCION = z.ID
+        INNER JOIN UBICACION m ON z.ID_PADRE = m.ID
+        INNER JOIN UBICACION e ON m.ID_PADRE = e.ID
+        WHERE (0 < INSTR(zona, z.NOMBRE) OR zona IS NULL) AND
+              (0 < INSTR(estado, e.NOMBRE) OR estado IS NULL) AND
+              (p.FECHAS.FECHA_INICIO >= f_inicio OR f_inicio IS NULL) AND
+              (p.FECHAS.FECHA_FIN <= f_fin OR f_fin IS NULL)
+        GROUP BY e.NOMBRE, z.NOMBRE, s.NOMBRE
+        ORDER BY 6 DESC
+        FETCH FIRST 10 ROWS ONLY;
+END;
+
+--REPORTE 10
+create PROCEDURE report_ten(cursor_10 OUT sys_refcursor, f_inicio DATE, f_fin DATE, proveedor VARCHAR) IS
+BEGIN
+    OPEN cursor_10 FOR
+        SELECT
+            "Fecha de inicio",
+            "Fecha de fin",
+            a1.LOGO AS "Comercio",
+            "Nombre de proveedor de servicio",
+            a2.LOGO AS "Logo proveedor de servicio",
+            "Ingresos"
+        FROM
+            (SELECT
+                TO_CHAR(MIN(c.FECHAS.FECHA_INICIO),'DD-MM-YYYY') AS "Fecha de inicio",
+                TO_CHAR(MAX(c.FECHAS.FECHA_FIN),'DD-MM-YYYY') AS "Fecha de fin",
+                ali.ID AS "aux1",
+                app.DATOS.NOMBRE AS "Nombre de proveedor de servicio",
+                app.ID AS "aux2",
+                CONCAT('$',SUM(s.ESPECIFICACION.PRECIO)) AS "Ingresos"
+            FROM CONTRATO c
+            INNER JOIN APLICACION app on app.ID = c.ID_APLICACION
+            INNER JOIN ALIADA ali on ali.ID = c.ID_ALIADA
+            INNER JOIN SERVICIO s on c.ID_SERVICIO = s.ID
+            WHERE (0 < INSTR(proveedor, app.DATOS.NOMBRE) OR proveedor IS NULL) AND
+                  (c.FECHAS.FECHA_INICIO >= f_inicio OR f_inicio IS NULL) AND
+                  (c.FECHAS.FECHA_FIN <= f_fin OR f_fin IS NULL)
+            GROUP BY ali.ID, app.DATOS.NOMBRE, app.ID
+            ORDER BY 5)
+        INNER JOIN ALIADA a1 ON a1.ID = "aux1"
+        INNER JOIN APLICACION a2 ON a2.ID = "aux2";
+END;
+
+--REPORTE 11
+create or replace PROCEDURE report_eleven(cursor_11 OUT sys_refcursor, f_inicio DATE, f_fin DATE, estad VARCHAR) IS
+BEGIN
+    OPEN cursor_11 FOR
+        SELECT
+            "Fecha de inicio",
+            "Fecha de fin",
+            "Nombre de proveedor de servicio",
+            a.LOGO AS "Logo proveedor de servicio",
+            "Estado"
+        FROM
+            (SELECT
+                TO_CHAR(MIN(p.FECHAS.FECHA_INICIO),'DD-MM-YYYY') AS "Fecha de inicio",
+                TO_CHAR(MAX(p.FECHAS.FECHA_FIN),'DD-MM-YYYY') AS "Fecha de fin",
+                a.DATOS.NOMBRE AS "Nombre de proveedor de servicio",
+                a.ID AS "aux",
+                e.NOMBRE AS "Estado",
+                COUNT(p.TRACKING) as "Pedidos"
+            FROM PEDIDO p
+            INNER JOIN APLICACION a on a.ID = p.ID_APLICACION
+            INNER JOIN UBICACION z ON p.ID_ZONA_DIRECCION = z.ID
+            INNER JOIN UBICACION m ON z.ID_PADRE = m.ID
+            INNER JOIN UBICACION e ON m.ID_PADRE = e.ID
+            WHERE (0 < INSTR(estad, e.NOMBRE) OR estad IS NULL) AND
+                  (p.FECHAS.FECHA_INICIO >= f_inicio OR f_inicio IS NULL) AND
+                  (p.FECHAS.FECHA_FIN <= f_fin OR f_fin IS NULL)
+            GROUP BY a.DATOS.NOMBRE, a.ID, e.NOMBRE
+            ORDER BY 6 DESC
+            FETCH FIRST 3 ROWS ONLY)
+        INNER JOIN APLICACION a ON a.ID = "aux";
+END;
+
+--REPORTE 13
+create PROCEDURE report_thirteen(cursor_13 OUT sys_refcursor, f_inicio DATE, f_fin DATE) IS
+BEGIN
+    OPEN cursor_13 FOR
+        SELECT "Nombre de proveedor de servicio",
+               app1.LOGO "Logo de proveedor de servicio",
+               "Promedio de satisfacción"
+        FROM (SELECT app.ID                                         "aux",
+                     app.DATOS.NOMBRE                               "Nombre de proveedor de servicio",
+                     CONCAT(ROUND(AVG(p.VALORACION)), ' estrellas') "Promedio de satisfacción"
+              FROM APLICACION app
+                       INNER JOIN PEDIDO P on app.ID = P.ID_APLICACION
+              WHERE p.FECHAS.FECHA_INICIO >= f_inicio AND p.FECHAS.FECHA_FIN <= f_fin
+              GROUP BY app.ID, app.DATOS.NOMBRE)
+        INNER JOIN APLICACION app1 On app1.ID = "aux";
+END;

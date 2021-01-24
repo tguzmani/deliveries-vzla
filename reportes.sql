@@ -211,3 +211,29 @@ BEGIN
             GROUP BY e.NOMBRE, app.DATOS.NOMBRE, app.ID, z.NOMBRE, pto.DESCRIPCION, p.TRACKING, p.FECHAS.FECHA_INICIO, p.FECHAS.FECHA_FIN, c.EMAIL)
         INNER JOIN APLICACION a ON a.ID = "aux");
 END;
+
+--REPORTE 8
+create PROCEDURE report_eight(cursor_8 OUT sys_refcursor, estado VARCHAR, f_inicio DATE, f_fin DATE, zona VARCHAR) IS
+BEGIN
+    OPEN cursor_8 FOR
+        (SELECT
+            TO_CHAR(MIN(p.FECHAS.FECHA_INICIO),'DD-MM-YYYY') AS "Fecha de inicio",
+            TO_CHAR(MAX(p.FECHAS.FECHA_FIN),'DD-MM-YYYY') AS "Fecha de fin",
+            e.NOMBRE AS "Estado",
+            z.NOMBRE AS "Zona",
+            s.NOMBRE AS "Sector del producto",
+            SUM(p2.ESPECIFICACION.CANTIDAD) AS "Cantidad productos"
+        FROM SECTOR s
+        INNER JOIN PRODUCTO p2 on s.ID = p2.ID_SECTOR
+        INNER JOIN PEDIDO p on p2.TRACKING_PEDIDO = p.TRACKING
+        INNER JOIN UBICACION z ON p.ID_ZONA_DIRECCION = z.ID
+        INNER JOIN UBICACION m ON z.ID_PADRE = m.ID
+        INNER JOIN UBICACION e ON m.ID_PADRE = e.ID
+        WHERE (0 < INSTR(zona, z.NOMBRE) OR zona IS NULL) AND
+              (0 < INSTR(estado, e.NOMBRE) OR estado IS NULL) AND
+              (p.FECHAS.FECHA_INICIO >= f_inicio OR f_inicio IS NULL) AND
+              (p.FECHAS.FECHA_FIN <= f_fin OR f_fin IS NULL)
+        GROUP BY e.NOMBRE, z.NOMBRE, s.NOMBRE
+        ORDER BY 6 DESC
+        FETCH FIRST 10 ROWS ONLY);
+END;

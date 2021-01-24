@@ -238,6 +238,38 @@ BEGIN
         FETCH FIRST 10 ROWS ONLY;
 END;
 
+--REPORTE 10
+create PROCEDURE report_ten(cursor_10 OUT sys_refcursor, f_inicio DATE, f_fin DATE, proveedor VARCHAR) IS
+BEGIN
+    OPEN cursor_10 FOR
+        SELECT
+            "Fecha de inicio",
+            "Fecha de fin",
+            a1.LOGO AS "Comercio",
+            "Nombre de proveedor de servicio",
+            a2.LOGO AS "Logo proveedor de servicio",
+            "Ingresos"
+        FROM
+            (SELECT
+                TO_CHAR(MIN(c.FECHAS.FECHA_INICIO),'DD-MM-YYYY') AS "Fecha de inicio",
+                TO_CHAR(MAX(c.FECHAS.FECHA_FIN),'DD-MM-YYYY') AS "Fecha de fin",
+                ali.ID AS "aux1",
+                app.DATOS.NOMBRE AS "Nombre de proveedor de servicio",
+                app.ID AS "aux2",
+                CONCAT('$',SUM(s.ESPECIFICACION.PRECIO)) AS "Ingresos"
+            FROM CONTRATO c
+            INNER JOIN APLICACION app on app.ID = c.ID_APLICACION
+            INNER JOIN ALIADA ali on ali.ID = c.ID_ALIADA
+            INNER JOIN SERVICIO s on c.ID_SERVICIO = s.ID
+            WHERE (0 < INSTR(proveedor, app.DATOS.NOMBRE) OR proveedor IS NULL) AND
+                  (c.FECHAS.FECHA_INICIO >= f_inicio OR f_inicio IS NULL) AND
+                  (c.FECHAS.FECHA_FIN <= f_fin OR f_fin IS NULL)
+            GROUP BY ali.ID, app.DATOS.NOMBRE, app.ID
+            ORDER BY 5)
+        INNER JOIN ALIADA a1 ON a1.ID = "aux1"
+        INNER JOIN APLICACION a2 ON a2.ID = "aux2";
+END;
+
 --REPORTE 13
 create PROCEDURE report_thirteen(cursor_13 OUT sys_refcursor, f_inicio DATE, f_fin DATE) IS
 BEGIN

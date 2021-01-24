@@ -212,10 +212,10 @@ BEGIN
         INNER JOIN APLICACION a ON a.ID = "aux");
 END;
 
---REPORTE 8
-create PROCEDURE report_eight(cursor_8 OUT sys_refcursor, estado VARCHAR, f_inicio DATE, f_fin DATE, zona VARCHAR) IS
+--REPORTE 9
+create PROCEDURE report_nine(cursor_9 OUT sys_refcursor, estado VARCHAR, f_inicio DATE, f_fin DATE, zona VARCHAR) IS
 BEGIN
-    OPEN cursor_8 FOR
+    OPEN cursor_9 FOR
         (SELECT
             TO_CHAR(MIN(p.FECHAS.FECHA_INICIO),'DD-MM-YYYY') AS "Fecha de inicio",
             TO_CHAR(MAX(p.FECHAS.FECHA_FIN),'DD-MM-YYYY') AS "Fecha de fin",

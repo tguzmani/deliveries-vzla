@@ -270,6 +270,38 @@ BEGIN
         INNER JOIN APLICACION a2 ON a2.ID = "aux2";
 END;
 
+--REPORTE 11
+create or replace PROCEDURE report_eleven(cursor_11 OUT sys_refcursor, f_inicio DATE, f_fin DATE, estad VARCHAR) IS
+BEGIN
+    OPEN cursor_11 FOR
+        SELECT
+            "Fecha de inicio",
+            "Fecha de fin",
+            "Nombre de proveedor de servicio",
+            a.LOGO AS "Logo proveedor de servicio",
+            "Estado"
+        FROM
+            (SELECT
+                TO_CHAR(MIN(p.FECHAS.FECHA_INICIO),'DD-MM-YYYY') AS "Fecha de inicio",
+                TO_CHAR(MAX(p.FECHAS.FECHA_FIN),'DD-MM-YYYY') AS "Fecha de fin",
+                a.DATOS.NOMBRE AS "Nombre de proveedor de servicio",
+                a.ID AS "aux",
+                e.NOMBRE AS "Estado",
+                COUNT(p.TRACKING) as "Pedidos"
+            FROM PEDIDO p
+            INNER JOIN APLICACION a on a.ID = p.ID_APLICACION
+            INNER JOIN UBICACION z ON p.ID_ZONA_DIRECCION = z.ID
+            INNER JOIN UBICACION m ON z.ID_PADRE = m.ID
+            INNER JOIN UBICACION e ON m.ID_PADRE = e.ID
+            WHERE (0 < INSTR(estad, e.NOMBRE) OR estad IS NULL) AND
+                  (p.FECHAS.FECHA_INICIO >= f_inicio OR f_inicio IS NULL) AND
+                  (p.FECHAS.FECHA_FIN <= f_fin OR f_fin IS NULL)
+            GROUP BY a.DATOS.NOMBRE, a.ID, e.NOMBRE
+            ORDER BY 6 DESC
+            FETCH FIRST 3 ROWS ONLY)
+        INNER JOIN APLICACION a ON a.ID = "aux";
+END;
+
 --REPORTE 13
 create PROCEDURE report_thirteen(cursor_13 OUT sys_refcursor, f_inicio DATE, f_fin DATE) IS
 BEGIN

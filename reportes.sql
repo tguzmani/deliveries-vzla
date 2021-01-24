@@ -174,15 +174,15 @@ END;
 create PROCEDURE report_seven(cursor_7 OUT sys_refcursor, estado VARCHAR, f_inicio DATE, f_fin DATE, proveedor VARCHAR) IS
 BEGIN
     OPEN cursor_7 FOR
-        (SELECT
-            "Estado",--
-            "Nombre de proveedor de servicio",--
+        SELECT
+            "Estado",
+            "Nombre de proveedor de servicio",
             a.LOGO as "Logo proveedor de servicio",
             "Dirección de envío",
             "Referencia",
             "#Tracking",
-            "Fecha de inicio",--
-            "Fecha de fin",--
+            "Fecha de inicio",
+            "Fecha de fin",
             "Cantidad de productos a enviar",
             "Email cliente"
         FROM (SELECT
@@ -209,14 +209,14 @@ BEGIN
                   (p.FECHAS.FECHA_INICIO >= f_inicio OR f_inicio IS NULL) AND
                   (p.FECHAS.FECHA_FIN <= f_fin OR f_fin IS NULL)
             GROUP BY e.NOMBRE, app.DATOS.NOMBRE, app.ID, z.NOMBRE, pto.DESCRIPCION, p.TRACKING, p.FECHAS.FECHA_INICIO, p.FECHAS.FECHA_FIN, c.EMAIL)
-        INNER JOIN APLICACION a ON a.ID = "aux");
+        INNER JOIN APLICACION a ON a.ID = "aux";
 END;
 
 --REPORTE 9
 create PROCEDURE report_nine(cursor_9 OUT sys_refcursor, estado VARCHAR, f_inicio DATE, f_fin DATE, zona VARCHAR) IS
 BEGIN
     OPEN cursor_9 FOR
-        (SELECT
+        SELECT
             TO_CHAR(MIN(p.FECHAS.FECHA_INICIO),'DD-MM-YYYY') AS "Fecha de inicio",
             TO_CHAR(MAX(p.FECHAS.FECHA_FIN),'DD-MM-YYYY') AS "Fecha de fin",
             e.NOMBRE AS "Estado",
@@ -235,5 +235,22 @@ BEGIN
               (p.FECHAS.FECHA_FIN <= f_fin OR f_fin IS NULL)
         GROUP BY e.NOMBRE, z.NOMBRE, s.NOMBRE
         ORDER BY 6 DESC
-        FETCH FIRST 10 ROWS ONLY);
+        FETCH FIRST 10 ROWS ONLY;
+END;
+
+--REPORTE 13
+create PROCEDURE report_thirteen(cursor_13 OUT sys_refcursor, f_inicio DATE, f_fin DATE) IS
+BEGIN
+    OPEN cursor_13 FOR
+        SELECT "Nombre de proveedor de servicio",
+               app1.LOGO "Logo de proveedor de servicio",
+               "Promedio de satisfacción"
+        FROM (SELECT app.ID                                         "aux",
+                     app.DATOS.NOMBRE                               "Nombre de proveedor de servicio",
+                     CONCAT(ROUND(AVG(p.VALORACION)), ' estrellas') "Promedio de satisfacción"
+              FROM APLICACION app
+                       INNER JOIN PEDIDO P on app.ID = P.ID_APLICACION
+              WHERE p.FECHAS.FECHA_INICIO >= f_inicio AND p.FECHAS.FECHA_FIN <= f_fin
+              GROUP BY app.ID, app.DATOS.NOMBRE)
+        INNER JOIN APLICACION app1 On app1.ID = "aux";
 END;

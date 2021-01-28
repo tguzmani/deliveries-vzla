@@ -302,6 +302,43 @@ BEGIN
         INNER JOIN APLICACION a ON a.ID = "aux";
 END;
 
+
+--REPORTE 12
+create or replace PROCEDURE report_twelve(cursor_12 OUT sys_refcursor, origen VARCHAR, destino VARCHAR) IS
+BEGIN
+    OPEN cursor_12 FOR
+SELECT
+    app.LOGO as "Logo proveedor de servicio",
+    "Zona de origen",
+    "Zona de destino",
+    "Tiempo de transporte",
+    "Tipo de transporte"
+FROM
+    (SELECT
+        a.ID AS "aux",
+        u1.NOMBRE AS "Zona de origen",
+        u2.NOMBRE AS "Zona de destino",
+        CASE u.TIPO
+                       WHEN 'moto' THEN CONCAT(ROUND(1440*(AVG(p.FECHAS.FECHA_FIN-p.FECHAS.FECHA_INICIO))-10),'min')
+                       WHEN 'carro' THEN CONCAT(ROUND(1440*(AVG(p.FECHAS.FECHA_FIN-p.FECHAS.FECHA_INICIO))),'min')
+                       WHEN 'camioneta' THEN CONCAT(ROUND(1440*(AVG(p.FECHAS.FECHA_FIN-p.FECHAS.FECHA_INICIO))+5),'min')
+                       END                 as "Tiempo de transporte",
+        u.TIPO AS "Tipo de transporte"
+    FROM PEDIDO p
+    INNER JOIN APLICACION a on a.ID = p.ID_APLICACION
+    INNER JOIN SUCURSAL s on s.ID_ALIADA = p.ID_ALIADA
+    INNER JOIN UBICACION u2 on p.ID_ZONA_DIRECCION = u2.ID
+    INNER JOIN UBICACION u1 on u1.ID = s.ID_ZONA
+    INNER JOIN UNIDAD u on p.ID_UNIDAD = u.ID
+    WHERE s.ID_ZONA = GET_CLOSER_SUCURSAL(p.CED_CLIENTE,p.ID_ALIADA,p.ID_ZONA_DIRECCION) AND
+          (0 < INSTR(origen, u1.NOMBRE) OR origen IS NULL) AND
+          (0 < INSTR(destino, u1.NOMBRE) OR destino IS NULL)
+    GROUP BY a.ID, u1.NOMBRE, u2.NOMBRE, u.TIPO
+    ORDER BY 1,2,3,5)
+INNER JOIN APLICACION app on app.ID = "aux";
+END;
+
+
 --REPORTE 13
 create PROCEDURE report_thirteen(cursor_13 OUT sys_refcursor, f_inicio DATE, f_fin DATE) IS
 BEGIN

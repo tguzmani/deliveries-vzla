@@ -87,3 +87,54 @@ SELECT get_travel_time(
     -66.90133777179757
 ) AS travel_time FROM dual;
 
+CREATE OR REPLACE FUNCTION get_travel_step (
+    in_origin_long IN UBICACION.latitud%type,
+    in_origin_lat IN UBICACION.longitud%type,
+    in_destination_long IN UBICACION.latitud%type,
+    in_destination_lat IN UBICACION.longitud%type,
+    in_elapsed IN number
+) RETURN VARCHAR2
+IS
+    -- HTTP Request
+    req utl_http.req;
+    res utl_http.resp;
+
+    -- Ruta
+    route VARCHAR2(4000) := 'localhost:8000/directions?';
+    query_origins VARCHAR2(4000) :=
+        'originLat=' || in_origin_long || '&originLong=' || in_origin_lat;
+    query_destination VARCHAR2(4000) :=
+        '&destinationLat=' || in_destination_long || '&destinationLong=' || in_destination_lat;
+    elapsed VARCHAR2(4000) := '&elapsed=' || in_elapsed;
+    url VARCHAR(4000) := route || query_origins || query_destination || elapsed;
+
+    -- Containers
+    buffer VARCHAR2(4000);
+    travel_time VARCHAR(4000);
+BEGIN
+    -- Debugging
+    -- DBMS_OUTPUT.PUT_LINE('in_origin_long = ' || in_origin_long);
+    -- DBMS_OUTPUT.PUT_LINE('in_origin_lat = ' || in_origin_lat);
+    -- DBMS_OUTPUT.PUT_LINE('in_destination_long = ' || in_destination_long);
+    -- DBMS_OUTPUT.PUT_LINE('in_destination_lat = ' || in_destination_lat);
+    -- DBMS_OUTPUT.PUT_LINE('url = ' || url);
+
+    req := utl_http.begin_request(url, 'GET',' HTTP/1.1');
+    utl_http.set_header(req, 'content-type', 'application/json');
+    res := utl_http.get_response(req);
+
+    BEGIN
+      LOOP
+        utl_http.read_line(res, buffer);
+        -- dbms_output.put_line(url);
+        -- DBMS_OUTPUT.PUT_LINE('response = '|| buffer);
+        travel_time := buffer;
+      END LOOP;
+
+    EXCEPTION
+      WHEN utl_http.end_of_body
+      THEN
+        utl_http.end_response(res);
+        RETURN travel_time;
+    END;
+END;

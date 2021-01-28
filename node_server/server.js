@@ -20,20 +20,20 @@ app.get('/', async (req, res) => {
     showAll,
   } = req.query
 
-  console.log('originLat: ', originLat)
-  console.log('originLong: ', originLong)
-  console.log('destinationLat: ', destinationLat)
-  console.log('destinationLong: ', destinationLong)
+  // console.log('originLat: ', originLat)
+  // console.log('originLong: ', originLong)
+  // console.log('destinationLat: ', destinationLat)
+  // console.log('destinationLong: ', destinationLong)
 
   const route =
-    'https://maps.googleapis.com/maps/api/distancematrix/json?units=metric'
+    'https://maps.googleapis.com/maps/api/distancematrix/json?units=metric?'
 
   const queryOrigins = `&origins=${originLat},${originLong}`
   const queryDestination = `&destinations=${destinationLat},${destinationLong}`
   const APIKey = '&key=AIzaSyCTulmhV9ssSIpWmPX1SiQk-GIlxPLE0Lk'
 
   const url = route + queryOrigins + queryDestination + APIKey
-  console.log('url: ', url)
+  // console.log('url: ', url)
 
   try {
     const response = await axios.get(url)
@@ -57,10 +57,10 @@ app.get('/directions', async (req, res) => {
     showAll,
   } = req.query
 
-  console.log('originLat: ', originLat)
-  console.log('originLong: ', originLong)
-  console.log('destinationLat: ', destinationLat)
-  console.log('destinationLong: ', destinationLong)
+  // console.log('originLat: ', originLat)
+  // console.log('originLong: ', originLong)
+  // console.log('destinationLat: ', destinationLat)
+  // console.log('destinationLong: ', destinationLong)
 
   const route = 'https://maps.googleapis.com/maps/api/directions/json?'
 
@@ -69,7 +69,7 @@ app.get('/directions', async (req, res) => {
   const APIKey = '&key=AIzaSyCTulmhV9ssSIpWmPX1SiQk-GIlxPLE0Lk'
 
   const url = route + queryOrigins + queryDestination + APIKey
-  console.log('url: ', url)
+  // console.log('url: ', url)
 
   try {
     const response = await axios.get(url)
@@ -89,8 +89,8 @@ app.get('/directions', async (req, res) => {
 
     const duration = response.data.routes[0].legs[0].duration.value
 
+    console.log('--------------- elapsed:', elapsed)
     console.log('duration:', duration)
-    console.log('elapsed:', elapsed)
     console.log('%:', (elapsed / duration) * 100)
     console.log('numSteps:', numSteps)
 

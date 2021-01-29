@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.12.2.final using JasperReports Library version 6.12.2-75c5e90a222ab406e416cbf590a5397028a52de3  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Reporte10" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="2482cb23-a0a8-475f-b0fc-09263c8a0bbe">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="ProyectoBDII"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<parameter name="Proveedor" class="java.lang.String"/>
+	<parameter name="f_inicio" class="java.sql.Date"/>
+	<parameter name="f_fin" class="java.sql.Date"/>
+	<queryString language="plsql">
+		<![CDATA[{call report_ten($P{ORACLE_REF_CURSOR}, $P{f_inicio}, $P{f_fin}, $P{Proveedor} )}]]>
+	</queryString>
+	<field name="Fecha de inicio" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="Fecha de inicio"/>
+	</field>
+	<field name="Fecha de fin" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="Fecha de fin"/>
+	</field>
+	<field name="Comercio" class="java.awt.Image">
+		<property name="com.jaspersoft.studio.field.label" value="Comercio"/>
+	</field>
+	<field name="Nombre de proveedor de servicio" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="Nombre de proveedor de servicio"/>
+	</field>
+	<field name="Logo proveedor de servicio" class="java.awt.Image">
+		<property name="com.jaspersoft.studio.field.label" value="Logo proveedor de servicio"/>
+	</field>
+	<field name="Ingresos" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="Ingresos"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="30" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="555" height="30" uuid="6a6d8d60-0a8c-4edb-afbd-0abfb6a3cdc5"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="Roboto" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ingresos por comercio y proveedor de servicio]]></text>
+			</staticText>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="30" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="95" height="30" forecolor="#FFFFFF" backcolor="#1B56E0" uuid="0d87aaa7-15d0-4de9-91a8-464fe9371920">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="600aa515-94f1-40ba-a9bc-0fe7b7ef42de"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="2.0" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha de inicio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="95" y="0" width="92" height="30" forecolor="#FFFFFF" backcolor="#1B56E0" uuid="119a25e9-799a-4999-9c92-d663bca505bf">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="90508370-9310-4709-90e8-a359a7bcf2bd"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="2.0" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha de fin]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="187" y="0" width="92" height="30" forecolor="#FFFFFF" backcolor="#1B56E0" uuid="32f68324-de55-443d-8f27-4f7d1efd7ff4">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="7e7958e4-7649-44b7-ae12-26b967cc2001"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="2.0" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Comercio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="279" y="0" width="92" height="30" forecolor="#FFFFFF" backcolor="#1B56E0" uuid="d156fa2b-b8ef-4f4b-9e30-d690f27464de">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="9bcdee1e-3341-40a2-b9ed-a390679a2f98"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="2.0" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nombre de proveedor de servicio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="371" y="0" width="92" height="30" forecolor="#FFFFFF" backcolor="#1B56E0" uuid="4f056746-e457-4c0b-a36d-adfeb26c0760">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="948c626d-c7ac-4625-9610-0af893bf5592"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="2.0" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Logo proveedor de servicio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="463" y="0" width="92" height="30" forecolor="#FFFFFF" backcolor="#1B56E0" uuid="d6cd6fd1-3bb1-466e-8599-837ddb531a38">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="6ea3b83c-88b4-4cd5-a0c2-b1d2f953811f"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="2.0" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ingresos]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="60" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="95" height="60" uuid="7186e292-1e54-4600-892c-a8b9b922ab41">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="600aa515-94f1-40ba-a9bc-0fe7b7ef42de"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="2.0" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{Fecha de inicio}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="95" y="0" width="92" height="60" uuid="140b18e3-1a37-43f4-bb26-92557a660de2">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="90508370-9310-4709-90e8-a359a7bcf2bd"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="2.0" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{Fecha de fin}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="279" y="0" width="92" height="60" uuid="bd88e99f-b159-4594-a9cc-c4520f6c51ca">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="9bcdee1e-3341-40a2-b9ed-a390679a2f98"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="2.0" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{Nombre de proveedor de servicio}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="463" y="0" width="92" height="60" uuid="a1175ab0-fb59-49b7-9698-f92f6ae5ab89">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="6ea3b83c-88b4-4cd5-a0c2-b1d2f953811f"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="2.0" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{Ingresos}]]></textFieldExpression>
+			</textField>
+			<image hAlign="Center" vAlign="Middle">
+				<reportElement x="187" y="0" width="92" height="60" uuid="4acc1cc9-7888-41c7-adf8-64024645f62f"/>
+				<box>
+					<pen lineWidth="2.0" lineColor="#000000"/>
+				</box>
+				<imageExpression><![CDATA[$F{Comercio}]]></imageExpression>
+			</image>
+			<image hAlign="Center" vAlign="Middle">
+				<reportElement x="371" y="0" width="92" height="60" uuid="1d35c797-ce35-46d3-b33d-3920184ee49c"/>
+				<box>
+					<pen lineWidth="2.0" lineColor="#000000"/>
+				</box>
+				<imageExpression><![CDATA[$F{Logo proveedor de servicio}]]></imageExpression>
+			</image>
+		</band>
+	</detail>
+</jasperReport>

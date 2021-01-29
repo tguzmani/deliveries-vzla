@@ -92,8 +92,9 @@ CREATE OR REPLACE FUNCTION get_travel_step (
     in_origin_lat IN UBICACION.longitud%type,
     in_destination_long IN UBICACION.latitud%type,
     in_destination_lat IN UBICACION.longitud%type,
-    in_elapsed IN number
-) RETURN VARCHAR2
+    in_elapsed IN number,
+    in_coordinate IN VARCHAR2
+) RETURN NUMBER
 IS
     -- HTTP Request
     req utl_http.req;
@@ -106,7 +107,9 @@ IS
     query_destination VARCHAR2(4000) :=
         '&destinationLat=' || in_destination_long || '&destinationLong=' || in_destination_lat;
     elapsed VARCHAR2(4000) := '&elapsed=' || in_elapsed;
-    url VARCHAR(4000) := route || query_origins || query_destination || elapsed;
+    coordinate VARCHAR(4000) := '&coordinate=' || in_coordinate;
+
+    url VARCHAR(4000) := route || query_origins || query_destination || elapsed || coordinate;
 
     -- Containers
     buffer VARCHAR2(4000);
@@ -117,7 +120,7 @@ BEGIN
     -- DBMS_OUTPUT.PUT_LINE('in_origin_lat = ' || in_origin_lat);
     -- DBMS_OUTPUT.PUT_LINE('in_destination_long = ' || in_destination_long);
     -- DBMS_OUTPUT.PUT_LINE('in_destination_lat = ' || in_destination_lat);
-    -- DBMS_OUTPUT.PUT_LINE('url = ' || url);
+    DBMS_OUTPUT.PUT_LINE('url = ' || url);
 
     req := utl_http.begin_request(url, 'GET',' HTTP/1.1');
     utl_http.set_header(req, 'content-type', 'application/json');

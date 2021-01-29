@@ -3,7 +3,8 @@ CREATE OR REPLACE PROCEDURE test_pedido(
     in_cedula IN INTEGER,
     in_app IN INTEGER,
     in_ali IN INTEGER,
-    in_elapsed in number)
+    in_elapsed in number,
+    in_coordinate in VARCHAR)
 IS
     minuto_pedido NUMBER;
     fecha_pedido DATE;
@@ -68,7 +69,8 @@ BEGIN
         aux_zona_oficina.LATITUD,
         aux_zona_sucursal.LONGITUD,
         aux_zona_sucursal.LATITUD,
-        in_elapsed * 60);
+        in_elapsed * 60,
+        in_coordinate);
     else
         dbms_output.put_line('elapsed >= recogida: ');
         step := get_travel_step(
@@ -76,7 +78,8 @@ BEGIN
         aux_zona_sucursal.LATITUD,
         aux_zona_direccion.LONGITUD,
         aux_zona_direccion.LATITUD,
-        (in_elapsed - tiempo_recogida) * 60);
+        (in_elapsed - tiempo_recogida) * 60,
+        in_coordinate);
     end if;
 
     dbms_output.put_line('-STEP: ' || step);
@@ -91,9 +94,9 @@ BEGIN
 end;
 
 begin
-    FOR i IN 1..9
+    FOR i IN 1..2
     LOOP
-       test_pedido(SYSDATE, 5263491, 2, 1, 5*i);
+       test_pedido(SYSDATE, 5263491, 2, 1, 5*i, 'lat');
     END LOOP;
 end;
 

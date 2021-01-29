@@ -54,7 +54,7 @@ app.get('/directions', async (req, res) => {
     destinationLat,
     destinationLong,
     elapsed,
-    showAll,
+    coordinate,
   } = req.query
 
   // console.log('originLat: ', originLat)
@@ -103,7 +103,9 @@ app.get('/directions', async (req, res) => {
 
     const startLocation = steps[currentStepIndex].start_location
 
-    return res.send(`${startLocation.lat}, ${startLocation.lng}`)
+    if (coordinate === 'lng') return res.send(`${startLocation.lng}`)
+
+    return res.send(`${startLocation.lat}`)
   } catch (error) {
     return res.status(400).send(error.message)
   }

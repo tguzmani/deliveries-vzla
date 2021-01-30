@@ -138,6 +138,6 @@ BEGIN
       WHEN utl_http.end_of_body
       THEN
         utl_http.end_response(res);
-        RETURN travel_time;
+        RETURN TO_NUMBER(travel_time);
     END;
 END;

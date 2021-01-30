@@ -103,3 +103,5 @@ end;
 
 
 select sysdate + 0.03 from dual;
+ALTER SESSION
+SET NLS_NUMERIC_CHARACTERS = '.,';

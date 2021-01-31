@@ -213,15 +213,15 @@ BEGIN
 END;
 
 --REPORTE 8
-create PROCEDURE report_eight(cursor_8 OUT sys_refcursor, tracking NUMBER) IS
+create or replace PROCEDURE report_eight(cursor_8 OUT sys_refcursor, track NUMBER) IS
 BEGIN
     OPEN cursor_8 FOR
-        SELECT p.TRACKING,
-               TO_CHAR(p.FECHAS.FECHA_INICIO, 'DD-MM-YYYY HH:Mi AM'),
-               TO_CHAR(p.FECHAS.FECHA_FIN, 'DD-MM-YYYY HH:Mi AM'),
-               count(P2.ID),
-               C2.EMAIL,
-               CONCAT(TRUNC(MOD((p.FECHAS.FECHA_FIN - p.FECHAS.FECHA_INICIO) * (60 * 24), 60)), ' minutos') "Minutos",
+        SELECT p.TRACKING AS "#Tracking",
+               TO_CHAR(p.FECHAS.FECHA_INICIO, 'DD-MM-YYYY HH:Mi AM') AS "Fecha de inicio",
+               TO_CHAR(p.FECHAS.FECHA_FIN, 'DD-MM-YYYY HH:Mi AM') AS "Fecha de fin",
+               count(P2.ID) AS "Cantidad de productos",
+               C2.EMAIL AS "Email cliente",
+               CONCAT(TRUNC(MOD((p.FECHAS.FECHA_FIN - p.FECHAS.FECHA_INICIO) * (60 * 24), 60)), ' minutos') "Tiempo estimado de llegada",
                GET_TRAVEL_STEP(U.LONGITUD, U.LATITUD, U2.LONGITUD, U2.LATITUD
                    , TRUNC(MOD((p.FECHAS.FECHA_FIN - p.FECHAS.FECHA_INICIO) * (60 * 24), 60)), 'lat') AS    lat,
                GET_TRAVEL_STEP(U.LONGITUD, U.LATITUD, U2.LONGITUD, U2.LATITUD
@@ -234,7 +234,7 @@ BEGIN
                  INNER JOIN UBICACION U2 on U2.ID = O.ID_ZONA
                  INNER JOIN PRODUCTO P2 on p.TRACKING = P2.TRACKING_PEDIDO
                  INNER JOIN CLIENTE C2 on p.CED_CLIENTE = C2.CEDULA
-        WHERE p.TRACKING = tracking
+        WHERE p.TRACKING = track or track IS NULL
         GROUP BY p.TRACKING, p.FECHAS.FECHA_INICIO, p.FECHAS.FECHA_FIN, C2.EMAIL,
                  GET_TRAVEL_STEP(U.LONGITUD, U.LATITUD, U2.LONGITUD, U2.LATITUD
                      , TRUNC(MOD((p.FECHAS.FECHA_FIN - p.FECHAS.FECHA_INICIO) * (60 * 24), 60)), 'lat'),

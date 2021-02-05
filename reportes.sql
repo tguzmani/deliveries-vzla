@@ -221,11 +221,11 @@ BEGIN
                TO_CHAR(p.FECHAS.FECHA_FIN, 'DD-MM-YYYY HH:Mi AM') AS "Fecha de fin",
                count(P2.ID) AS "Cantidad de productos",
                C2.EMAIL AS "Email cliente",
-               CONCAT(TRUNC(MOD((p.FECHAS.FECHA_FIN - p.FECHAS.FECHA_INICIO) * (60 * 24), 60)), ' minutos') "Tiempo estimado de llegada",
-               GET_TRAVEL_STEP(U.LONGITUD, U.LATITUD, U2.LONGITUD, U2.LATITUD
-                   , TRUNC(MOD((p.FECHAS.FECHA_FIN - p.FECHAS.FECHA_INICIO) * (60 * 24), 60)), 'lat') AS    lat,
-               GET_TRAVEL_STEP(U.LONGITUD, U.LATITUD, U2.LONGITUD, U2.LATITUD
-                   , TRUNC(MOD((p.FECHAS.FECHA_FIN - p.FECHAS.FECHA_INICIO) * (60 * 24), 60)), 'lng') AS    lng
+               CONCAT(TRUNC((p.FECHAS.FECHA_FIN - p.FECHAS.FECHA_INICIO) * (60 * 24)), ' minutos') "Tiempo estimado de llegada",
+               GET_TRAVEL_STEP(U2.LONGITUD, U2.LATITUD, U.LONGITUD, U.LATITUD
+                   , TRUNC((SYSDATE - p.FECHAS.FECHA_INICIO) * 1440 * 60,2), 'lat') AS    lat,
+               GET_TRAVEL_STEP(U2.LONGITUD, U2.LATITUD, U.LONGITUD, U.LATITUD
+                   , TRUNC((SYSDATE - p.FECHAS.FECHA_INICIO) * 1440 * 60,2), 'lng') AS    lng
         FROM PEDIDO p
                  INNER JOIN DIRECCION D on D.ID = p.ID_DIRECCION and D.CED_CLIENTE = p.ID_CLIENTE_DIRECCION and
                                            D.ID_ZONA = p.ID_ZONA_DIRECCION
@@ -235,11 +235,9 @@ BEGIN
                  INNER JOIN PRODUCTO P2 on p.TRACKING = P2.TRACKING_PEDIDO
                  INNER JOIN CLIENTE C2 on p.CED_CLIENTE = C2.CEDULA
         WHERE p.TRACKING = track or track IS NULL
-        GROUP BY p.TRACKING, p.FECHAS.FECHA_INICIO, p.FECHAS.FECHA_FIN, C2.EMAIL,
-                 GET_TRAVEL_STEP(U.LONGITUD, U.LATITUD, U2.LONGITUD, U2.LATITUD
-                     , TRUNC(MOD((p.FECHAS.FECHA_FIN - p.FECHAS.FECHA_INICIO) * (60 * 24), 60)), 'lat'),
-                 GET_TRAVEL_STEP(U.LONGITUD, U.LATITUD, U2.LONGITUD, U2.LATITUD
-                     , TRUNC(MOD((p.FECHAS.FECHA_FIN - p.FECHAS.FECHA_INICIO) * (60 * 24), 60)), 'lng')
+        GROUP BY p.TRACKING, TO_CHAR(p.FECHAS.FECHA_INICIO, 'DD-MM-YYYY HH:Mi AM'), TO_CHAR(p.FECHAS.FECHA_FIN, 'DD-MM-YYYY HH:Mi AM'), C2.EMAIL, CONCAT(TRUNC((p.FECHAS.FECHA_FIN - p.FECHAS.FECHA_INICIO) * (60 * 24)), ' minutos'), GET_TRAVEL_STEP(U2.LONGITUD, U2.LATITUD, U.LONGITUD, U.LATITUD
+                   , TRUNC((SYSDATE - p.FECHAS.FECHA_INICIO) * 1440 * 60,2), 'lat'), GET_TRAVEL_STEP(U2.LONGITUD, U2.LATITUD, U.LONGITUD, U.LATITUD
+                   , TRUNC((SYSDATE - p.FECHAS.FECHA_INICIO) * 1440 * 60,2), 'lng')
         ORDER BY p.TRACKING;
 END;
 

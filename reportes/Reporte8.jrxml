@@ -134,7 +134,7 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="70" splitType="Stretch">
+		<band height="78" splitType="Stretch">
 			<textField>
 				<reportElement x="0" y="0" width="81" height="70" uuid="8ac414ed-80da-4486-9034-2c979093a997">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="0ce4f34c-035a-4f61-878f-7cb2a7044555"/>
@@ -195,14 +195,13 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{Tiempo estimado de llegada}]]></textFieldExpression>
 			</textField>
-			<componentElement>
-				<reportElement x="480" y="0" width="75" height="70" isPrintInFirstWholeBand="true" uuid="612fcfe7-af4a-40d3-9b81-cb4f3c8ae762"/>
-				<c:map xmlns:c="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" onErrorType="Icon">
-					<c:latitudeExpression><![CDATA[$F{LAT}]]></c:latitudeExpression>
-					<c:longitudeExpression><![CDATA[$F{LNG}]]></c:longitudeExpression>
-					<c:zoomExpression><![CDATA[8]]></c:zoomExpression>
-				</c:map>
-			</componentElement>
+			<image hAlign="Center" vAlign="Middle">
+				<reportElement x="476" y="0" width="79" height="70" uuid="2874b829-1a09-491f-8153-6793f9d0a9c0"/>
+				<box>
+					<pen lineWidth="2.0"/>
+				</box>
+				<imageExpression><![CDATA["https://open.mapquestapi.com/staticmap/v5/map?key=GliXLCpF0QZPsAtQyWSToAVL034G1mSe&locations=" + $F{LAT}.toString() + "," + $F{LNG}.toString() + "&size=@2x&zoom=16&type=map&defaultMarker=marker-sm-22407F-3B5998"]]></imageExpression>
+			</image>
 		</band>
 	</detail>
 </jasperReport>

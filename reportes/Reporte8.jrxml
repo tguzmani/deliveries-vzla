@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.12.2.final using JasperReports Library version 6.12.2-75c5e90a222ab406e416cbf590a5397028a52de3  -->
+<!-- Created with Jaspersoft Studio version 6.15.0.final using JasperReports Library version 6.15.0-dd49bfb94918336b8321d5507193f0169ead4e95  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Reporte8" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b515cbf2-0e00-4632-a1cb-76fbfcea12a0">
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="ProyectoBDII"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="BD2"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<parameter name="Tracking" class="java.lang.Integer"/>
 	<queryString language="plsql">
@@ -117,7 +117,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
-				<text><![CDATA[Tiempo estimado de llegada]]></text>
+				<text><![CDATA[Tiempo estimado]]></text>
 			</staticText>
 			<staticText>
 				<reportElement mode="Opaque" x="476" y="0" width="79" height="30" forecolor="#FFFFFF" backcolor="#1B56E0" uuid="952d7b83-63b1-4a08-9673-3f8c12742a13">
@@ -134,7 +134,7 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="78" splitType="Stretch">
+		<band height="70" splitType="Stretch">
 			<textField>
 				<reportElement x="0" y="0" width="81" height="70" uuid="8ac414ed-80da-4486-9034-2c979093a997">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="0ce4f34c-035a-4f61-878f-7cb2a7044555"/>

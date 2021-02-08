@@ -1,4 +1,4 @@
-create role empleado_comercio;
+create role empleado_comercio; 
 create role gerente_comercio;
 create role gerente_aplicacion;
 create role cliente;
@@ -96,3 +96,31 @@ grant select on unidad to empleado_comercio;
 grant select on unidad to gerente_comercio;
 grant insert, select, update, delete on unidad to gerente_aplicacion;
 grant select, update on unidad to conductor;
+
+-- USUARIOS
+alter session set "_ORACLE_SCRIPT" = true;
+
+create user andrea
+identified by secreto;
+grant create session to andrea;
+grant cliente to andrea;
+
+create user enrique
+identified by secreto;
+grant create session to enrique;
+grant gerente_aplicacion to enrique;
+
+create user paola
+identified by secreto;
+grant create session to paola;
+grant gerente_comercio to paola;
+
+create user julio
+identified by secreto;
+grant create session to julio;
+grant empleado_comercio to julio;
+
+create user juan
+identified by secreto;
+grant create session to juan;
+grant conductor to juan;
